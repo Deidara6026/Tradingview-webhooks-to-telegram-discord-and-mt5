@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from models import Signal
+from .models import Signal
 
 def signal_api_endpoint(request, _id):
     signal = Signal.objects.get(id=_id)

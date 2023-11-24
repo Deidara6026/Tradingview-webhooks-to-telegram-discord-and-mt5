@@ -5,8 +5,8 @@ User = settings.AUTH_USER_MODEL
 
 # Create your models here.
 class TelegramAlert(models.Model):
-    channel_invite_link = models.CharField(25)
-    message_format = models.CharField(500)
+    channel_invite_link = models.CharField(max_length=25)
+    message_format = models.CharField(max_length=500)
     
 
 

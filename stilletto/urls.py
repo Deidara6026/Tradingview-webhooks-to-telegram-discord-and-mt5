@@ -16,7 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from signal_api.views import signal_api_endpoint
+from app.views import dashboard
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('dashboard/', dashboard),
+    path('alerts/tvtg/v1/<int:_id>', signal_api_endpoint)
 ]
