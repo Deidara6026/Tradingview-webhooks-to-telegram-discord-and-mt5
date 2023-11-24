@@ -7,6 +7,8 @@ User = settings.AUTH_USER_MODEL
 class TelegramAlert(models.Model):
     channel_invite_link = models.CharField(max_length=25)
     message_format = models.CharField(max_length=500)
+    message_prefix = models.CharField(max_length=200)
+    message_suffix = models.CharField(max_length=200)
     
 
 
@@ -14,5 +16,5 @@ class Signal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     telegram = models.OneToOneField(TelegramAlert, on_delete=models.CASCADE, null=True, blank=True)
     telegram_enabled = models.BooleanField()
-    parse = models.BooleanField()
+    parse = models.BooleanField(default=False)
     

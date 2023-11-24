@@ -22,5 +22,5 @@ from app.views import dashboard
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', dashboard),
-    path('alerts/tvtg/v1/<int:_id>', signal_api_endpoint)
+    path('api/tvtg/v1/<int:_id>', signal_api_endpoint)
 ]

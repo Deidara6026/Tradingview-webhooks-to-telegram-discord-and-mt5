@@ -1,0 +1,154 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <title>Stiletto Dashboard</title>
+</head>
+<body>
+    
+    
+    <nav class="navbar navbar-expand navbar-light" style="background-color: #fdf5e7;">
+
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                <picture>
+                    <img src='{% static "logo.png" %}' alt="Hi!" class="img-fluid" alt="image desc" style="width:70px;height:65px; margin-left: 10px;">
+                  </picture>
+              </a>
+              <div class="navbar-brand" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Dropdown link
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                      <li><a class="dropdown-item" href="#">Action</a></li>
+                      <li><a class="dropdown-item" href="#">Another action</a></li>
+                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                    
+                  </li>
+                </ul></div>
+                    
+                    <button class="d-flex btn btn-outline-success" type="submit" style="border-color: #a86c0c;color: #a86c0c;">Logout</button>
+
+              
+            </div>
+</nav>
+<br><br>
+<div class="container mx-5">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Tradingview</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div>
+            <br>
+            <div class="tab-pane fade show active mx-5" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="mx-auto" style="width: 70%;">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" onclick="showtg()" checked>
+                    <label class="form-check-label" for="flexCheckChecked">
+                      Send to Telegram
+                    </label>
+                  </div>
+                <div id="tgoptions">
+                <div class="input-group mb-3"style="width: 100%;">
+                    <input type="text" class="form-control" placeholder="Telegram Invite Link" aria-label="Telegram Invite Link" aria-describedby="basic-addon2">
+                </div>
+                <div class="row">
+                    <div class="input-group col-auto mx-auto"style="width: 45%;height:120px">
+                        <textarea class="form-control" aria-label="With textarea" maxlength="200" placeholder="Message Prefix(optional)"></textarea>
+                      </div>
+                    <div class="input-group col-auto mx-auto"style="width: 45%;height:120px">
+                        <textarea class="form-control" aria-label="With textarea" maxlength="200" placeholder="Message Suffix(optional)"></textarea>
+                    </div>
+                </div>
+                <br><br></div><br>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" onclick="showbinance()" checked>
+                    <label class="form-check-label" for="flexCheckChecked">
+                      Binance API(Spot)
+                    </label>
+                  </div>
+                <div id="boptions">
+                <div class="input-group mb-3"style="width: 100%;">
+                    <input type="text" class="form-control" placeholder="Binance Api Key"">
+                </div>
+                <div class="input-group mb-3"style="width: 100%;">
+                    <input type="text" class="form-control" placeholder="Binance Api Hash">
+                </div>
+                <button type="button" class="btn btn-info">Submit</button>
+            </div>
+                <!-- <div class="row">
+                    <div class="input-group col-auto"style="width: 30%;">
+                        <input type="text" class="form-control" placeholder="Order Quantity">
+                      </div>
+                    </div> -->
+                <!-- <div class="col-auto">
+                <div style="width: 60%;">
+                    <small class="text-center">Paste the following text into the tradingview alert Message box. Be sure to adjust the side, type, and quantity for each of your trades</small>
+                <p class="border p-1">
+                    %%%%
+                    symbol: {%verbatim%}{{ticker}},
+                    side: SELL,
+                    type: LIMIT,
+                    quantity: 0.002,
+                    price: {{close}}{%endverbatim%}
+                </p></div></div>
+                </div> -->
+                </div>
+                <br><br></div><br>
+                
+                
+               
+            </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+      </div>
+      
+</div>
+</body>
+<script>
+    function showtg() {
+        var htmlShow = document.getElementById("tgoptions");
+        if (htmlShow.style.display === "none") {
+            htmlShow.style.display = "block";
+        } else {
+            htmlShow.style.display = "none";
+        }
+}
+    function showbinance() {
+        var htmlShow = document.getElementById("boptions");
+        if (htmlShow.style.display === "none") {
+            htmlShow.style.display = "block";
+        } else {
+            htmlShow.style.display = "none";
+        }
+}
+</script>
+</html>

@@ -7,7 +7,7 @@ from .forms import *
 User = get_user_model()
 
 
-@login_required
-def dashboard():
+#@login_required
+def dashboard(request):
 
-    return render("main/dashboard.html")
+    return render(request, "app/dashboard.html")
