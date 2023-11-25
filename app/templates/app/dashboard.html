@@ -64,69 +64,52 @@
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
-        <div>
+        <form action="{% url 'submitalert' %}" method="post">
+            {% csrf_token %}
             <br>
             <div class="tab-pane fade show active mx-5" id="home" role="tabpanel" aria-labelledby="home-tab">
                 <div class="mx-auto" style="width: 70%;">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" onclick="showtg()" checked>
+                    {{signalform.telegram_enabled}}
                     <label class="form-check-label" for="flexCheckChecked">
                       Send to Telegram
                     </label>
                   </div>
                 <div id="tgoptions">
                 <div class="input-group mb-3"style="width: 100%;">
-                    <input type="text" class="form-control" placeholder="Telegram Invite Link" aria-label="Telegram Invite Link" aria-describedby="basic-addon2">
+                    {{signalform.channel_invite_link}}
                 </div>
                 <div class="row">
-                    <div class="input-group col-auto mx-auto"style="width: 45%;height:120px">
-                        <textarea class="form-control" aria-label="With textarea" maxlength="200" placeholder="Message Prefix(optional)"></textarea>
+                    <div class="input-group col-auto mx-auto"style="width: 50%;height:120px">
+                        {{signalform.message_prefix}}
                       </div>
-                    <div class="input-group col-auto mx-auto"style="width: 45%;height:120px">
-                        <textarea class="form-control" aria-label="With textarea" maxlength="200" placeholder="Message Suffix(optional)"></textarea>
+                    <div class="input-group col-auto mx-auto"style="width: 50%;height:120px">
+                        {{signalform.message_suffix}}
                     </div>
                 </div>
                 <br><br></div><br>
                 
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" onclick="showbinance()" checked>
+                    {{signalform.binance_enabled}}
                     <label class="form-check-label" for="flexCheckChecked">
                       Binance API(Spot)
                     </label>
                   </div>
                 <div id="boptions">
                 <div class="input-group mb-3"style="width: 100%;">
-                    <input type="text" class="form-control" placeholder="Binance Api Key"">
+                    {{signalform.binance_api_key}}
                 </div>
                 <div class="input-group mb-3"style="width: 100%;">
-                    <input type="text" class="form-control" placeholder="Binance Api Hash">
+                    {{signalform.binance_api_hash}}
                 </div>
-                <button type="button" class="btn btn-info">Submit</button>
+                <input type="submit" value="Submit" class="btn btn-info">
             </div>
-                <!-- <div class="row">
-                    <div class="input-group col-auto"style="width: 30%;">
-                        <input type="text" class="form-control" placeholder="Order Quantity">
-                      </div>
-                    </div> -->
-                <!-- <div class="col-auto">
-                <div style="width: 60%;">
-                    <small class="text-center">Paste the following text into the tradingview alert Message box. Be sure to adjust the side, type, and quantity for each of your trades</small>
-                <p class="border p-1">
-                    %%%%
-                    symbol: {%verbatim%}{{ticker}},
-                    side: SELL,
-                    type: LIMIT,
-                    quantity: 0.002,
-                    price: {{close}}{%endverbatim%}
-                </p></div></div>
-                </div> -->
                 </div>
                 <br><br></div><br>
                 
-                
                
-            </div>
-        </div>
+            </form>
+    </div>
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
       </div>
@@ -150,5 +133,24 @@
             htmlShow.style.display = "none";
         }
 }
+
+    function submitNew() {
+        const data = {
+            tgenabled: document.getElementById("tgenabled").value,
+            tgprefix: document.getElementById("tgprefix").value,
+            tgsuffix: document.getElementById("tgsuffix").value,
+            tginvitelink: document.getElementById("tginvitelink").value,
+            be: document.getElementById("binance_enabled").value,
+            bapi: document.getElementById("binance_api_key").value,
+            bhash: document.getElementById("binance_api_hash").value
+        };
+        fetch("{% url 'submitalert' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    }
 </script>
 </html>

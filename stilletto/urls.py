@@ -15,12 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from signal_api.views import signal_api_endpoint
-from app.views import dashboard
+from app.views import dashboard, submit_alert
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dashboard/', dashboard),
-    path('api/tvtg/v1/<int:_id>', signal_api_endpoint)
+    path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
+    path('dashboard/', dashboard, name="dashboard"),
+    path('submitalert/', submit_alert, name="submitalert"),
+    path('api/tvtg/v1/<int:_id>', signal_api_endpoint, name="signalendpoint"),
 ]
