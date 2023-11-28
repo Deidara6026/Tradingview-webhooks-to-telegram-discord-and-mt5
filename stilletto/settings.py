@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'signal_api',
-    'app'
+    'rest_framework',
+    'django_cryptography',
+    'app',
 ]
 
 AUTH_USER_MODEL = "accounts.CustomUser" 
@@ -85,6 +87,10 @@ DATABASES = {
     }
 }
 
+
+TELEGRAM = {
+    'token': "2e3r4heh3dhwdwdddddddddddddddddddddddddddddd"
+}
 
 
 # Password validation
