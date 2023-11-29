@@ -5,7 +5,7 @@ class SignalForm(ModelForm):
 
     class Meta:
         model = Signal
-        fields = ["telegram_enabled", "channel_invite_link", "message_prefix", "message_suffix", "mt5_enabled", "mt5_login", "mt5_password", "mt5_server"]
+        fields = ["telegram_enabled", "channel_chat_id", "message_prefix", "message_suffix", "mt5_enabled", "mt5_login", "mt5_password", "mt5_server"]
         widgets = {
             "message_prefix": Textarea(attrs={"placeholder":"Message Prefix(optional)", "style":"width: 90%;height:120px"}),
             "message_suffix": Textarea(attrs={"placeholder":"Message Prefix(optional)", "style":"width: 90%;height:120px"}),
@@ -14,6 +14,6 @@ class SignalForm(ModelForm):
             "mt5_login": TextInput(attrs={"class":"form-control", "placeholder":"mt5 Login"}),
             "mt5_password": TextInput(attrs={"class":"form-control", "placeholder":"mt5 Password"}),
             "mt5_server": TextInput(attrs={"class":"form-control", "placeholder":"mt5 Server"}),
-            "channel_invite_link": TextInput(attrs={"class":"form-control", "placeholder":"Telegram Invite Link"}),
+            "channel_chat_id": TextInput(attrs={"class":"form-control", "placeholder":"Telegram Invite Link"}),
 
         }

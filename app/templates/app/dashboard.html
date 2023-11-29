@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <div class="">
     <nav class="navbar navbar-expand navbar-light" style="background-color: #fdf5e7;">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
@@ -55,98 +56,83 @@
             <button class="d-flex btn btn-outline-success" type="submit"
                 style="border-color: #a86c0c;color: #a86c0c;">Logout</button>
         </div>
+        
     </nav>
+
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#fdf5e7" fill-opacity="1" d="M0,192L12,170.7C24,149,48,107,72,80C96,53,120,43,144,58.7C168,75,192,117,216,144C240,171,264,181,288,192C312,203,336,213,360,186.7C384,160,408,96,432,96C456,96,480,160,504,197.3C528,235,552,245,576,234.7C600,224,624,192,648,160C672,128,696,96,720,85.3C744,75,768,85,792,85.3C816,85,840,75,864,64C888,53,912,43,936,53.3C960,64,984,96,1008,122.7C1032,149,1056,171,1080,154.7C1104,139,1128,85,1152,58.7C1176,32,1200,32,1224,58.7C1248,85,1272,139,1296,176C1320,213,1344,235,1368,240C1392,245,1416,235,1428,229.3L1440,224L1440,0L1428,0C1416,0,1392,0,1368,0C1344,0,1320,0,1296,0C1272,0,1248,0,1224,0C1200,0,1176,0,1152,0C1128,0,1104,0,1080,0C1056,0,1032,0,1008,0C984,0,960,0,936,0C912,0,888,0,864,0C840,0,816,0,792,0C768,0,744,0,720,0C696,0,672,0,648,0C624,0,600,0,576,0C552,0,528,0,504,0C480,0,456,0,432,0C408,0,384,0,360,0C336,0,312,0,288,0C264,0,240,0,216,0C192,0,168,0,144,0C120,0,96,0,72,0C48,0,24,0,12,0L0,0Z"></path></svg> -->
+</div>
     <br>
     <br>
     <div class="container mx-5">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
-                    role="tab" aria-controls="home" aria-selected="true">Tradingview</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="alerts-tab" data-bs-toggle="tab" data-bs-target="#alerts" type="button"
-                    role="tab" aria-controls="alerts" aria-selected="false">Alerts</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button"
-                    role="tab" aria-controls="history" aria-selected="false">History</button>
-            </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-            <br>
-            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <form action="{% url 'submitalert' %}" method="post">
-                    {% csrf_token %}
-                    <div class="mx-auto" style="width: 70%;">
-                        <div class="form-check">
-                            {{signalform.telegram_enabled}}
-                            <label class="form-check-label" for="flexCheckChecked">
-                                Send to Telegram
-                            </label>
-                        </div>
-                        <div id="tgoptions">
-                            <div class="input-group mb-3" style="width: 100%;">
-                                {{signalform.channel_invite_link}}
-                            </div>
-                            <div class="row">
-                                <div class="input-group col-auto mx-auto" style="width: 50%;height:120px">
-                                    {{signalform.message_prefix}}
-                                </div>
-                                <div class="input-group col-auto mx-auto" style="width: 50%;height:120px">
-                                    {{signalform.message_suffix}}
-                                </div>
-                            </div>
-                            <br>
-                            <br>
-                        </div>
-                        <br>
-                        <div class="form-check">
-                            {{signalform.binance_enabled}}
-                            <label class="form-check-label" for="flexCheckChecked">
-                                Binance API(Spot)
-                            </label>
-                        </div>
-                        <div id="boptions">
-                            <div class="input-group mb-3" style="width: 100%;">
-                                {{signalform.binance_api_key}}
-                            </div>
-                            <div class="input-group mb-3" style="width: 100%;">
-                                {{signalform.binance_api_hash}}
-                            </div></div>
-                            <input type="submit" value="Submit" class="btn btn-info">
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background-color: antiquewhite; color: #a86c0c; border-color: #a86c0c; border-radius: 7px; position: fixed; bottom: 20px; right: 20px;">
+            Add Webhook +
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </form>
-                    <br>
-                    <br>
-            </div>
-        <div class="tab-pane fade" id="alerts" role="tabpanel" aria-labelledby="alerts-tab">
-            <div class="mx-auto"style="width: 90%;">
-                <div class="row">
-                    {% for d in signals %}
-                        <div class="col-lg-3 col-md-6 my-3">
-                            <div class="card text-center" style="width: 100%;">
-                                <div class="card-body ">
-                                    <h5 class="card-text"># {{ d.id }}</h5>
-                                    <p class="card-text">{{ d.channel_invite_link }}</p>
-                                    <br>
-                                    <p class="card-text">Telegram Enabled: {% if d.telegram_enabled %}<span style="color:green;">✓</span>{% else %}<span style="color:red;">✗</span>{% endif %}</p>
-                                    <p class="card-text">Binance Enabled: {% if d.binance_enabled %}<span style="color:green;">✓</span>{% else %}<span style="color:red;">✗</span>{% endif %}</p>
-                                    <br>
-                                    {% if d.telegram_enabled %}
-                                        <p class="card-text">Message Prefix: {{ d.mp }}</p>
-                                        <p class="card-text">Message Suffix: {{ d.ms }}</p>
-                                    {% endif %}
-                                    <a href="" class="btn btn-primary">Get Webhook Link</a>
-                                </div>
+                    <div class="modal-body">
+                        <form action="{% url 'submitalert' %}" method="post">
+                            {% csrf_token %}
+                            <div class="mx-auto" style="width: 70%;">
+                                <div class="card p-3 shadow">
+                                    <div class="form-check">
+                                        {{signalform.telegram_enabled}}
+                                        <label class="form-check-label" for="flexCheckChecked">
+                                            Send to Telegram
+                                        </label>
+                                    </div>
+                                    <div id="tgoptions">
+                                        <div class="input-group mx-auto" style="width: 60%;">
+                                            {{signalform.channel_chat_id}}
+                                        </div><br>
+                                        <div class="row">
+                                            <div class="input-group col-auto mx-auto" style="width: 50%;height:120px">
+                                                {{signalform.message_prefix}}
+                                            </div>
+                                            <div class="input-group col-auto mx-auto" style="width: 50%;height:120px">
+                                                {{signalform.message_suffix}}
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <br>
+                                </div></div>
+                                <br>
+                                <div class="card p-3 shadow" style="">
+                                    <div class="form-check">
+                                        {{signalform.mt5_enabled}}
+                                        <label class="form-check-label" for="flexCheckChecked">
+                                            MetaTrader5
+                                        </label>
+                                    </div>
+                                    <div id="mt5options">
+                                        <div class="row">
+                                        <div class="input-group mb-3 col-auto mx-auto" style="width: 40%;">
+                                            {{signalform.mt5_login}}
+                                        </div>
+                                        <div class="input-group mb-3 col-auto mx-auto" style="width: 40%;">
+                                            {{signalform.mt5_password}}
+                                        </div></div>
+                                        <div class="input-group mb-3 mx-auto" style="width: 40%;">
+                                            {{signalform.mt5_server}}
+                                        </div></div></div><br>
+                                <input type="submit" value="Submit" class="btn btn-info">
                             </div>
-                        </div>
-                    {% endfor %}
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
-
         </div>
-        <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">...</div>
     </div>
     </div>
 </body>
@@ -159,8 +145,8 @@
             htmlShow.style.display = "none";
         }
     }
-    function showbinance() {
-        var htmlShow = document.getElementById("boptions");
+    function showmt5() {
+        var htmlShow = document.getElementById("mt5options");
         if (htmlShow.style.display === "none") {
             htmlShow.style.display = "block";
         } else {

@@ -15,7 +15,7 @@ def dashboard(request):
     for signal in signals:
         d.append({
             "id":signal.id, 
-            "channel_invite_link":signal.channel_invite_link, 
+            "channel_invite_link":signal.channel_chat_id, 
             "telegram_enabled":signal.telegram_enabled, 
             "binance_enabled":signal.mt5_enabled, 
             "mp":signal.message_prefix,
