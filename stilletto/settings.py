@@ -89,7 +89,7 @@ DATABASES = {
 
 
 TELEGRAM = {
-    'token': "2e3r4heh3dhwdwdddddddddddddddddddddddddddddd"
+    'token': "6894838515:AAGDNmExrl-jVHjWslKWlhSZSblIt05egKo"
 }
 
 

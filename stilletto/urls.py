@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('dashboard/', dashboard, name="dashboard"),
-    path('api/<int:id>', SignalAPIView.as_view()),
+    path('api/<int:pk>', SignalAPIView.as_view()),
     path('submitalert/', submit_alert, name="submitalert"),
 
 ]
