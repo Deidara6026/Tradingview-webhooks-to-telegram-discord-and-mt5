@@ -18,3 +18,4 @@ class Signal(models.Model):
     mt5_login = encrypt(models.CharField(max_length=30, null=True, blank=True))
     mt5_password = encrypt(models.CharField(max_length=60, null=True, blank=True))
     mt5_server = encrypt(models.CharField(max_length=30, null=True, blank=True))
+    mt5_lot = models.FloatField(null=True, blank=True)

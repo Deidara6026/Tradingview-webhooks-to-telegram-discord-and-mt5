@@ -4,10 +4,14 @@
 {% if error %}
 <p><strong>Invalid email or password.</strong></p>
 {% endif %}
-<h2>Log In</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Log In</button>
-</form>
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="card p-4" style="width: 50%;">
+            <h2>Sign Up</h2><br>
+            <form method="post">
+              {% csrf_token %}
+              {{form.as_p}}
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
 {% endblock content %}

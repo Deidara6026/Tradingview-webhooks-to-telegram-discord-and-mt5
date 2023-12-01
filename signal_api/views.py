@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework import permissions
 from django.conf import settings
 import telebot
+import MetaTrader5 as mt5
 
 
 def send_telegram_message(message, channel):
@@ -65,6 +66,27 @@ Comment: {{note}}
     m = m.replace("{{side}}", params['side'].upper())
     m = m.replace("{{note}}", params['note'])
     return m
+
+def send_mt5_order(params, det):
+    if not mt5.initialize(login=det.mt5_login, server=det.mt5_server, password=det.mt5_password):
+        return False
+    request = {
+    "action": mt5.TRADE_ACTION_DEAL,
+    "symbol": params["symbol"],
+    "volume": det.mt5_lot,
+    "type": mt5.ORDER_TYPE_BUY if params["side"].lower() in ["buy", "long"] else mt5.ORDER_TYPE_SELL,
+    "price": params["price"],
+    "sl": params["sl"],
+    "tp": params["tp"],
+    "deviation": 20,
+    "magic": 7776026,
+    "comment": "Stilletto Trades",
+    "type_time": mt5.ORDER_TIME_GTC,
+    "type_filling": mt5.ORDER_FILLING_RETURN,
+    }
+    # send a trading request
+    result = mt5.order_send(request)
+    print(result)
 
 
 
