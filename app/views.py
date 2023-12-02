@@ -3,26 +3,19 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from .forms import *
-from signal_api.models import Signal
+from signal_api.models import SignalWebhook
 # Create your views here.
 User = get_user_model()
 
 
 @login_required
 def dashboard(request):
-    signals = Signal.objects.filter(user=request.user).all()
-    d = []
-    for signal in signals:
-        d.append({
-            "id":signal.id, 
-            "channel_invite_link":signal.channel_chat_id, 
-            "telegram_enabled":signal.telegram_enabled, 
-            "binance_enabled":signal.mt5_enabled, 
-            "mp":signal.message_prefix,
-            "ms":signal.message_suffix,  
-        })
-    context = {"signalform":SignalForm, "signals":d}
-    print(signals)
+    context = {
+        "signalform":SignalForm,
+        "tg_form": Telegram_Link_Form,
+        "mt5_form": MT5_Link_Form, 
+        "discord_form": Discord_Link_Form, 
+        }
     return render(request, "app/dashboard.html", context)
 
 

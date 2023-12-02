@@ -82,53 +82,63 @@
                         <form action="{% url 'submitalert' %}" method="post">
                             {% csrf_token %}
                             <div class="mx-auto" style="width: 70%;background-color: #131516; color: aliceblue;">
-                                <div class="card p-3 shadow" style="background-color: #131516; color: aliceblue; border-color: #252729;">
-                                    <div class="form-check mb-3">
-                                        {{signalform.telegram_enabled}}
-                                        <label class="form-check-label" for="flexCheckChecked">
-                                            Send to Telegram
-                                        </label>
-                                    </div>
-                                    <div id="tgoptions">
-                                        <div class="input-group mx-auto" style="width: 60%;">
-                                            {{signalform.channel_chat_id}}
-                                        </div><br>
-                                        <div class="row">
-                                            <div class="input-group col-auto mx-auto" style="width: 50%;height:120px">
-                                                {{signalform.message_prefix}}
-                                            </div>
-                                            <div class="input-group col-auto mx-auto" style="width: 50%;height:120px">
-                                                {{signalform.message_suffix}}
-                                            </div>
+                                <div id="telegramInputs">
+                                    <div class="card p-3 shadow" id="tgoptions" style="background-color: #131516; color: aliceblue; border-color: #252729;">
+                                        <div class="form-check mb-3">
+                                            {{tg_form.telegram_enabled}}
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                Add a Telegram Chat
+                                            </label>
                                         </div>
-                                        <br>
-                                        <br>
-                                </div></div>
+                                        <div>
+                                            <div class="input-group mx-auto" style="width: 60%;">
+                                                {{tg_form.channel_chat_id}}
+                                            </div><br>
+                                            <div class="row">
+                                                <div class="input-group col-auto mx-auto" style="width: 50%;height:120px">
+                                                    {{tg_form.message_prefix}}
+                                                </div>
+                                                <div class="input-group col-auto mx-auto" style="width: 50%;height:120px">
+                                                    {{tg_form.message_suffix}}
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="addTelegramInput()">Telegram +</button>
                                 <br>
-                                <div class="card p-3 shadow" style="background-color: #131516; color: aliceblue; border-color: #252729;">
-                                    <div class="form-check mb-3">
-                                        {{signalform.mt5_enabled}}
-                                        <label class="form-check-label" for="flexCheckChecked">
-                                            MetaTrader5
-                                        </label>
+                                <div id="mt5Inputs">
+                                    <div class="card p-3 shadow" style="background-color: #131516; color: aliceblue; border-color: #252729;">
+                                        <div class="form-check mb-3">
+                                            {{signalform.mt5_enabled}}
+                                            <label class="form-check-label" for="flexCheckChecked">
+                                                MetaTrader5
+                                            </label>
+                                        </div>
+                                        <div id="mt5options">
+                                            <div class="row">
+                                                <div class="input-group mb-3 col-auto mx-auto" style="width: 40%;">
+                                                    {{signalform.mt5_login}}
+                                                </div>
+                                                <div class="input-group mb-3 col-auto mx-auto" style="width: 40%;">
+                                                    {{signalform.mt5_password}}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-group mb-3 mx-auto col-auto" style="width: 40%;">
+                                                    {{signalform.mt5_lot}}
+                                                </div>
+                                                <div class="input-group mb-3 mx-auto col-auto" style="width: 40%;">
+                                                    {{signalform.mt5_server}}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div id="mt5options">
-                                        <div class="row">
-                                        <div class="input-group mb-3 col-auto mx-auto" style="width: 40%;">
-                                            {{signalform.mt5_login}}
-                                        </div>
-                                        <div class="input-group mb-3 col-auto mx-auto" style="width: 40%;">
-                                            {{signalform.mt5_password}}
-                                        </div></div>
-                                        <div class="row">
-                                        <div class="input-group mb-3 mx-auto col-auto" style="width: 40%;">
-                                            {{signalform.mt5_lot}}
-                                        </div>
-                                        <div class="input-group mb-3 mx-auto col-auto" style="width: 40%;">
-                                            {{signalform.mt5_server}}
-                                        </div>
-                                    </div>
-                                </div></div><br>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="addMT5Input()">Add More MT5 Inputs</button>
+                                <br>
                                 <input type="submit" value="Submit" class="btn btn-info float-end">
                             </div>
                         </form>
@@ -141,6 +151,23 @@
     </div>
 </body>
 <script>
+
+    function addTelegramInput() {
+        var telegramInputs = document.getElementById('telegramInputs');
+        var newInput = document.createElement('div');
+        newInput.setAttribute("class", "card p-3 shadow");
+        newInput.setAttribute("style", "background-color: #131516; color: aliceblue; border-color: #252729;");
+        newInput.innerHTML = document.getElementById('tgoptions').innerHTML;
+        telegramInputs.appendChild(newInput);
+    }
+
+    function addMT5Input() {
+        var mt5Inputs = document.getElementById('mt5Inputs');
+        var newInput = document.createElement('div');
+        newInput.innerHTML = document.getElementById('mt5options').innerHTML;
+        mt5Inputs.appendChild(newInput);
+    }
+
     function showtg() {
         var htmlShow = document.getElementById("tgoptions");
         if (htmlShow.style.display === "none") {

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Signal
-from .serializers import SignalSerializer
+from .models import *
+from .serializers import SignalWebhookSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -93,17 +93,16 @@ def send_mt5_order(params, det):
 class SignalAPIView(APIView):
     def post(self, request, *args, **kwargs):
 
-        signal = Signal.objects.get(id=self.kwargs["pk"])
+        signal = SignalWebhook.objects.filter(id=self.kwargs["pk"])
+        telegram_chats = Telegram_Link.filter(webhook=signal)
+        discord_chats = Discord_Link.filter(webhook=signal)
+        mt5_accounts = MT5_Link.filter(webhook=signal)
         data = request.data
         tradingview_message = data.get('message')
         params = parse_signal_hit(tradingview_message)
-        if signal.telegram_enabled:
-            if signal.parse:
-                tradingview_message = parse(params, signal.telegram_template)
-            else:
-                tradingview_message = parse(params)
-            print(tradingview_message)
-            send_telegram_message(tradingview_message, signal.channel_chat_id)
+        if telegram_chats:
+                data = parse(params, telegram_chats)
+        send_telegram_message(data)
 
         if signal.mt5_enabled:
             pass

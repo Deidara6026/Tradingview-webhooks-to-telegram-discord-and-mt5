@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Signal
+from .models import SignalWebhook
 
 # Register your models here.
-admin.site.register(Signal)
+admin.site.register(SignalWebhook)
