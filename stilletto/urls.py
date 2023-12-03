@@ -17,13 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from signal_api.views import SignalAPIView
-from app.views import dashboard, submit_alert
+from app.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('dashboard/', dashboard, name="dashboard"),
-    path('api/<int:pk>', SignalAPIView.as_view()),
+    path('submittg/', submit_telegram_link, name="submittg"),
+    path('submitmt5/', submit_telegram_link, name="submitmt5"),
+    path('submitdiscord/', submit_telegram_link, name="submitdiscord"),
+    path('api/<int:pk>', SignalAPIView.as_view(), name="signal_api_endpoint"),
     path('submitalert/', submit_alert, name="submitalert"),
 
 ]
