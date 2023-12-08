@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import SignalWebhook
-
+from .models import *
 # Register your models here.
-admin.site.register(SignalWebhook)
+admin.site.register(Telegram_Webhook)
+admin.site.register(MT5_Webhook)
+admin.site.register(TelegramChat)

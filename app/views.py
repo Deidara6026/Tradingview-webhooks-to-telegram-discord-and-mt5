@@ -1,9 +1,9 @@
-from django.shortcuts import render, HttpResponse, JsonResponse
+from django.shortcuts import render, HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from .forms import *
-from signal_api.models import SignalWebhook
+from signal_api.models import *
 from django.urls import reverse
 # Create your views here.
 User = get_user_model()
@@ -12,7 +12,7 @@ User = get_user_model()
 @login_required
 def dashboard(request):
     context = {
-        "signalform":SignalForm(),
+        # "signalform":SignalForm(),
 
         }
     return render(request, "app/dashboard.html", context)
@@ -21,7 +21,7 @@ def dashboard(request):
 @login_required
 def submit_alert(request):
     if request.method == "POST":
-        form = SignalForm(request.POST)
+        form = 1#SignalForm(request.POST)
         if form.is_valid:
             form = form.save(commit=False)
             form.user = request.user
