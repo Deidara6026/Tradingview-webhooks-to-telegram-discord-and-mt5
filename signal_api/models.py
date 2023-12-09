@@ -26,7 +26,7 @@ class Order(models.Model):
     sl = models.FloatField()
     side = models.CharField(max_length=5)
     quantity = models.FloatField()
-    ticker = models.CharField(max_length=10)
+    ticker = models.CharField(max_length=10, null=True, blank=True)
 
 
 class TakeProfit(models.Model):
@@ -53,9 +53,17 @@ class TelegramChat(models.Model):
 
 
 class Discord_Webhook(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=30, null=True, blank=True)
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     parse = models.BooleanField(default=False)
-    channel_chat_id = models.CharField(max_length=15, null=True, blank=True)
+    hits = models.IntegerField(null=True, blank=True)
+    limit = models.IntegerField(null=True, blank=True)
+    plan = models.CharField(max_length=5, null=True, blank=True)
     message_format = models.CharField(max_length=500, null=True, blank=True)
     message_prefix = models.CharField(max_length=200, null=True, blank=True)
     message_suffix = models.CharField(max_length=200, null=True, blank=True)
+
+class DiscordChat(models.Model):
+    channel_webhook_url = models.CharField(max_length=200)
+    webhook = models.ForeignKey(Discord_Webhook, on_delete=models.CASCADE)

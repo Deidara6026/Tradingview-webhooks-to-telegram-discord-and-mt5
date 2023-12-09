@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-d6((rkfr7ov@tq02-(ctbb^%26qm!ipm7vf7=wh3=nnjtz9ms*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["deidara6026.pythonanywhere.com"]
+ALLOWED_HOSTS = ["deidara6026.pythonanywhere.com", "127.0.0.1"]
 
 
 # Application definition
@@ -89,6 +89,13 @@ DATABASES = {
 
 TELEGRAM = {
     'token': "6894838515:AAGDNmExrl-jVHjWslKWlhSZSblIt05egKo"
+}
+
+
+DISCORD = {
+    'app_id': '1183069282200989696',
+    'public_key': 'b601e30f9f1206dd8ee4dbf9ed27b6589468f3ff4d91d12de01df770daa111ed',
+    'token':'MTE4MzA2OTI4MjIwMDk4OTY5Ng.GSf-NH.15aY3uxSOzypwiAZyfBa3OWeBksz4ncU4r8vdw'
 }
 
 lemon_api_key = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiJjNTk5ZTA4YmFhNjk4YzdkYTkxZTQzMGIzOThjYTAwOWZjNmZiNDcwOTBlZGIzNzUwMzliZjBlMDM4NmUyMjVhNzU3MGVkMTYyOTdkNjE0MyIsImlhdCI6MTcwMTgxMjcxOS43ODYzNjEsIm5iZiI6MTcwMTgxMjcxOS43ODYzNjUsImV4cCI6MjAxNzQzMTkxOS43NTkxMTgsInN1YiI6IjE3MDQxODciLCJzY29wZXMiOltdfQ.JiXJEyZANZ1bRcAItMsUZBVkp5OeADJ7eQ6ssDrZaejS1EVQ3wxB1ggsCHvjt6838x6IJ5mWkg5jKC2t-zinpKFKzw7SybyjTvJ4i7RN7Kwt49E-L_8EMVhm2kRoBJ8MZ82OUPmjfNp8UKjhJqV3NrtDJn4zyOJW6veZRPZRFO4_QGtNFebv_Tl13Cz1_8f5qQxNhMNnpWnBSmTdfhOeHRiGI8zmnEwC-U4_Z_wJY0NVfFGO4AeDt3ZBsDcv_BK3VNk21oETvf434E0icnhf5Zvc5hbvfoo_kTDcAXovpZ7RPDwUgKQO931zCKbfBG8C0jpCBRCN8Mw-3sKpHo8tO8M2jW8vNjI39UAhVTXV6TlYvv-DeyLVLcbnSyjrYeW5lQTDEyB8lozcA43ajFZoC1znDghqN1DWgLM1aJFheDEEUq2hVDyQDXM2pd6ZhgdikbSe7Aj-t9o3g9wkuOjNbkeKvGD9u0jlPfkqdJV2_-_l28-o80vS2M0suI66h7uR"
