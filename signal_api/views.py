@@ -29,8 +29,9 @@ def send_discord_message(data: list):
             webhook_url = x[0]
             message = x[1]
             requests.post(webhook_url, json={"content": message})
-        except:
+        except Exception as e:
             pass
+            
 
 
 
@@ -59,7 +60,6 @@ def parse_signal_hit(msg: str):
 
 
 def parse(params: dict, webhook):
-    res = []
     default_template = """
 {{side}} {{symbol}}
 
@@ -130,13 +130,25 @@ class MT5APIView(APIView):
         tradingview_messages = data.get("message").split("\n")
         for message in tradingview_messages:
             params = parse_signal_hit(message)
-            if params:
+            if params.get("side").lower() == "close":
                 o = Order.objects.create(
                     is_active=True,
                     mt5_webhook=mt5_webhook,
-                    entry=params.get("entry"),
-                    sl=params.get("sl"),
-                    side=params.get("side"),
+                    ticker=params.get("symbol", ""),
+                    side=params.get("side", ""),
+                )
+                o.mt5_webhook = mt5_webhook
+                o.save()
+                return
+            else:
+                o = Order.objects.create(
+                    is_active=True,
+                    mt5_webhook=mt5_webhook,
+                    entry=params.get("entry", 0.0),
+                    sl=params.get("sl", 0.0),
+                    side=params.get("side", ""),
+                    ticker=params.get("symbol", ""),
+                    quantity=params.get("quantity", "")
                 )
                 o.mt5_webhook = mt5_webhook
                 o.save()

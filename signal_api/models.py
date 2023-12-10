@@ -1,11 +1,18 @@
 from django.db import models
 from django.conf import settings
-from django_cryptography.fields import encrypt
+from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 import uuid
 
 User = settings.AUTH_USER_MODEL
 
 
+
+class Alert(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
 
 class MT5_Webhook(models.Model):
     webhook_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)  
@@ -16,6 +23,7 @@ class MT5_Webhook(models.Model):
     parse = models.BooleanField(default=False)
     limit = models.IntegerField()
     hits = models.IntegerField()
+    old_alerts = GenericRelation(Alert)
     plan = models.CharField(max_length=5) 
 
 
@@ -27,6 +35,8 @@ class Order(models.Model):
     side = models.CharField(max_length=5)
     quantity = models.FloatField()
     ticker = models.CharField(max_length=10, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
 
 
 class TakeProfit(models.Model):
@@ -41,6 +51,7 @@ class Telegram_Webhook(models.Model):
     parse = models.BooleanField(default=False)
     hits = models.IntegerField()
     limit = models.IntegerField()
+    old_alerts = GenericRelation(Alert)
     plan = models.CharField(max_length=5)
     message_format = models.CharField(max_length=500, null=True, blank=True)
     message_prefix = models.CharField(max_length=200, null=True, blank=True)
@@ -60,6 +71,7 @@ class Discord_Webhook(models.Model):
     hits = models.IntegerField(null=True, blank=True)
     limit = models.IntegerField(null=True, blank=True)
     plan = models.CharField(max_length=5, null=True, blank=True)
+    old_alerts = GenericRelation(Alert)
     message_format = models.CharField(max_length=500, null=True, blank=True)
     message_prefix = models.CharField(max_length=200, null=True, blank=True)
     message_suffix = models.CharField(max_length=200, null=True, blank=True)
