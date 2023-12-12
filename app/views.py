@@ -16,31 +16,14 @@ User = get_user_model()
 def dashboard(request):
     context = {
         # "signalform":SignalForm(),
+        "discord_checkout": checkout("e323c57d-b490-4d15-96fb-00b0ccc1a91c", request.user.id),
+        "telegram_checkout": checkout("86a9f6d7-1541-48c9-994a-5c65af3f9c0f", request.user.id),
+        "mt5_checkout": checkout("380c7a5a-cab6-445c-af52-733410b62e4c", request.user.id)
     }
     return render(request, "app/dashboard.html", context)
 
 
-def create_checkout(user_id: str):
-    api_url = "https://api.lemonsqueezy.com/v1/checkouts"
-    lemon_settings = settings.LEMONSQUEEZY
-    headers = {
-        "Accept": "application/vnd.api+json",
-        "Content-Type": "application/vnd.api+json",
-        "Authorization": f"Bearer {lemon_settings.api_key}",
-    }
-    data = {
-        {
-            "type": "checkouts",
-            "attributes": {
-                "checkout_data": {"custom": {"user_id": str(user_id)}},
-                "preview": true,
-            },
-            "relationships": {
-                "store": {"data": {"type": "stores", "id": "58249"}},
-                "variant": {"data":{"type":"variants", "id", "145362"}}
-            },
-        }
-    }
+checkout = lambda uid, vid : f"https://stiletto.lemonsqueezy.com/checkout/buy/{vid}?checkout[custom][user_id]={uid}"
 
 
 @login_required
