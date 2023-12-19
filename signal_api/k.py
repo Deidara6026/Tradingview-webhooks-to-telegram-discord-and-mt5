@@ -20,7 +20,12 @@ def create_checkout(user_id="heysup"):
         },
     }
     "https://stiletto.lemonsqueezy.com/checkout/buy/e323c57d-b490-4d15-96fb-00b0ccc1a91c?checkout[custom][user_id]={uid}"
-    print(requests.post(api_url, headers=headers, data=json.dumps(data)).content)
+    print(
+        requests.get(
+            "https://api.lemonsqueezy.com/v1/subscriptions/208545",
+            headers=headers,
+        ).json()
+    )
 
 
 create_checkout()

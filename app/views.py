@@ -23,7 +23,7 @@ def dashboard(request):
     return render(request, "app/dashboard.html", context)
 
 
-checkout = lambda uid, vid : f"https://stiletto.lemonsqueezy.com/checkout/buy/{vid}?checkout[custom][user_id]={uid}"
+checkout = lambda uid, vid : f"https://stiletto.lemonsqueezy.com/checkout/buy/{vid}?checkout[custom][user_id]={uid}&checkout[custom][vid]={vid}"
 
 
 @login_required

@@ -9,7 +9,7 @@ from rest_framework import status
 from rest_framework import permissions
 from django.conf import settings
 import telebot
-import requests
+import requests, datetime
 
 def send_telegram_message(data: list):
     telegram_settings = settings.TELEGRAM
@@ -178,6 +178,56 @@ class DiscordAPIView(APIView):
         send_discord_message(res)
         discord_webhook.hits += 1
         discord_webhook.save()
+        return JsonResponse({"status": "success"})
+
+def get_subscription_by_id(id, wid, reason):
+    url = f"https://api.lemonsqueezy.com/v1/subscriptions/{str(id)}"
+    headers = {
+        "Accept": "application/vnd.api+json",
+        "Content-Type": "application/vnd.api+json",
+        "Authorization": f"Bearer {settings.LEMONSQUEEZY['api_key']}",
+    }
+    result = requests.get(url, headers=headers).json()
+    pid = result["data"]["attributes"]["product_id"]
+    vid = result["data"]["attributes"]["variant_id"]
+    renews_at = result["data"]["attributes"]["renews_at"]
+    if pid == settings.LEMONSQUEEZY["telegram_pid"] :
+        t = Telegram_Webhook.objects.filter(webhook_id=wid).first()
+    elif pid == settings.LEMONSQUEEZY["discord_pid"] :
+        t = Discord_Webhook.objects.filter(webhook_id=wid).first()
+    elif pid == settings.LEMONSQUEEZY["mt5_pid"] :
+        t = MT5_Webhook.objects.filter(webhook_id=wid).first()
+    if reason == "initial":
+        t.variant_id = vid
+        t.product_id = pid
+        t.subscription_id = id
+        t.status = "active"
+        t.renews_at = datetime.datetime.strptime(renews_at, "%Y-%m-%dT%H:%M:%S.%fZ")
+        if vid in settings.LEMONSQUEEZY["telegram_vids"]:
+            hit_limit = settings.LEMONSQUEEZY["telegram_vids"][vid]
+            t.hit_limit = hit_limit
+            t.chat_limit = int(result["data"]["attributes"]["first_subscription_item"]["quantity"])
+        if vid in settings.LEMONSQUEEZY["discord_vids"]:
+            hit_limit = settings.LEMONSQUEEZY["discord_vids"][vid]
+            t.hit_limit = hit_limit
+            t.chat_limit = int(result["data"]["attributes"]["first_subscription_item"]["quantity"])
+        
+        t.save()
+
+    return [pid, vid]
+
+class LemonAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        subscription_id = data["data"]["attributes"]["subscription_id"]
+        reason = data["data"]["attributes"].get("billing_reason", None)
+        if reason is None:
+            reason = data["meta"]["event_name"]
+        if reason == "renewal":
+            return
+        webhook_id = data["meta"]["custom_data"]["webhook_id"]
+        d = get_subscription_by_id(subscription_id, webhook_id, reason)
+        
         return JsonResponse({"status": "success"})
 
 

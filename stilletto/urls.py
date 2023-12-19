@@ -30,6 +30,7 @@ urlpatterns = [
     path('tview_api/mt5/<uuid:pk>', MT5APIView.as_view(), name="mt5_signal_api_endpoint"),
     path('tview_api/discord/<uuid:pk>', DiscordAPIView.as_view(), name="discord_signal_api_endpoint"),
     path('metatrader_api/<str:pk>', EAAPIView.as_view(), name="ea_signal_api_endpoint"),
+    path('webhooks/lemons', LemonAPIView.as_view(), name="lemon_api_endpoint"),
     path('submitalert/', submit_alert, name="submitalert"),
 
 ]
