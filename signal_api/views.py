@@ -10,6 +10,15 @@ from rest_framework import permissions
 from django.conf import settings
 import telebot
 import requests, datetime
+import hashlib
+import hmac
+import logging
+
+
+
+std_logger = logging.getLogger(__name__)
+lemon_logger = logging.getLogger("lemon")
+
 
 def send_telegram_message(data: list):
     telegram_settings = settings.TELEGRAM
@@ -21,7 +30,6 @@ def send_telegram_message(data: list):
             pass
 
 
-
 def send_discord_message(data: list):
     discord_settings = settings.DISCORD
     for x in data:
@@ -31,15 +39,12 @@ def send_discord_message(data: list):
             requests.post(webhook_url, json={"content": message})
         except Exception as e:
             pass
-            
-
-
 
 
 def parse_signal_hit(msg: str):
     params = msg.split()
     command = params[0]
-    if command.lower() == 'close':
+    if command.lower() == "close":
         d = {"side": "close"}
         if len(params) > 1:
             d.update({"symbol": params[1]})
@@ -84,7 +89,7 @@ Stop Loss: {{sl}}
     else:
         m = m.replace("Entry Price: {{p}}", "")
     if "tp" in params:
-        tp_values = ', '.join(map(str, params.get("tp", [])))
+        tp_values = ", ".join(map(str, params.get("tp", [])))
         m = m.replace("{{take profit}}", tp_values)
         m = m.replace("{{tp}}", tp_values)
     else:
@@ -114,7 +119,7 @@ class TelegramAPIView(APIView):
         if telegram_chats:
             data = parse(params, telegram_webhook)
         res = [[chat.chat_id, data] for chat in telegram_chats]
-        
+
         send_telegram_message(res)
         telegram_webhook.hits += 1
         telegram_webhook.save()
@@ -148,16 +153,14 @@ class MT5APIView(APIView):
                     sl=params.get("sl", 0.0),
                     side=params.get("side", ""),
                     ticker=params.get("symbol", ""),
-                    quantity=params.get("quantity", "")
+                    quantity=params.get("quantity", ""),
                 )
                 o.mt5_webhook = mt5_webhook
                 o.save()
                 tp_values = params.get("tp", [])
                 for tp_value in tp_values:
                     tp = TakeProfit.objects.create(
-                        is_active=True,
-                        order=o,
-                        price=tp_value
+                        is_active=True, order=o, price=tp_value
                     )
                     tp.save()
 
@@ -174,13 +177,14 @@ class DiscordAPIView(APIView):
         params = parse_signal_hit(tradingview_message)
         if discord_chats:
             data = parse(params, discord_webhook)
-        res = [[chat.channel_webhook_url, data] for chat in discord_chats]  
+        res = [[chat.channel_webhook_url, data] for chat in discord_chats]
         send_discord_message(res)
         discord_webhook.hits += 1
         discord_webhook.save()
         return JsonResponse({"status": "success"})
 
-def get_subscription_by_id(id, wid, reason):
+
+def handle_lemon_webhook(id, wid, reason):
     url = f"https://api.lemonsqueezy.com/v1/subscriptions/{str(id)}"
     headers = {
         "Accept": "application/vnd.api+json",
@@ -190,44 +194,87 @@ def get_subscription_by_id(id, wid, reason):
     result = requests.get(url, headers=headers).json()
     pid = result["data"]["attributes"]["product_id"]
     vid = result["data"]["attributes"]["variant_id"]
+    status = result["data"]["attributes"]["status"]
     renews_at = result["data"]["attributes"]["renews_at"]
-    if pid == settings.LEMONSQUEEZY["telegram_pid"] :
+
+    if pid == settings.LEMONSQUEEZY["telegram_pid"]:
         t = Telegram_Webhook.objects.filter(webhook_id=wid).first()
-    elif pid == settings.LEMONSQUEEZY["discord_pid"] :
+
+
+    elif pid == settings.LEMONSQUEEZY["discord_pid"]:
         t = Discord_Webhook.objects.filter(webhook_id=wid).first()
-    elif pid == settings.LEMONSQUEEZY["mt5_pid"] :
+
+
+    elif pid == settings.LEMONSQUEEZY["mt5_pid"]:
         t = MT5_Webhook.objects.filter(webhook_id=wid).first()
-    if reason == "initial":
+
+
+    if reason == "subscription_created":
         t.variant_id = vid
         t.product_id = pid
         t.subscription_id = id
         t.status = "active"
         t.renews_at = datetime.datetime.strptime(renews_at, "%Y-%m-%dT%H:%M:%S.%fZ")
+
         if vid in settings.LEMONSQUEEZY["telegram_vids"]:
             hit_limit = settings.LEMONSQUEEZY["telegram_vids"][vid]
             t.hit_limit = hit_limit
-            t.chat_limit = int(result["data"]["attributes"]["first_subscription_item"]["quantity"])
+            t.chat_limit = int(
+                result["data"]["attributes"]["first_subscription_item"]["quantity"]
+            )
+
         if vid in settings.LEMONSQUEEZY["discord_vids"]:
             hit_limit = settings.LEMONSQUEEZY["discord_vids"][vid]
             t.hit_limit = hit_limit
-            t.chat_limit = int(result["data"]["attributes"]["first_subscription_item"]["quantity"])
+            t.chat_limit = int(
+                result["data"]["attributes"]["first_subscription_item"]["quantity"]
+            )
         
-        t.save()
+        if vid in settings.LEMONSQUEEZY["mt5_vids"]:
+            hit_limit = settings.LEMONSQUEEZY["mt5_vids"][vid]
+            t.hit_limit = hit_limit
+
+
+    elif status in ["past_due", "unpaid"]:
+        ends_at = result["data"]["attributes"]["ends_at"]
+        t.ends_at = datetime.datetime.strptime(ends_at, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+    elif status == "active":
+        t.ends_at = None
+        t.status = "active"
+
+    elif status == "on_trial":
+        t.status = "active"
+        t.ends_at = datetime.datetime.strptime(
+            result["data"]["attributes"]["trial_ends_at"], "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
+
+    elif status == "expired":
+        t.status = "inactive"
+
+    t.save()
 
     return [pid, vid]
 
+
 class LemonAPIView(APIView):
     def post(self, request, *args, **kwargs):
+        signature = request.META['HTTP_X_SIGNATURE']
+        secret = settings.lemon_signed_secret
+
+        digest = hmac.new(secret.encode(), request.body, hashlib.sha256).hexdigest()
+
+        if not hmac.compare_digest(digest, signature):
+            pass
+            #logging here
         data = request.POST
         subscription_id = data["data"]["attributes"]["subscription_id"]
-        reason = data["data"]["attributes"].get("billing_reason", None)
-        if reason is None:
-            reason = data["meta"]["event_name"]
+        reason = data["meta"]["event_name"]
         if reason == "renewal":
             return
         webhook_id = data["meta"]["custom_data"]["webhook_id"]
-        d = get_subscription_by_id(subscription_id, webhook_id, reason)
-        
+        handle_lemon_webhook(subscription_id, webhook_id, reason)
+
         return JsonResponse({"status": "success"})
 
 
@@ -236,24 +283,25 @@ class EAAPIView(APIView):
         mt5_account = get_object_or_404(MT5_Webhook, webhook_id=self.kwargs["pk"])
         order = Order.objects.filter(is_active=True, mt5_webhook=mt5_account).first()
         if not order:
-            return JsonResponse({'status': 'no orders'})
+            return JsonResponse({"status": "no orders"})
 
         tps = order.takeprofit_set.filter(is_active=True).all()
         if not tps:
             order.is_active = False
             order.save()
-            return JsonResponse({'status': 'no orders'})
+            return JsonResponse({"status": "no orders"})
 
         tp = tps.first()
         tp.is_active = False
         tp.save()
-        return JsonResponse({
-            'status': 'success',
-            "command":"neworder",
-            "entry": order.entry,
-            "sl": order.sl,
-            "tp": tp.price,
-            "ticker": order.ticker,
-            "side": order.side,
-
-        })
+        return JsonResponse(
+            {
+                "status": "success",
+                "command": "neworder",
+                "entry": order.entry,
+                "sl": order.sl,
+                "tp": tp.price,
+                "ticker": order.ticker,
+                "side": order.side,
+            }
+        )

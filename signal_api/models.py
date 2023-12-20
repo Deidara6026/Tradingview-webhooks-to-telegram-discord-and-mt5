@@ -25,11 +25,9 @@ class MT5_Webhook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30, null=True, blank=True)
     meta_id = models.UUIDField(default=uuid.uuid4, editable=False)
-    parse = models.BooleanField(default=False)
-    limit = models.IntegerField()
+    hit_limit = models.IntegerField()
     hits = models.IntegerField()
     old_alerts = GenericRelation(Alert)
-    plan = models.CharField(max_length=5) 
 
 
 class Order(models.Model):
@@ -52,11 +50,6 @@ class TakeProfit(models.Model):
 class Telegram_Webhook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30, null=True, blank=True)
-    subscription_id = models.UUIDField(null=True, blank=True)
-    product_id = models.UUIDField(null=True, blank=True)
-    variant_id = models.UUIDField(null=True, blank=True)
-    renews_at = models.DateTimeField(null=True, blank=True)
-    ends_at = models.DateTimeField(null=True, blank=True)
     # update_payment_method = models.CharField(max_length=50, null=True, blank=True)
     webhook_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     parse = models.BooleanField(default=False)
@@ -87,7 +80,6 @@ class Discord_Webhook(models.Model):
     parse = models.BooleanField(default=False)
     hits = models.IntegerField(null=True, blank=True)
     limit = models.IntegerField(null=True, blank=True)
-    plan = models.CharField(max_length=5, null=True, blank=True)
     old_alerts = GenericRelation(Alert)
     message_format = models.CharField(max_length=500, null=True, blank=True)
     message_prefix = models.CharField(max_length=200, null=True, blank=True)
