@@ -27,7 +27,7 @@ def send_telegram_message(data: list):
         try:
             bot.send_message(x[0], x[1])
         except:
-            pass
+            std_logger.error(e)
 
 
 def send_discord_message(data: list):
@@ -38,7 +38,7 @@ def send_discord_message(data: list):
             message = x[1]
             requests.post(webhook_url, json={"content": message})
         except Exception as e:
-            pass
+            std_logger.error(e)
 
 
 def parse_signal_hit(msg: str):
@@ -60,7 +60,6 @@ def parse_signal_hit(msg: str):
                 if key.lower() in ["sl"]:
                     d.update({"sl": value})
 
-    print(d)
     return d
 
 
@@ -265,9 +264,10 @@ class LemonAPIView(APIView):
         digest = hmac.new(secret.encode(), request.body, hashlib.sha256).hexdigest()
 
         if not hmac.compare_digest(digest, signature):
-            pass
+            lemon_logger.critical(f"Attempted fake lemon api hit: {request}")
             #logging here
         data = request.POST
+        lemon_logger.info(str(datetime.datetime.now())+"   "+str(data))
         subscription_id = data["data"]["attributes"]["subscription_id"]
         reason = data["meta"]["event_name"]
         if reason == "renewal":
