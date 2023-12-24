@@ -1,0 +1,165 @@
+//+------------------------------------------------------------------+
+//|                                                stiletto-auto.mq5 |
+//|                                  Copyright 2023, MetaQuotes Ltd. |
+//|                                             https://www.mql5.com |
+//+------------------------------------------------------------------+
+#property copyright "Copyright 2023, MetaQuotes Ltd."
+#property link      "https://www.mql5.com"
+#property version   "1.00"
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+#include <JAson.mqh>
+#include <Trade\Trade.mqh>
+#include <Trade\OrderInfo.mqh> //Instatiate Library for Orders Information
+#include <Trade\PositionInfo.mqh>
+CTrade m_trade;  
+
+long order_magic=602618;
+#property script_show_inputs
+//--- input parameters
+input string Webhook_ID = "";
+input int slippage=20;
+input double lot_size = 0.01;
+int OnInit()
+  {
+//--- create timer
+   EventSetTimer(5);
+   
+   
+//---
+   return(INIT_SUCCEEDED);
+  }
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+  {
+//--- destroy timer
+   EventKillTimer();
+   
+  }
+//+------------------------------------------------------------------+
+//| Expert tick function                                             |
+//+------------------------------------------------------------------+
+
+int getticketbyid(struct ticket t, ulong tid){
+  string stid = (string)tid;
+  string query;
+  StringConcatenate(query, "SELECT * FROM TICKET WHERE TID==", stid);
+  int request=DatabasePrepare(db, query);
+   if(request==INVALID_HANDLE)
+     {
+      Print("DB: ", filename, " request failed with code ", GetLastError());
+      DatabaseClose(db);
+      return -1;
+     };
+    DatabaseRead(request, t);
+    DatabaseFinalise(request);
+};
+
+void OnTick()
+  {
+    for(int i = PositionsTotal()-1; i>=0; i--){
+    ulong = posticket = PositionGetTicket(i);
+    if(PositionSelectByTicket(posticket)){
+      struct t{
+        int td;
+        int ts;
+        double tt;
+        ulong tid;
+        };
+      getticketbyid(t, posticket);
+      
+      
+      }
+    }
+   
+  }
+
+
+void close_by_ticker(string s)
+  {
+   COrderInfo     m_order; //Library for Orders information
+   CPositionInfo  m_position; // Library for all position features and information
+
+   for(int i = PositionsTotal() - 1; i >= 0; i--) // loop all Open Positions
+      if(m_position.SelectByIndex(i))  // select a position
+        {
+          if (m_position.Symbol() == s){
+            m_trade.PositionClose(m_position.Ticket()); // then close it 
+            Sleep(100); // Relax for 100 ms
+          }
+        }
+  }
+void close_all()
+  {
+   COrderInfo     m_order; //Library for Orders information
+   CPositionInfo  m_position; // Library for all position features and information
+
+   for(int i = PositionsTotal() - 1; i >= 0; i--) // loop all Open Positions
+      if(m_position.SelectByIndex(i))  // select a position
+        {
+            m_trade.PositionClose(m_position.Ticket()); // then close it 
+            Sleep(100); // Relax for 100 ms
+        }
+  }
+
+//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
+//| Timer function                                                   |
+//+------------------------------------------------------------------+
+void OnTimer()
+  {
+//---
+   string cookie=NULL,headers;
+   string url = "https://deidara6026.pythonanywhere.com/metatrader_api/51b36c74-f140-4f96-afc5-5a4f3798bb0b";
+   char   post[],result[];
+   ResetLastError();
+   int timeout=5000;
+   int res=WebRequest("GET",url,cookie,NULL,timeout,post,0,result,headers);
+   if(res==-1)
+     {
+      Print("Error in WebRequest. Error code  =",GetLastError());
+     }
+   else
+     {
+      if(res==200)
+        {
+        CJAVal loader;
+        loader.Deserialize(CharArrayToString(result),CP_UTF8);  
+        double e = loader["entry"].ToDbl();
+        double tp = loader["tp"].ToDbl();
+        double sl = loader["sl"].ToDbl();
+        string t = loader["ticker"].ToStr();
+        string s = loader["side"].ToStr();
+        string command = loader["command"].ToStr();
+        if (command == "NEW") {
+          m_trade.SetExpertMagicNumber(order_magic);
+          m_trade.SetMarginMode();
+          m_trade.SetTypeFillingBySymbol(t);
+          m_trade.SetDeviationInPoints(slippage);
+          if (s == "BUY" || s=="buy"){
+            m_trade.Buy(lot_size,t,e,sl,tp,"q");
+          } else {
+            m_trade.Sell(lot_size,t,e,sl,tp,"q");
+          }
+        } else if(command == "STOP"){
+          if (t == ""){
+            close_all();
+          } else {
+          close_by_ticker(t);
+          }
+        }
+        }
+   }
+  }
+//+------------------------------------------------------------------+
+//| Trade function                                                   |
+//+------------------------------------------------------------------+
+void OnTrade()
+  {
+//---
+   
+  }
+//+------------------------------------------------------------------+
