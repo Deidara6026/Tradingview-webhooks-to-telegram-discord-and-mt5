@@ -21,62 +21,87 @@ long order_magic=602618;
 input string Webhook_ID = "";
 input int slippage=20;
 input double lot_size = 0.01;
+
+struct ticket
+  {
+    int td; //if the difference between the current price and the sl is >= ts, adjust the sl to be td distance from the price
+    int ts;
+    double tt;
+    ulong tid;
+  };
+int db = DatabaseOpen("exo.db", DATABASE_OPEN_CREATE);
+
 int OnInit()
   {
-//--- create timer
    EventSetTimer(5);
-   
-   
-//---
    return(INIT_SUCCEEDED);
+   
   }
-//+------------------------------------------------------------------+
-//| Expert deinitialization function                                 |
-//+------------------------------------------------------------------+
+
 void OnDeinit(const int reason)
   {
-//--- destroy timer
    EventKillTimer();
-   
   }
-//+------------------------------------------------------------------+
-//| Expert tick function                                             |
-//+------------------------------------------------------------------+
 
-int getticketbyid(struct ticket t, ulong tid){
+
+int getticketbyid(ticket &t, ulong tid){
   string stid = (string)tid;
   string query;
   StringConcatenate(query, "SELECT * FROM TICKET WHERE TID==", stid);
   int request=DatabasePrepare(db, query);
    if(request==INVALID_HANDLE)
      {
-      Print("DB: ", filename, " request failed with code ", GetLastError());
+      Print("DB: ", "exo", " request failed with code ", GetLastError());
       DatabaseClose(db);
       return -1;
      };
-    DatabaseRead(request, t);
-    DatabaseFinalise(request);
-};
+    DatabaseReadBind(request, t);
+    DatabaseFinalize(request);
+    return 1;
+}
 
 void OnTick()
   {
     for(int i = PositionsTotal()-1; i>=0; i--){
-    ulong = posticket = PositionGetTicket(i);
-    if(PositionSelectByTicket(posticket)){
-      struct t{
-        int td;
-        int ts;
-        double tt;
-        ulong tid;
-        };
-      getticketbyid(t, posticket);
-      
-      
+      ulong posticket = PositionGetTicket(i);
+      if(PositionSelectByTicket(posticket)){ 
+        ticket t;
+        getticketbyid(t, posticket);
+        if (t.tid == posticket){
+           if(PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY){
+            double current_price = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+            double current_sl = PositionGetDouble(POSITION_SL);
+            double current_tp = PositionGetDouble(POSITION_TP);
+            if(current_price - current_sl >=t.ts){
+              double sl = current_price-t.td;
+                if(sl > current_sl){
+                  CTrade trade;
+                  if(trade.PositionModify(posticket, sl, current_tp)){
+                    Print("trailing stop modified:", posticket);
+                  }
+                }
+            }
+          else if(PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_SELL){
+              double current_price = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+              double current_sl = PositionGetDouble(POSITION_SL);
+              double current_tp = PositionGetDouble(POSITION_TP);
+              if(current_sl - current_price >=t.ts)
+              {
+                double sl = current_price+t.td;
+                if(sl < current_sl)
+                {
+                  CTrade trade;
+                  if(trade.PositionModify(posticket, sl, current_tp)){
+                    Print("trailing stop modified:", posticket);
+                  }
+                }
+              }
+           }
+        }
       }
     }
-   
   }
-
+}
 
 void close_by_ticker(string s)
   {
