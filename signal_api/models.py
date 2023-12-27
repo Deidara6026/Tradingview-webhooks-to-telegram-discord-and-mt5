@@ -34,6 +34,11 @@ class Order(models.Model):
     is_active = models.BooleanField()
     mt5_webhook = models.ForeignKey(MT5_Webhook, on_delete=models.CASCADE)
     entry = models.FloatField()
+    magic = models.IntegerField(null=True, blank=True)
+    tt = models.IntegerField(null=True, blank=True)
+    td = models.IntegerField(null=True, blank=True)
+    ts = models.IntegerField(null=True, blank=True)
+    trailing_type = models.IntegerField(null=True, blank=True) # -1 for percent, 1 for points
     sl = models.FloatField()
     side = models.CharField(max_length=5)
     quantity = models.FloatField()

@@ -43,22 +43,39 @@ def send_discord_message(data: list):
 
 def parse_signal_hit(msg: str):
     params = msg.split()
-    command = params[0]
-    if command.lower() == "close":
-        d = {"side": "close"}
-        if len(params) > 1:
-            d.update({"symbol": params[1]})
-    else:
-        d = {"symbol": params[1], "side": command}
-        for param in params:
+    command = params[0].lower()
+    d = {"side": command}
+
+    if command == "close" and len(params) > 1:
+        d.update({"symbol": params[1]})
+    elif command != "close":
+        d.update({"symbol": params[1]})
+
+        for param in params[2:]:
             if ":" in param:
                 key, value = param.split(":")
-                if key.lower() in ["p", "price"]:
+                key = key.lower()
+
+                if key in ["p", "price"]:
                     d.update({"price": value})
-                if key.lower().startswith("tp"):
+                elif key.startswith("tp"):
                     d.setdefault("tp", []).append(value)
-                if key.lower() in ["sl"]:
+                elif key == "sl":
                     d.update({"sl": value})
+                elif key == "q":
+                    if "%" in value:
+                        d.update({"qt":"1"})
+                    else:
+                        d.update({"qt":"-1"})
+                    d.update({"sl": value})
+                elif key == "m":
+                    d.update({"m": value})
+                elif key == "tt":
+                    d.update({"tt": value})
+                elif key == "td":
+                    d.update({"td": value})
+                elif key == "ts":
+                    d.update({"ts": value})
 
     return d
 

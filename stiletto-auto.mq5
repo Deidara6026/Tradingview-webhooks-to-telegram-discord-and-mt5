@@ -28,14 +28,47 @@ struct ticket
     int ts;
     double tt;
     ulong tid;
+    bool active;
+    int val_type; // percentages, points, 1, -1
   };
-int db = DatabaseOpen("exo.db", DATABASE_OPEN_CREATE);
+
+
+int db = DatabaseOpen("exo.sqlite", DATABASE_OPEN_READWRITE | DATABASE_OPEN_CREATE | DATABASE_OPEN_COMMON);
 
 int OnInit()
   {
    EventSetTimer(5);
    return(INIT_SUCCEEDED);
-   
+   if (!DatabaseTableExists(db, "TICKETS")){
+    if(db==INVALID_HANDLE)
+     {
+      Print("DB: ", "exo.sqlite", " open failed with code ", GetLastError());
+      return -1;
+     }
+     if(!DatabaseExecute(db, "CREATE TABLE TICKETS("
+                          "ID          INT KEY NOT NULL,"
+                          "tid         INT     NOT NULL,"
+                          "tt          INT     NOT NULL,"
+                          "td          INT     NOT NULL,"
+                          "ts          INT     NOT NULL,"
+                          "active      INT     NOT NULL);"))
+        {
+         Print("DB: create the TICKETS table  failed with code ", GetLastError());
+         return(false);
+        }
+   }
+  }
+  
+  // Function to remove a ticket from the database once a trade hits takeprofit or stop loss
+  void remove_ticket(ulong tid)
+  {
+    string stid = (string)tid;
+    string query;
+    StringConcatenate(query, "DELETE FROM TICKETS WHERE tid = ", stid);
+    if(!DatabaseExecute(db, query))
+    {
+      Print("DB: delete from the TICKETS table failed with code ", GetLastError());
+    }
   }
 
 void OnDeinit(const int reason)
@@ -60,18 +93,37 @@ int getticketbyid(ticket &t, ulong tid){
     return 1;
 }
 
+void activate_trailing(ulong tid)
+  {
+    string stid = (string)tid;
+    string query;
+    StringConcatenate(query, "UPDATE TICKETS SET active = 1 WHERE tid = ", stid);
+    if(!DatabaseExecute(db, query))
+    {
+      Print("DB: update the TICKETS table failed with code ", GetLastError());
+    }
+}
+
+
+
+
 void OnTick()
   {
     for(int i = PositionsTotal()-1; i>=0; i--){
       ulong posticket = PositionGetTicket(i);
       if(PositionSelectByTicket(posticket)){ 
         ticket t;
-        getticketbyid(t, posticket);
+        if(getticketbyid(t, posticket) == -1) continue; // Skip if ticket not found in the db
         if (t.tid == posticket){
            if(PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY){
             double current_price = SymbolInfoDouble(_Symbol, SYMBOL_BID);
             double current_sl = PositionGetDouble(POSITION_SL);
             double current_tp = PositionGetDouble(POSITION_TP);
+            double open_price = PositionGetDouble(POSITION_PRICE_OPEN);
+            double current_p = PositionGetDouble(POSITION_PRICE_CURRENT);
+            if(t.val_type > 0 && open_price*((t.tt+100)/100) >= current_price) if(MathAbs(current_p-open_price)>t.tt){
+              activate_trailing(posticket);
+            }
             if(current_price - current_sl >=t.ts){
               double sl = current_price-t.td;
                 if(sl > current_sl){
@@ -156,6 +208,9 @@ void OnTimer()
         double e = loader["entry"].ToDbl();
         double tp = loader["tp"].ToDbl();
         double sl = loader["sl"].ToDbl();
+        double tt = loader["tt"].ToDbl();
+        double ts = loader["ts"].ToDbl();
+        double td = loader["td"].ToDbl();
         string t = loader["ticker"].ToStr();
         string s = loader["side"].ToStr();
         string command = loader["command"].ToStr();
@@ -185,6 +240,16 @@ void OnTimer()
 void OnTrade()
   {
 //---
-   
+   for(int i=PositionsTotal()-1; i>=0; i--)
+   {
+      ulong posticket = PositionGetTicket(i);
+      if(PositionSelectByTicket(posticket))
+      {
+         if(PositionGetInteger(POSITION_TICKET) != 0)
+         {
+            remove_ticket(posticket);
+         }
+      }
+   }
   }
 //+------------------------------------------------------------------+
