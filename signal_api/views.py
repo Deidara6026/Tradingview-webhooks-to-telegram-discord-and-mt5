@@ -41,43 +41,70 @@ def send_discord_message(data: list):
             std_logger.error(e)
 
 
-def parse_signal_hit(msg: str):
-    params = msg.split()
-    command = params[0].lower()
-    d = {"side": command}
+def parse_signal_hit(m: str):
+    r = []
+    for msg in m.split("\n"):
+        params = msg.split(" ")
+        command = params[0].lower()
+        d = {"side": command}
+        if msg.lower() == "close":
+            d.update({"all":True})
 
-    if command == "close" and len(params) > 1:
-        d.update({"symbol": params[1]})
-    elif command != "close":
-        d.update({"symbol": params[1]})
+        if command == "close":
+            try:
+                magic = int(params[1])
+                d.update({"m", magic})
+            except ValueError:
+                d.update({"symbol": params[1].upper()})
 
-        for param in params[2:]:
-            if ":" in param:
-                key, value = param.split(":")
-                key = key.lower()
 
-                if key in ["p", "price"]:
-                    d.update({"price": value})
-                elif key.startswith("tp"):
-                    d.setdefault("tp", []).append(value)
-                elif key == "sl":
-                    d.update({"sl": value})
-                elif key == "q":
-                    if "%" in value:
-                        d.update({"qt":"1"})
-                    else:
-                        d.update({"qt":"-1"})
-                    d.update({"sl": value})
-                elif key == "m":
-                    d.update({"m": value})
-                elif key == "tt":
-                    d.update({"tt": value})
-                elif key == "td":
-                    d.update({"td": value})
-                elif key == "ts":
-                    d.update({"ts": value})
+        elif command == "modify":
+            try:
+                magic = int(params[1])
+                d.update({"m", magic})
+            except ValueError:
+                d.update({"symbol": params[1].upper()})
+            for p in params:
+                k,v=p.split("=")
+                if k.lower() == "tp":
+                    d.update({"tp":v})
+                if k.lower() == "sl":
+                    d.update({"sl":v})
+            
 
-    return d
+
+        elif command in ["buy", "sell"]:
+            d.update({"symbol": params[1].upper()})
+
+            for param in params[2:]:
+                if "=" in param:
+                    key, value = param.split("=")
+                    key = key.lower()
+
+                    if key in ["p", "price"]:
+                        d.update({"price": value})
+                    elif key.startswith("tp"):
+                        d.setdefault("tp", []).append(value)
+                    elif key == "sl":
+                        d.update({"sl": value})
+                    elif key == "e":
+                        d.update({"e": value})
+                    elif key == "q":
+                        if "%" in value:
+                            d.update({"qt":"1"})
+                        else:
+                            d.update({"qt":"-1"})
+                        d.update({"sl": value})
+                    elif key == "m":
+                        d.update({"m": value})
+                    elif key == "tt":
+                        d.update({"tt": value})
+                    elif key == "td":
+                        d.update({"td": value})
+                    elif key == "ts":
+                        d.update({"ts": value})
+        r.append(d)
+    return r
 
 
 def parse(params: dict, webhook):
@@ -131,12 +158,12 @@ class TelegramAPIView(APIView):
         data = request.data
         telegram_chats = telegram_webhook.telegramchat_set.all()
         tradingview_message = data.get("message")
-        params = parse_signal_hit(tradingview_message)
-        if telegram_chats:
-            data = parse(params, telegram_webhook)
-        res = [[chat.chat_id, data] for chat in telegram_chats]
+        for params in parse_signal_hit(tradingview_message):
+            if telegram_chats:
+                data = parse(params, telegram_webhook)
+            res = [[chat.chat_id, data] for chat in telegram_chats]
 
-        send_telegram_message(res)
+            send_telegram_message(res)
         telegram_webhook.hits += 1
         telegram_webhook.save()
         return JsonResponse({"status": "success"})
@@ -150,35 +177,58 @@ class MT5APIView(APIView):
         data = request.data
         tradingview_messages = data.get("message").split("\n")
         for message in tradingview_messages:
-            params = parse_signal_hit(message)
-            if params.get("side").lower() == "close":
-                o = Order.objects.create(
-                    is_active=True,
-                    mt5_webhook=mt5_webhook,
-                    ticker=params.get("symbol", ""),
-                    side=params.get("side", ""),
-                )
-                o.mt5_webhook = mt5_webhook
-                o.save()
-                return
-            else:
-                o = Order.objects.create(
-                    is_active=True,
-                    mt5_webhook=mt5_webhook,
-                    entry=params.get("entry", 0.0),
-                    sl=params.get("sl", 0.0),
-                    side=params.get("side", ""),
-                    ticker=params.get("symbol", ""),
-                    quantity=params.get("quantity", ""),
-                )
-                o.mt5_webhook = mt5_webhook
-                o.save()
-                tp_values = params.get("tp", [])
-                for tp_value in tp_values:
-                    tp = TakeProfit.objects.create(
-                        is_active=True, order=o, price=tp_value
+            for params in parse_signal_hit(message):
+                if params.get("side").lower() in ["buy", "sell"]:
+                    o = Order.objects.create(
+                        is_active=True,
+                        mt5_webhook=mt5_webhook,
+                        ticker=params.get("symbol", ""),
+                        side=params.get("side", ""),
+                        tt = params.get("tt", None),
+                        ts = params.get("ts", None),
+                        td = params.get("td", None),
+                        sl = params.get("sl", None),
+                        m = params.get("m", None),
+                        quantity = params.get("quantity", None),
+                        entry = params.get("entry", None),
+                        q_type= params.get("qt", None),
+                        trailing_type=params.get("trail_type")
                     )
+                    o.mt5_webhook = mt5_webhook
+                    o.save()
+                    tp_values = params.get("tp", [])
+                    for tp_value in tp_values:
+                        tp = TakeProfit.objects.create(
+                            is_active=True, order=o, price=tp_value
+                        )
                     tp.save()
+
+
+                elif params.get("side").lower() == "close":
+                    o = CloseOrder.objects.create(
+                        is_active=True,
+                        mt5_webhook=mt5_webhook,
+                        ticker=params.get("symbol", None),
+                        magic=params.get("m", None),
+                    )
+                    o.mt5_webhook = mt5_webhook
+                    o.save()
+
+                
+                elif params.get("side").lower() == "modify":
+                    o = CloseOrder.objects.create(
+                        is_active=True,
+                        mt5_webhook=mt5_webhook,
+                        ticker=params.get("symbol", None),
+                        magic=params.get("m", None),
+                        sl = params.get("sl", None),
+                        tp = params.get("tp", None),
+                        
+                    )
+                    o.mt5_webhook = mt5_webhook
+                    o.save()
+        return JsonResponse({"ok": 200})
+
 
 
 class DiscordAPIView(APIView):
@@ -190,14 +240,14 @@ class DiscordAPIView(APIView):
         data = request.data
         discord_chats = discord_webhook.discordchat_set.all()
         tradingview_message = data.get("message")
-        params = parse_signal_hit(tradingview_message)
-        if discord_chats:
-            data = parse(params, discord_webhook)
-        res = [[chat.channel_webhook_url, data] for chat in discord_chats]
-        send_discord_message(res)
+        for params in parse_signal_hit(tradingview_message):
+            if discord_chats:
+                data = parse(params, discord_webhook)
+            res = [[chat.channel_webhook_url, data] for chat in discord_chats]
+            send_discord_message(res)
         discord_webhook.hits += 1
         discord_webhook.save()
-        return JsonResponse({"status": "success"})
+        return JsonResponse({"ok": 200})
 
 
 def handle_lemon_webhook(id, wid, reason):

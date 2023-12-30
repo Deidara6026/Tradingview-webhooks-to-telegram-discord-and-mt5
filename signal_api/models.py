@@ -40,17 +40,26 @@ class Order(models.Model):
     ts = models.IntegerField(null=True, blank=True)
     trailing_type = models.IntegerField(null=True, blank=True) # -1 for percent, 1 for points
     sl = models.FloatField()
+    magic  = models.IntegerField(null=True, blank=True)
     side = models.CharField(max_length=5)
     quantity = models.FloatField()
+    q_type = models.IntegerField(null=True, blank=True)
     ticker = models.CharField(max_length=10, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-
 
 
 class TakeProfit(models.Model):
     price = models.FloatField()
     is_active = models.BooleanField(default=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+
+class CloseOrder(models.Model):
+    is_active = models.BooleanField()
+    mt5_webhook = models.ForeignKey(MT5_Webhook, on_delete=models.CASCADE)
+    magic = models.IntegerField(null=True, blank=True)
+    ticker = models.CharField(max_length=10, null=True, blank=True)
+
 
 class Telegram_Webhook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
