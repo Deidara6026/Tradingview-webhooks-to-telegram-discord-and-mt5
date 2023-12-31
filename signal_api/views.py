@@ -48,7 +48,7 @@ def parse_signal_hit(m: str):
         command = params[0].lower()
         d = {"side": command}
         if msg.lower() == "close":
-            d.update({"all":True})
+            d.update({"all":True,})
 
         if command == "close":
             try:
@@ -108,44 +108,50 @@ def parse_signal_hit(m: str):
 
 
 def parse(params: dict, webhook):
-    default_template = """
+    if params["side"] in ["buy", "sell"]:
+        default_template = """
 {{side}} {{symbol}}
 
-Entry Price: {{p}}
+
+Entry Price: {{e}}
 
 Take Profit: {{tp}}
 Stop Loss: {{sl}}
+--------------------
+Trailing Settings
+Trigger: {{tt}}
+Distance: {{td}}
+Step: {{ts}}
+
+            """
+    elif params["side"] == "modify":
+        m = f"""
+Modify {params.get("symbol", None) or "#"+str(params.get("m"), None)}
+
+SL: {params.get("sl", None) or "Unchanged"}
+TP: {params.get("tp", None) or "Unchanged"}
+        """
+        return m
+
+    elif params["side"] == "close":
+        m = f"""
+Close {params.get("symbol", None) or params.get("m", None)  or "all previously opened trades"}
 
         """
+        return m
+
     if webhook.message_format == None:
         template = default_template
     else:
         template = webhook.message_format
     m = template
-    if "symbol" in params:
-        m = m.replace("{{symbol}}", params.get("symbol", "").upper())
-    else:
-        m = m.replace("{{symbol}}", "")
-    if "price" in params:
-        m = m.replace("{{price}}", params.get("price", ""))
-        m = m.replace("{{p}}", params.get("price", ""))
-    else:
-        m = m.replace("Entry Price: {{p}}", "")
-    if "tp" in params:
-        tp_values = ", ".join(map(str, params.get("tp", [])))
-        m = m.replace("{{take profit}}", tp_values)
-        m = m.replace("{{tp}}", tp_values)
-    else:
-        m = m.replace("Take Profit: {{tp}}", "")
-    if "sl" in params:
-        m = m.replace("{{stop loss}}", params.get("sl", ""))
-        m = m.replace("{{sl}}", params.get("sl", ""))
-    else:
-        m = m.replace("Stop Loss: {{sl}}", "")
-    if "side" in params:
-        m = m.replace("{{side}}", params.get("side", "").upper())
-    else:
-        m = m.replace("{{side}}", "").replace("{{symbol}}", "")
+    for k in params.keys():
+        template = template.replace(k, str(params[k]))
+    m = template.replace("{{", "").replace("}}", "")
+    return m
+    if params.get("tt", None) == None:
+        m = m.split("--------------------")[0]
+    m = m.replace("{{sl}}", "None").replace("{{e}}", "Current").replace("{{tp}}", "None")
     return m
 
 
@@ -210,13 +216,14 @@ class MT5APIView(APIView):
                         mt5_webhook=mt5_webhook,
                         ticker=params.get("symbol", None),
                         magic=params.get("m", None),
+                        _all = params.get("all", False)
                     )
                     o.mt5_webhook = mt5_webhook
                     o.save()
 
                 
                 elif params.get("side").lower() == "modify":
-                    o = CloseOrder.objects.create(
+                    o = ModifyOrder.objects.create(
                         is_active=True,
                         mt5_webhook=mt5_webhook,
                         ticker=params.get("symbol", None),
@@ -349,26 +356,55 @@ class EAAPIView(APIView):
     def get(self, request, *args, **kwargs):
         mt5_account = get_object_or_404(MT5_Webhook, webhook_id=self.kwargs["pk"])
         order = Order.objects.filter(is_active=True, mt5_webhook=mt5_account).first()
-        if not order:
+        close_order = CloseOrder.objects.filter(is_active=True, mt5_webhook=mt5_account).first()
+        modify_order = ModifyOrder.objects.filter(is_active=True, mt5_webhook=mt5_account).first()
+        if not (order or close_order or modify_order):
             return JsonResponse({"status": "no orders"})
+        if order:
+            tps = order.takeprofit_set.filter(is_active=True).all()
+            if not tps:
+                order.is_active = False
+                order.save()
+                return JsonResponse({"status": "no orders"})
 
-        tps = order.takeprofit_set.filter(is_active=True).all()
-        if not tps:
-            order.is_active = False
-            order.save()
-            return JsonResponse({"status": "no orders"})
+            tp = tps.first()
+            tp.is_active = False
+            tp.save()
+            return JsonResponse(
+                {
+                    "status": "success",
+                    "command": "neworder",
+                    "entry": order.entry,
+                    "sl": order.sl,
+                    "tp": tp.price,
+                    "tt": order.tt,
+                    "ts": order.ts,
+                    "td": order.td,
+                    "magic": order.magic,
+                    "trailing_type": order.trailing_type,
+                    "ticker": order.ticker,
+                    "side": order.side,
+                }
+            )
+        elif close_order:
+            return JsonResponse(
+                {
+                    "status": "success",
+                    "command": "close",
+                    "magic": close_order.magic,
+                    "ticker": close_order.ticker,
+                    "all": close_order._all,
+                }
+            )
+        elif modify_order:
+            return JsonResponse(
+                {
+                    "status": "success",
+                    "command": "close",
+                    "magic": modify_order.magic,
+                    "ticker": modify_order.ticker,
+                    "sl": modify_order.sl,
+                    "tp": modify_order.price,
+                }
+            )
 
-        tp = tps.first()
-        tp.is_active = False
-        tp.save()
-        return JsonResponse(
-            {
-                "status": "success",
-                "command": "neworder",
-                "entry": order.entry,
-                "sl": order.sl,
-                "tp": tp.price,
-                "ticker": order.ticker,
-                "side": order.side,
-            }
-        )

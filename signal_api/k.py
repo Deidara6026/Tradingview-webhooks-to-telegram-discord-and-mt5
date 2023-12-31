@@ -34,7 +34,7 @@ def create_checkout(user_id="heysup"):
     Buy GBPUSD e=1.2345 tp=1.24333 sl=1.02222 q=0.1 m=7 tt=100 td=200 ts=10 q=4%
     Modify 7 tp=0, sl=0
     """
+if not (False or False):
+    print("hit")
 
-int("g")
 
-create_checkout()

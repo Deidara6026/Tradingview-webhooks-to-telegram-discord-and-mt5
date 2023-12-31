@@ -59,6 +59,16 @@ class CloseOrder(models.Model):
     mt5_webhook = models.ForeignKey(MT5_Webhook, on_delete=models.CASCADE)
     magic = models.IntegerField(null=True, blank=True)
     ticker = models.CharField(max_length=10, null=True, blank=True)
+    _all = models.BooleanField(null=True, blank=True)
+
+
+class ModifyOrder(models.Model):
+    is_active = models.BooleanField()
+    mt5_webhook = models.ForeignKey(MT5_Webhook, on_delete=models.CASCADE)
+    magic = models.IntegerField(null=True, blank=True)
+    ticker = models.CharField(max_length=10, null=True, blank=True)
+    sl = models.FloatField(null=True, blank=True)
+    tp = models.FloatField(null=True, blank=True)
 
 
 class Telegram_Webhook(models.Model):
