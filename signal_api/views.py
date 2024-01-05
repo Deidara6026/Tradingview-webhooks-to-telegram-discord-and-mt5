@@ -16,7 +16,6 @@ import logging
 import re
 
 
-
 std_logger = logging.getLogger(__name__)
 lemon_logger = logging.getLogger("lemon")
 
@@ -45,12 +44,18 @@ def send_discord_message(data: list):
 def parse_signal_hit(m: str):
     r = []
     for msg in m.split("\n"):
-        msg = re.sub("\s*(\W)\s*",r"\1",msg) # Get rid of wild whitespaces between special chars, as well as double spaces 
+        msg = re.sub(
+            "\s*(\W)\s*", r"\1", msg
+        )  # Get rid of wild whitespaces between special chars, as well as double spaces
         params = msg.split(" ")
         command = params[0].lower()
         d = {"side": command}
         if msg.lower() == "close":
-            d.update({"all":True,})
+            d.update(
+                {
+                    "all": True,
+                }
+            )
 
         if command == "close":
             try:
@@ -59,7 +64,6 @@ def parse_signal_hit(m: str):
             except ValueError:
                 d.update({"symbol": params[1].upper()})
 
-
         elif command == "modify":
             try:
                 magic = int(params[1])
@@ -67,13 +71,13 @@ def parse_signal_hit(m: str):
             except ValueError:
                 d.update({"symbol": params[1].upper()})
             for p in params:
-                k,v=p.split("=")
+                k, v = p.split("=")
                 if k.lower() == "tp":
-                    d.update({"tp":v})
+                    d.update({"tp": v})
                 if k.lower() == "sl":
-                    d.update({"sl":v})
-            
-
+                    if v.lower == "b":
+                        v = -1
+                    d.update({"sl": v})
 
         elif command in ["buy", "sell"]:
             d.update({"symbol": params[1].upper()})
@@ -93,9 +97,9 @@ def parse_signal_hit(m: str):
                         d.update({"e": value})
                     elif key == "q":
                         if "%" in value:
-                            d.update({"qt":"1"})
+                            d.update({"qt": "1"})
                         else:
-                            d.update({"qt":"-1"})
+                            d.update({"qt": "-1"})
                         d.update({"sl": value})
                     elif key == "m":
                         d.update({"m": value})
@@ -132,6 +136,7 @@ Modify {params.get("symbol", None) or "#"+str(params.get("m"), None)}
 
 SL: {params.get("sl", None) or "Unchanged"}
 TP: {params.get("tp", None) or "Unchanged"}
+{"Break Even"}
         """
         return m
 
@@ -153,7 +158,11 @@ Close {params.get("symbol", None) or params.get("m", None)  or "all previously o
     return m
     if params.get("tt", None) == None:
         m = m.split("--------------------")[0]
-    m = m.replace("{{sl}}", "None").replace("{{e}}", "Current").replace("{{tp}}", "None")
+    m = (
+        m.replace("{{sl}}", "None")
+        .replace("{{e}}", "Current")
+        .replace("{{tp}}", "None")
+    )
     return m
 
 
@@ -192,15 +201,15 @@ class MT5APIView(APIView):
                         mt5_webhook=mt5_webhook,
                         ticker=params.get("symbol", ""),
                         side=params.get("side", ""),
-                        tt = params.get("tt", None),
-                        ts = params.get("ts", None),
-                        td = params.get("td", None),
-                        sl = params.get("sl", None),
-                        m = params.get("m", None),
-                        quantity = params.get("quantity", None),
-                        entry = params.get("entry", None),
-                        q_type= params.get("qt", None),
-                        trailing_type=params.get("trail_type")
+                        tt=params.get("tt", None),
+                        ts=params.get("ts", None),
+                        td=params.get("td", None),
+                        sl=params.get("sl", None),
+                        m=params.get("m", None),
+                        quantity=params.get("quantity", None),
+                        entry=params.get("entry", None),
+                        q_type=params.get("qt", None),
+                        trailing_type=params.get("trail_type"),
                     )
                     o.mt5_webhook = mt5_webhook
                     o.save()
@@ -211,33 +220,29 @@ class MT5APIView(APIView):
                         )
                     tp.save()
 
-
                 elif params.get("side").lower() == "close":
                     o = CloseOrder.objects.create(
                         is_active=True,
                         mt5_webhook=mt5_webhook,
                         ticker=params.get("symbol", None),
                         magic=params.get("m", None),
-                        _all = params.get("all", False)
+                        _all=params.get("all", False),
                     )
                     o.mt5_webhook = mt5_webhook
                     o.save()
 
-                
                 elif params.get("side").lower() == "modify":
                     o = ModifyOrder.objects.create(
                         is_active=True,
                         mt5_webhook=mt5_webhook,
                         ticker=params.get("symbol", None),
                         magic=params.get("m", None),
-                        sl = params.get("sl", None),
-                        tp = params.get("tp", None),
-                        
+                        sl=params.get("sl", None),
+                        tp=params.get("tp", None),
                     )
                     o.mt5_webhook = mt5_webhook
                     o.save()
         return JsonResponse({"ok": 200})
-
 
 
 class DiscordAPIView(APIView):
@@ -275,14 +280,11 @@ def handle_lemon_webhook(id, wid, reason):
     if pid == settings.LEMONSQUEEZY["telegram_pid"]:
         t = Telegram_Webhook.objects.filter(webhook_id=wid).first()
 
-
     elif pid == settings.LEMONSQUEEZY["discord_pid"]:
         t = Discord_Webhook.objects.filter(webhook_id=wid).first()
 
-
     elif pid == settings.LEMONSQUEEZY["mt5_pid"]:
         t = MT5_Webhook.objects.filter(webhook_id=wid).first()
-
 
     if reason == "subscription_created":
         t.variant_id = vid
@@ -304,11 +306,10 @@ def handle_lemon_webhook(id, wid, reason):
             t.chat_limit = int(
                 result["data"]["attributes"]["first_subscription_item"]["quantity"]
             )
-        
+
         if vid in settings.LEMONSQUEEZY["mt5_vids"]:
             hit_limit = settings.LEMONSQUEEZY["mt5_vids"][vid]
             t.hit_limit = hit_limit
-
 
     elif status in ["past_due", "unpaid"]:
         ends_at = result["data"]["attributes"]["ends_at"]
@@ -334,16 +335,16 @@ def handle_lemon_webhook(id, wid, reason):
 
 class LemonAPIView(APIView):
     def post(self, request, *args, **kwargs):
-        signature = request.META['HTTP_X_SIGNATURE']
+        signature = request.META["HTTP_X_SIGNATURE"]
         secret = settings.lemon_signed_secret
 
         digest = hmac.new(secret.encode(), request.body, hashlib.sha256).hexdigest()
 
         if not hmac.compare_digest(digest, signature):
             lemon_logger.critical(f"Attempted fake lemon api hit: {request}")
-            #logging here
+            # logging here
         data = request.POST
-        lemon_logger.info(str(datetime.datetime.now())+"   "+str(data))
+        lemon_logger.info(str(datetime.datetime.now()) + "   " + str(data))
         subscription_id = data["data"]["attributes"]["subscription_id"]
         reason = data["meta"]["event_name"]
         if reason == "renewal":
@@ -358,8 +359,12 @@ class EAAPIView(APIView):
     def get(self, request, *args, **kwargs):
         mt5_account = get_object_or_404(MT5_Webhook, webhook_id=self.kwargs["pk"])
         order = Order.objects.filter(is_active=True, mt5_webhook=mt5_account).first()
-        close_order = CloseOrder.objects.filter(is_active=True, mt5_webhook=mt5_account).first()
-        modify_order = ModifyOrder.objects.filter(is_active=True, mt5_webhook=mt5_account).first()
+        close_order = CloseOrder.objects.filter(
+            is_active=True, mt5_webhook=mt5_account
+        ).first()
+        modify_order = ModifyOrder.objects.filter(
+            is_active=True, mt5_webhook=mt5_account
+        ).first()
         if not (order or close_order or modify_order):
             return JsonResponse({"status": "no orders"})
         if order:
@@ -410,4 +415,3 @@ class EAAPIView(APIView):
                     "tp": modify_order.price,
                 }
             )
-

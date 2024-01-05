@@ -243,20 +243,28 @@ void OnTimer()
                     CTrade trade;
                     double current_sl = PositionGetDouble(POSITION_SL);
                     if(trade.PositionModify(posticket, current_sl, tp)){
-                      Print("trailing stop modified:", posticket);
+                      Print("Take Profit Modified:", posticket);
                     }
                   } else if(tp==0 && sl!=0){
                     CTrade trade;
                     double current_tp = PositionGetDouble(POSITION_TP);
                     if(trade.PositionModify(posticket, sl, current_tp)){
-                      Print("trailing stop modified:", posticket);
+                      Print("Stop Loss Modified:", posticket);
                     }
                   } else if (tp!=0 && sl!=0){
                     CTrade trade;
                     if(trade.PositionModify(posticket, sl, tp)){
-                      Print("trailing stop modified:", posticket);
+                      Print("Stop loss and take profit modified:", posticket);
                     }
-                  }
+                  } else if(sl==-1){
+                      double open_price = PositionGetDouble(POSITION_PRICE_OPEN);
+                      double current_tp = PositionGetDouble(POSITION_TP);
+                      CTrade trade;
+                      if(trade.PositionModify(posticket, open_price, current_tp)){
+                      Print("Stop Loss Moved to Break-Even:", posticket);
+                    }
+
+                    }
                 }
               }
             }
