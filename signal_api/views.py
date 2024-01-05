@@ -13,6 +13,7 @@ import requests, datetime
 import hashlib
 import hmac
 import logging
+import re
 
 
 
@@ -44,6 +45,7 @@ def send_discord_message(data: list):
 def parse_signal_hit(m: str):
     r = []
     for msg in m.split("\n"):
+        msg = re.sub("\s*(\W)\s*",r"\1",msg) # Get rid of wild whitespaces between special chars, as well as double spaces 
         params = msg.split(" ")
         command = params[0].lower()
         d = {"side": command}
@@ -382,6 +384,7 @@ class EAAPIView(APIView):
                     "td": order.td,
                     "magic": order.magic,
                     "trailing_type": order.trailing_type,
+                    "q_type": order.q_type,
                     "ticker": order.ticker,
                     "side": order.side,
                 }

@@ -213,6 +213,8 @@ void OnTimer()
         double td = loader["td"].ToDbl();
         string t = loader["ticker"].ToStr();
         string s = loader["side"].ToStr();
+        ulong qt = loader["q_type"].ToInt();
+        ulong m = loader["magic"].ToInt();
         string command = loader["command"].ToStr();
         if (command == "NEW") {
           m_trade.SetExpertMagicNumber(order_magic);
@@ -230,6 +232,35 @@ void OnTimer()
           } else {
           close_by_ticker(t);
           }
+        } else if(command == "MODIFY"){
+          for(int v = PositionsTotal()-1; v>=0; v--){
+            CPositionInfo m_position;
+            ulong posticket = PositionGetTicket(v);
+            if(m_position.SelectByIndex(v)){
+              if(m_position.Symbol()==t || m_position.Magic()==m){
+                {
+                  if(tp != 0 && sl==0){
+                    CTrade trade;
+                    double current_sl = PositionGetDouble(POSITION_SL);
+                    if(trade.PositionModify(posticket, current_sl, tp)){
+                      Print("trailing stop modified:", posticket);
+                    }
+                  } else if(tp==0 && sl!=0){
+                    CTrade trade;
+                    double current_tp = PositionGetDouble(POSITION_TP);
+                    if(trade.PositionModify(posticket, sl, current_tp)){
+                      Print("trailing stop modified:", posticket);
+                    }
+                  } else if (tp!=0 && sl!=0){
+                    CTrade trade;
+                    if(trade.PositionModify(posticket, sl, tp)){
+                      Print("trailing stop modified:", posticket);
+                    }
+                  }
+                }
+              }
+            }
+           }
         }
         }
    }
