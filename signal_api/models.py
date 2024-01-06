@@ -13,6 +13,7 @@ class Alert(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
+    content = models.CharField(max_length=2000)
 
 class MT5_Webhook(models.Model):
     webhook_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)  

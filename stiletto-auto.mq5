@@ -14,8 +14,7 @@
 #include <Trade\OrderInfo.mqh> //Instatiate Library for Orders Information
 #include <Trade\PositionInfo.mqh>
 CTrade m_trade;  
-
-long order_magic=602618;
+ulong order_magic = 60262;
 #property script_show_inputs
 //--- input parameters
 input string Webhook_ID = "";
@@ -217,7 +216,8 @@ void OnTimer()
         ulong m = loader["magic"].ToInt();
         string command = loader["command"].ToStr();
         if (command == "NEW") {
-          m_trade.SetExpertMagicNumber(order_magic);
+          if (m>0){m_trade.SetExpertMagicNumber(m);} else{m_trade.SetExpertMagicNumber(order_magic);}
+          
           m_trade.SetMarginMode();
           m_trade.SetTypeFillingBySymbol(t);
           m_trade.SetDeviationInPoints(slippage);

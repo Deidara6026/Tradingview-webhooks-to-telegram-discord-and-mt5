@@ -13,6 +13,7 @@ import requests, datetime
 import hashlib
 import hmac
 import logging
+from discord_webhook import DiscordWebhook, DiscordEmbed
 import re
 
 
@@ -25,18 +26,25 @@ def send_telegram_message(data: list):
     bot = telebot.TeleBot(telegram_settings["token"])
     for x in data:
         try:
+            if x[3] is not None:
+                bot.send_photo(x[0], x[3], x[2])
             bot.send_message(x[0], x[1])
         except:
             std_logger.error(e)
 
 
-def send_discord_message(data: list):
+def send_discord_message(data: list[list]):
     discord_settings = settings.DISCORD
     for x in data:
         try:
             webhook_url = x[0]
             message = x[1]
-            requests.post(webhook_url, json={"content": message})
+            webhook = DiscordWebhook(webhook_url)
+            embed = DiscordEmbed(title="Alert Triggered Via Stiletto", description=message, color="03b2f8")
+            if x[3] is not None:
+                embed.set_image(url=x[3])
+                webhook.add_embed(embed)
+            webhook.execute()
         except Exception as e:
             std_logger.error(e)
 
@@ -44,12 +52,18 @@ def send_discord_message(data: list):
 def parse_signal_hit(m: str):
     r = []
     for msg in m.split("\n"):
+        d = {}
         msg = re.sub(
             "\s*(\W)\s*", r"\1", msg
         )  # Get rid of wild whitespaces between special chars, as well as double spaces
         params = msg.split(" ")
+        for i,v in enumerate(params):
+            if "http" in v:
+                img_url = params.pop(i)
+                d.update({"img":img_url})
+
         command = params[0].lower()
-        d = {"side": command}
+        d.update({"side": command})
         if msg.lower() == "close":
             d.update(
                 {
@@ -178,7 +192,7 @@ class TelegramAPIView(APIView):
         for params in parse_signal_hit(tradingview_message):
             if telegram_chats:
                 data = parse(params, telegram_webhook)
-            res = [[chat.chat_id, data] for chat in telegram_chats]
+            res = [[chat.chat_id, data, params.get('img', None)] for chat in telegram_chats]
 
             send_telegram_message(res)
         telegram_webhook.hits += 1
@@ -257,7 +271,7 @@ class DiscordAPIView(APIView):
         for params in parse_signal_hit(tradingview_message):
             if discord_chats:
                 data = parse(params, discord_webhook)
-            res = [[chat.channel_webhook_url, data] for chat in discord_chats]
+            res = [[chat.channel_webhook_url, data, params.get("img", None)] for chat in discord_chats]
             send_discord_message(res)
         discord_webhook.hits += 1
         discord_webhook.save()
