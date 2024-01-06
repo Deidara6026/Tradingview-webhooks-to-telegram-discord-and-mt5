@@ -40,7 +40,11 @@ def send_discord_message(data: list[list]):
             webhook_url = x[0]
             message = x[1]
             webhook = DiscordWebhook(webhook_url)
-            embed = DiscordEmbed(title="Alert Triggered Via Stiletto", description=message, color="03b2f8")
+            embed = DiscordEmbed(
+                title="Alert Triggered Via Stiletto",
+                description=message,
+                color="03b2f8",
+            )
             if x[3] is not None:
                 embed.set_image(url=x[3])
                 webhook.add_embed(embed)
@@ -57,10 +61,10 @@ def parse_signal_hit(m: str):
             "\s*(\W)\s*", r"\1", msg
         )  # Get rid of wild whitespaces between special chars, as well as double spaces
         params = msg.split(" ")
-        for i,v in enumerate(params):
+        for i, v in enumerate(params):
             if "http" in v:
                 img_url = params.pop(i)
-                d.update({"img":img_url})
+                d.update({"img": img_url})
 
         command = params[0].lower()
         d.update({"side": command})
@@ -192,7 +196,9 @@ class TelegramAPIView(APIView):
         for params in parse_signal_hit(tradingview_message):
             if telegram_chats:
                 data = parse(params, telegram_webhook)
-            res = [[chat.chat_id, data, params.get('img', None)] for chat in telegram_chats]
+            res = [
+                [chat.chat_id, data, params.get("img", None)] for chat in telegram_chats
+            ]
 
             send_telegram_message(res)
         telegram_webhook.hits += 1
@@ -271,7 +277,10 @@ class DiscordAPIView(APIView):
         for params in parse_signal_hit(tradingview_message):
             if discord_chats:
                 data = parse(params, discord_webhook)
-            res = [[chat.channel_webhook_url, data, params.get("img", None)] for chat in discord_chats]
+            res = [
+                [chat.channel_webhook_url, data, params.get("img", None)]
+                for chat in discord_chats
+            ]
             send_discord_message(res)
         discord_webhook.hits += 1
         discord_webhook.save()
