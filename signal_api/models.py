@@ -14,6 +14,7 @@ class Alert(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
     content = models.CharField(max_length=2000)
+    
 
 class MT5_Webhook(models.Model):
     webhook_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)  
@@ -41,12 +42,14 @@ class Order(models.Model):
     ts = models.IntegerField(null=True, blank=True)
     trailing_type = models.IntegerField(null=True, blank=True) # -1 for percent, 1 for points
     sl = models.FloatField()
-    magic  = models.IntegerField(null=True, blank=True)
     side = models.CharField(max_length=5)
     quantity = models.FloatField()
-    q_type = models.IntegerField(null=True, blank=True)
+    q_type = models.IntegerField(null=True, blank=True) # -1 for percent, 1 for qty
     ticker = models.CharField(max_length=10, null=True, blank=True)
+    img_url = models.CharField(max_length=100, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    trader_notes = models.CharField(5000, null=True, blank=True)
+    rating = models.FloatField(default=0.0)
 
 
 class TakeProfit(models.Model):
@@ -70,6 +73,7 @@ class ModifyOrder(models.Model):
     ticker = models.CharField(max_length=10, null=True, blank=True)
     sl = models.FloatField(null=True, blank=True)
     tp = models.FloatField(null=True, blank=True)
+    
 
 
 class Telegram_Webhook(models.Model):

@@ -206,6 +206,62 @@ class TelegramAPIView(APIView):
         return JsonResponse({"status": "success"})
 
 
+class NoteAPIView(APIView):
+    serializers = OrderSerializer
+    def post(self, request, *args, **kwargs):
+        order = get_object_or_404(Order, id=self.kwargs["pk"]) 
+        data = request.data
+
+        note = data.get("note", order.trader_notes)
+        rating = data.get("rating", order.rating)
+        order.trader_notes = note
+        order.rating = rating
+        order.save()
+        return JsonResponse({"status": "success"})
+
+    def get_queryset(self):
+        wid = self.request.query_params.get('wid', None)
+        webhoook = self.request.query_params.get('w', None)
+        if webhook == "mt5":
+            queryset = MT5_Webhook.objects.filter(id=wid).one().order_set.all()
+            text = "\n-----------------------------------------------\n"
+            t = f"""
+Trailing Settings
+Trigger: {order.tt}
+Step: {order.ts}
+Distance: {order.td}
+            """
+            modify = "\n".join([f"Modify {m.magic or m.ticker} Tp: {m.tp or 'No Change'} Sl: {m.sl or 'No Change'}" for m in order.modifyorder_set.all()])
+            close = "\n".join([f"Close {m.magic or m.ticker or 'All'}" for m in order.cancelorder_set.all()])
+            t = text.join(
+                [
+                    f"""
+{order.date_created.strftime("%m/%d/%Y, %H:%M:%S")}
+{order.side.upper()} - {order.ticker.upper}
+Chart Image: {order.img_url}
+
+Entry: {order.entry}
+Profit Targets: {", ".join([tp.price for tp in order.takeprofit_set.all()])}
+Stop Loss(initial): {order.sl}
+Quantity: {order.quantity}{"%" if order.q_type < 0 else ""}
+
+{t if not order.tt is None else ""}
+Related Commands:
+
+{modify}
+{cancel}
+
+Trade Rating: {order.rating}
+Trade Notes: 
+
+{order.trader_notes}
+
+                    """ for order in queryset
+                ]
+            )
+            return t
+        
+
 class MT5APIView(APIView):
     def post(self, *args, **kwargs):
         mt5_webhook = get_object_or_404(MT5_Webhook, id=self.kwargs["pk"])

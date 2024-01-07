@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from signal_api.views import TelegramAPIView, MT5APIView, DiscordAPIView, EAAPIView, LemonAPIView
+from signal_api.views import TelegramAPIView, MT5APIView, DiscordAPIView, EAAPIView, LemonAPIView, NoteAPIView
 from app.views import *
 
 urlpatterns = [
@@ -30,6 +30,7 @@ urlpatterns = [
     path('tview_api/mt5/<uuid:pk>', MT5APIView.as_view(), name="mt5_signal_api_endpoint"),
     path('tview_api/discord/<uuid:pk>', DiscordAPIView.as_view(), name="discord_signal_api_endpoint"),
     path('metatrader_api/<str:pk>', EAAPIView.as_view(), name="ea_signal_api_endpoint"),
+    path('journal_note_api/<str:pk>', NoteAPIView.as_view(), name="note_api_endpoint"),
     path('webhooks/lemons', LemonAPIView.as_view(), name="lemon_api_endpoint"),
     path('submitalert/', submit_alert, name="submitalert"),
 
