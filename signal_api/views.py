@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 from django.conf import settings
 import telebot
 import requests, datetime
@@ -15,6 +17,9 @@ import hmac
 import logging
 from discord_webhook import DiscordWebhook, DiscordEmbed
 import re
+import base64
+from io import BytesIO
+from reportlab.pdfgen import canvas
 
 
 std_logger = logging.getLogger(__name__)
@@ -208,10 +213,12 @@ class TelegramAPIView(APIView):
 
 class NoteAPIView(APIView):
     serializers = OrderSerializer
-    def post(self, request, *args, **kwargs):
-        order = get_object_or_404(Order, id=self.kwargs["pk"]) 
-        data = request.data
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request, *args, **kwargs):    
+        data = request.data
+        order = get_object_or_404(Order, id=data.get("pk")) 
         note = data.get("note", order.trader_notes)
         rating = data.get("rating", order.rating)
         order.trader_notes = note
@@ -223,43 +230,50 @@ class NoteAPIView(APIView):
         wid = self.request.query_params.get('wid', None)
         webhoook = self.request.query_params.get('w', None)
         if webhook == "mt5":
+            
+
             queryset = MT5_Webhook.objects.filter(id=wid).one().order_set.all()
+            buffer = BytesIO()
+            pdf = canvas.Canvas(buffer)
+
             text = "\n-----------------------------------------------\n"
-            t = f"""
-Trailing Settings
-Trigger: {order.tt}
-Step: {order.ts}
-Distance: {order.td}
-            """
-            modify = "\n".join([f"Modify {m.magic or m.ticker} Tp: {m.tp or 'No Change'} Sl: {m.sl or 'No Change'}" for m in order.modifyorder_set.all()])
-            close = "\n".join([f"Close {m.magic or m.ticker or 'All'}" for m in order.cancelorder_set.all()])
-            t = text.join(
-                [
-                    f"""
-{order.date_created.strftime("%m/%d/%Y, %H:%M:%S")}
-{order.side.upper()} - {order.ticker.upper}
-Chart Image: {order.img_url}
+            for order in queryset:
+                t = f"""
+                Trailing Settings
+                Trigger: {order.tt}
+                Step: {order.ts}
+                Distance: {order.td}
+                """
+                modify = "\n".join([f"Modify {m.magic or m.ticker} Tp: {m.tp or 'No Change'} Sl: {m.sl or 'No Change'}" for m in order.modifyorder_set.all()])
+                close = "\n".join([f"Close {m.magic or m.ticker or 'All'}" for m in order.cancelorder_set.all()])
+                at = f"""
+                {order.date_created.strftime("%m/%d/%Y, %H:%M:%S")}
+                {order.side.upper()} - {order.ticker.upper}
+                Chart Image: {order.img_url}
+                
+                Entry: {order.entry}
+                Profit Targets: {", ".join([tp.price for tp in order.takeprofit_set.all()])}
+                Stop Loss(initial): {order.sl}
+                Quantity: {order.quantity}{"%" if order.q_type < 0 else ""}
+                
+                {t if not order.tt is None else ""}
+                Related Commands:
+                
+                {modify}
+                {close}
+                
+                Trade Rating: {order.rating}
+                Trade Notes: 
+                
+                {order.trader_notes}
+                """
+                pdf.drawString(100, 100, at)
+                pdf.showPage()
 
-Entry: {order.entry}
-Profit Targets: {", ".join([tp.price for tp in order.takeprofit_set.all()])}
-Stop Loss(initial): {order.sl}
-Quantity: {order.quantity}{"%" if order.q_type < 0 else ""}
-
-{t if not order.tt is None else ""}
-Related Commands:
-
-{modify}
-{cancel}
-
-Trade Rating: {order.rating}
-Trade Notes: 
-
-{order.trader_notes}
-
-                    """ for order in queryset
-                ]
-            )
-            return t
+            pdf.save()
+            buffer.seek(0)
+            encoded_pdf = base64.b64encode(buffer.read()).decode('utf-8')
+            return encoded_pdf
         
 
 class MT5APIView(APIView):
