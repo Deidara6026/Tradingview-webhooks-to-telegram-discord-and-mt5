@@ -14,6 +14,13 @@ from functools import reduce
 User = get_user_model()
 
 
+def index(request):
+    return render(request, "app/index.html")
+
+def platforms(request):
+    return render(request, "app/index.html")
+
+
 @login_required
 def dashboard(request):
     # Get the webhooks that the user has, serialize for json, and add to context
