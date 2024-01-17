@@ -9,12 +9,12 @@ User = settings.AUTH_USER_MODEL
 
 
 class Alert(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     date = models.DateTimeField(auto_now_add=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
-    content = models.CharField(max_length=2000)
+    content = models.CharField(max_length=2000, null=True)
     
 
 class MT5_Webhook(models.Model):
@@ -49,7 +49,7 @@ class Order(models.Model):
     ticker = models.CharField(max_length=10, null=True, blank=True)
     img_url = models.CharField(max_length=100, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    trader_notes = models.CharField(5000, null=True, blank=True)
+    trader_notes = models.CharField(max_length=5000, null=True, blank=True)
     rating = models.FloatField(default=0.0)
 
 
