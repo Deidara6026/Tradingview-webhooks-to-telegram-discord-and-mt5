@@ -33,7 +33,7 @@ class MT5_Webhook(models.Model):
     old_alerts = GenericRelation(Alert)
 
 class Binance_Webhook(models.model):
-    api_key
+    api_key 
 
 
 
