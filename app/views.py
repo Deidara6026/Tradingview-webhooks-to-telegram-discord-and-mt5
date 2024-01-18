@@ -15,10 +15,10 @@ User = get_user_model()
 
 
 def index(request):
-    return render(request, "app/index.html")
+    return render(request, "app/home.html")
 
 def platforms(request):
-    return render(request, "app/index.html")
+    return render(request, "app/platforms.html")
 
 
 @login_required

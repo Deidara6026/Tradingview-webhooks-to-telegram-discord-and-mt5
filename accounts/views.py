@@ -13,7 +13,7 @@ def signup(request):
             return redirect('dashboard')
     else:
         form = SignUpForm()   
-    return render(request, 'accounts/signup.html', {'form': form})
+    return render(request, 'accounts/sign-up.html', {'form': form})
 
 
 def log_in(request):
@@ -34,7 +34,7 @@ def log_in(request):
     else:
         form = LogInForm()
 
-    return render(request, 'accounts/login.html', {'form': form, 'error': error})
+    return render(request, 'accounts/sign-in.html', {'form': form, 'error': error})
 
 
 def log_out(request):

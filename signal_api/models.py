@@ -32,8 +32,8 @@ class MT5_Webhook(models.Model):
     hit_limit = models.IntegerField(null=True, blank=True)
     old_alerts = GenericRelation(Alert)
 
-class Binance_Webhook(models.model):
-    api_key 
+class Binance_Webhook(models.Model):
+    pass
 
 
 
