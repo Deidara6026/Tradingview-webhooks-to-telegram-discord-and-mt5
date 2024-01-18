@@ -32,6 +32,10 @@ class MT5_Webhook(models.Model):
     hit_limit = models.IntegerField(null=True, blank=True)
     old_alerts = GenericRelation(Alert)
 
+class Binance_Webhook(models.Model):
+    pass
+
+
 
 class Order(models.Model):
     is_active = models.BooleanField()
