@@ -1,14 +1,14 @@
 
-
+{% load static %}
 <!doctype html>
 <html lang="en" >
   <head>
     <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <title>Stiletto Authentication</title>
-      <link rel="shortcut icon" href="../../assets/images/logo.png" />
-      <link rel="stylesheet" href="../../assets/css/libs.min.css">
-      <link rel="stylesheet" href="../../assets/css/coinex.css?v=1.0.0">  
+      <link rel="stylesheet" href="{% static 'assets/css/libs.min.css' %}">
+      <link rel="shortcut icon" href="{% static 'img/logo.png' %}" />
+      <link rel="stylesheet" href="{% static 'css/coinex.css' %}">
       <style>
          body{
             background-image: url(../img/background.jpg);
@@ -34,62 +34,51 @@
                <div>
                   <div class="auth-form">
                         <h2 class="text-center mb-4">Sign Up</h2>
-                        <form>
-                           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <form method="post">
+                           {% csrf_token %}
+                           <p>Create an Account.</p>
                            <div class="row">
                               <div class="col-md-6 mb-4">
                                   <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="firstName" placeholder="FirstName">
-                                        <label for="firstName">First Name</label>
+                                        {{form.username}}
+                                        <label for="firstName">Username</label>
                                     </div>
                               </div>
                               <div class="col-md-6 mb-4">
                                  <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="lastName" placeholder="lastName">
-                                        <label for="lastName">Last Name</label>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="row">
-                              <div class="col-md-6 mb-4">
-                                  <div class="form-floating mb-3">
-                                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                                        <label for="floatingInput">Email</label>
-                                    </div>
-                              </div>
-                              <div class="col-md-6 mb-4">
-                                 <div class="form-floating mb-3">
-                                       <input type="text" class="form-control" id="phoneno" placeholder="phoneno">
+                                       {{ form.phone_no }}
                                        <label for="phoneno">Phone no</label>
                                  </div>
                               </div>
                            </div>
                            <div class="row">
+                              <div class="col-md-12 mb-4">
+                                 <div class="form-floating mb-3">
+                                        {{form.email}}
+                                        <label for="lastName">Email</label>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="row">
                               <div class="col-md-6 mb-4">
                                   <div class="form-floating mb-2">
-                                        <input type="text" class="form-control" id="Password" placeholder="Password">
+                                        {{form.password1}}
                                         <label for="Password">Password</label>
                                     </div>
                               </div>
                               <div class="col-md-6 mb-4">
                                   <div class="form-floating mb-2">
-                                        <input type="text" class="form-control" id="confirmpassword" placeholder="confirmpassword">
-                                        <label for="confirmpassword">Confirm-password</label>
+                                        {{ form.password2 }}
+                                        <label for="confirmpassword">Confirm Password</label>
                                     </div>
                               </div>
                            </div>
-                           <div class="form-check d-flex justify-content-center  mb-2">
-                              <input type="checkbox" class="form-check-input" id="agree">
-                              <label class="ms-1 form-check-label" for="agree">I agree with the terms of
-                                 use</label>
+                              <button type="submit" class="btn btn-primary">Sign Up</button>
                            </div>
-                           <div class="text-center">
-                              <button type="button" class="btn btn-primary">Sign Up</button>
-                           </div>
-                           <div class="text-center mt-3">
+                           <!-- <div class="text-center mt-3">
                               <p>or sign in with others account?</p>
-                           </div>
-                           <div class="d-flex justify-content-center">
+                           </div> -->
+                           <!-- <div class="d-flex justify-content-center">
                                  <ul class="list-group list-group-horizontal list-group-flush">
                                     <li class="list-group-item border-0 bg-transparent">
                                        <a href="#"><img src="../../assets/images/brands/01.png" class="img-fluid avatar avatar-30 avatar-rounded" alt="fb"></a>
@@ -101,10 +90,10 @@
                                        <a href="#"><img src="../../assets/images/brands/03.png" class="img-fluid avatar avatar-30 avatar-rounded" alt="im"></a>
                                     </li>
                                  </ul>
-                              </div>
+                              </div> -->
                         </form>
                         <div class="new-account mt-3 text-center">
-                           <p>Already have an Account <a class="text-primary" href="../../dashboard/auth/sign-in.html">Sign in</a>
+                           <p>Already have an Account <a class="text-primary" href="{% url 'accounts:sign-in' %}">Sign in</a>
                            </p>
                         </div>
                      </div>
@@ -119,14 +108,14 @@
       
     
     <!-- Backend Bundle JavaScript -->
-    <script src="../../assets/js/libs.min.js"></script>
+    <script src="{% static 'assets/js/libs.min.js' %}"></script>
     <!-- widgetchart JavaScript -->
-    <script src="../../assets/js/charts/widgetcharts.js"></script>
+    <script src="{% static 'assets/js/charts/widgetcharts.js' %}"></script>
     <!-- fslightbox JavaScript -->
-    <script src="../../assets/js/fslightbox.js"></script>
+    <script src="{% static 'assets/js/fslightbox.js' %}"></script>
     <!-- app JavaScript -->
-    <script src="../../assets/js/app.js"></script>
+    <script src="{% static 'assets/js/app.js' %}"></script>
     <!-- apexchart JavaScript -->
-    <script src="../../assets/js/charts/apexcharts.js"></script>
+    <script src="{% static 'assets/js/charts/apexcharts.js' %}"></script>
   </body>
 </html>
