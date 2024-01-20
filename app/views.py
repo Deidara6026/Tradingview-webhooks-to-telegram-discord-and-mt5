@@ -9,6 +9,7 @@ import requests
 from django.conf import settings
 from django.db.models import Q
 from functools import reduce
+import datetime
 
 # Create your views here.
 User = get_user_model()
@@ -20,31 +21,42 @@ def index(request):
 def platforms(request):
     return render(request, "app/platforms.html")
 
-
 @login_required
 def dashboard(request):
     # Get the webhooks that the user has, serialize for json, and add to context
     discord_list = Discord_Webhook.objects.filter(user=request.user).all()
     telegram_list = Telegram_Webhook.objects.filter(user=request.user).all()
-    mt5_list = MT5_Webhook.objects.select_related("order").filter(user=request.user).all()
+    mt5_list = MT5_Webhook.objects.prefetch_related("order_set").filter(user=request.user).all()
 
-    last_week_alerts = Alert.objects.filter(user=request.user, date_created__lte=datetime.now()-timedelta(days=7)).order_by("-id")
-    last_week_dict = {}
-    for alert in last_week_alert:
+    last_week_alerts = Alert.objects.filter(user=request.user, date__lte=datetime.datetime.now()-datetime.timedelta(days=7)).order_by("-id")
+    now = datetime.datetime.now()
+    l = []
+    for x in range(7):
+        d = now - datetime.timedelta(days=x)
+        l.append(int(d.strftime("%d")))
+    last_week_dict = dict.fromkeys(l, 0)
+    print(l)
+    for alert in last_week_alerts:
         d = alert.date.strftime("%d")
-        last_week_dict[d] += last_week_dict.setdefault(d, 0)+1
+        last_week_dict[d] += 1
 
-
+    orders=[]
     if mt5_list:
         orders = Order.objects.order_by("-id").filter(reduce(lambda x,y : x | y, [Q(mt5_webhook=webhook) for webhook in mt5_list]))[:10]
 
     webhooks= list(mt5_list)+list(discord_list)+list(telegram_list),
-
+    lv = list(last_week_dict.values())
+    lv.reverse()
     context = {
         # "signalform":SignalForm(),
         "orders": list(orders),
-        "last_week_dict": last_week_dict,
+        "last_week_len": len(last_week_alerts),
+        "last_week_y": lv,
+        "last_week_keys": l,
         "webhooks": webhooks,
+        "webhook_len": len(webhooks),
+        "alerts": last_week_alerts,
+        "username": request.user.username,
         "discord_checkout": checkout("e323c57d-b490-4d15-96fb-00b0ccc1a91c", request.user.id),
         "telegram_checkout": checkout("86a9f6d7-1541-48c9-994a-5c65af3f9c0f", request.user.id),
         "mt5_checkout": checkout("380c7a5a-cab6-445c-af52-733410b62e4c", request.user.id)
