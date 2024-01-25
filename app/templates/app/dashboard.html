@@ -562,7 +562,7 @@
                
             </div>
          </div>
-         <div class="col-lg-7">
+         <div class="col-lg-5">
             <div class="card card-body" style="
             background: rgba(31, 21, 16, 0.87);
             border-radius: 16px;
@@ -713,42 +713,23 @@
                </div>
                <div>
                   <ul class="list-inline m-0 p-0">
+                    {% if not last_week_alerts %}
+                    <p>Nothing to see here!</p>
+                    {% endif%}
+                    {% for alert in last_week_alerts %}
                      <li class="d-flex  align-items-center pt-3">
-                        <div class="d-flex justify-content-between rounded-pill"><img src="../assets/images/coins/01.png" class="img-fluid avatar avatar-40 avatar-rounded" alt="img6">
+                        <div class="d-flex justify-content-between rounded-pill"><img src="{% static 'img/'%}{{alert.webhook_name}}" class="img-fluid avatar avatar-40 avatar-rounded" alt="img6">
                            <div class="ms-3 flex-grow-1">
-                           <h5 class="mb-2">Bitcoin</h5>
-                           <p class=" text-success mb-2">+$10,00</p>
-                           <p class="fs-6">Bitcoins Evolution™. 234000 Satisfied Customers From 107 Countries.</p>
+                           <h5 class="mb-2">{{alert.webhook_name}}</h5>
+                            
+                           <p class="fs-6">{{alert.content}}</p>
                            </div>
                            <div class="">
-                              <p>11/02/21</p>
+                              <p>{{alert.date|date:"M d, Y"}}</p>
                            </div>
                         </div>
                      </li>
-                     <li class="d-flex  align-items-center pt-3">
-                        <div class="d-flex justify-content-between rounded-pill"><img src="../assets/images/coins/09.png" class="img-fluid avatar avatar-40 avatar-rounded" alt="img7">
-                           <div class="ms-3 flex-grow-1">
-                           <h5 class="mb-2">Ethereum</h5>
-                           <p class=" text-danger mb-2">-$50,00</p>
-                           <p class="fs-6">Ethereum is a decentralized, blockchain with smart contract functionality</p>
-                           </div>
-                           <div class="">
-                              <p>11/02/21</p>
-                           </div>
-                        </div>
-                     </li>
-                     <li class="d-flex  align-items-center pt-3">
-                        <div class="d-flex justify-content-between rounded-pill"><img src="../assets/images/coins/06.png" class="img-fluid avatar avatar-40 avatar-rounded" alt="img8">
-                           <div class="ms-3 flex-grow-1">
-                           <h5 class="mb-2">Litecoin</h5>
-                           <p class=" text-danger mb-2">-$50,00</p>
-                           <p class="fs-6">Litecoin is a peer-to-peer cryptocurrency and open-source software</p>
-                           </div>
-                           <div class="">
-                              <p>11/02/21</p>
-                           </div>
-                        </div>
-                     </li>
+                      {%endfor%}
                   </ul>
                </div>
             </div>

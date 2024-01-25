@@ -123,7 +123,7 @@ def parse_signal_hit(m: str):
                             d.update({"qt": "1"})
                         else:
                             d.update({"qt": "-1"})
-                        d.update({"sl": value})
+                        d.update({"q": value})
                     elif key == "m":
                         d.update({"m": value})
                     elif key == "tt":
@@ -278,14 +278,15 @@ class NoteAPIView(APIView):
 
 class MT5APIView(APIView):
     def post(self, *args, **kwargs):
-        mt5_webhook = get_object_or_404(MT5_Webhook, id=self.kwargs["pk"])
-        if mt5_webhook.hits > mt5_webhook.limit:
+        mt5_webhook = get_object_or_404(MT5_Webhook, webhook_id=self.kwargs["pk"])
+        if mt5_webhook.hits > mt5_webhook.hit_limit:
             return JsonResponse({"status": "limit exceeded"})
-        data = request.data
+        data = self.request.data
         tradingview_messages = data.get("message").split("\n")
         for message in tradingview_messages:
             for params in parse_signal_hit(message):
                 if params.get("side").lower() in ["buy", "sell"]:
+                    print(params)
                     o = Order.objects.create(
                         is_active=True,
                         mt5_webhook=mt5_webhook,
@@ -295,9 +296,9 @@ class MT5APIView(APIView):
                         ts=params.get("ts", None),
                         td=params.get("td", None),
                         sl=params.get("sl", None),
-                        m=params.get("m", None),
-                        quantity=params.get("quantity", None),
-                        entry=params.get("entry", None),
+                        magic=params.get("m", None),
+                        quantity=params.get("q", None),
+                        entry=params.get("e", None),
                         q_type=params.get("qt", None),
                         trailing_type=params.get("trail_type"),
                     )
@@ -332,6 +333,8 @@ class MT5APIView(APIView):
                     )
                     o.mt5_webhook = mt5_webhook
                     o.save()
+        mt5_webhook.old_alerts.create(content=str(data.get("message")), user=mt5_webhook.user)
+        mt5_webhook.save()
         return JsonResponse({"ok": 200})
 
 
