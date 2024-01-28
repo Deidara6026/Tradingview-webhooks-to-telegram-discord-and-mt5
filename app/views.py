@@ -26,7 +26,7 @@ def dashboard(request):
     # Get the webhooks that the user has, serialize for json, and add to context
     discord_list = Discord_Webhook.objects.filter(user=request.user).all()
     telegram_list = Telegram_Webhook.objects.filter(user=request.user).all()
-    mt5_list = MT5_Webhook.objects.prefetch_related("order_set").filter(user=request.user).all()
+    mt5_list = MT5_Webhook.objects.filter(user=request.user).all()
     last_week_alerts = Alert.objects.filter(user=request.user, date__lte=datetime.datetime.now()-datetime.timedelta(days=7)).order_by("-id")
     now = datetime.datetime.now()
     l = []
@@ -46,7 +46,6 @@ def dashboard(request):
     webhooks= list(mt5_list)+list(discord_list)+list(telegram_list),
     lv = list(last_week_dict.values())
     lv.reverse()
-    print(orders, last_week_alerts)
     context = {
         # "signalform":SignalForm(),
         "orders": list(orders),

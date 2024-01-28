@@ -333,7 +333,8 @@ class MT5APIView(APIView):
                     )
                     o.mt5_webhook = mt5_webhook
                     o.save()
-        mt5_webhook.old_alerts.create(content=str(data.get("message")), user=mt5_webhook.user)
+        a = Alert(content_object=mt5_webhook, webhook_type="mt5", user=mt5_webhook.user, text=str(data.get("message")))
+        a.save()
         mt5_webhook.save()
         return JsonResponse({"ok": 200})
 

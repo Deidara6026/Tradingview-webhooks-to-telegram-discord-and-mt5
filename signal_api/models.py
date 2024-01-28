@@ -9,13 +9,19 @@ User = settings.AUTH_USER_MODEL
 
 
 class Alert(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     webhook_type = models.CharField(max_length=15, null=True, blank=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey()
-    content = models.CharField(max_length=2000, null=True)
+    object_id = models.UUIDField()
+    content_object = GenericForeignKey("content_type", "object_id")
+    text = models.CharField(max_length=300, null=True)
+
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
     
 
 class MT5_Webhook(models.Model):
