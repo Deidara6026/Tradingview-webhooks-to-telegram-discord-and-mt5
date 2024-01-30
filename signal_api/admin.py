@@ -8,4 +8,5 @@ admin.site.register(TelegramChat)
 admin.site.register(DiscordChat)
 admin.site.register(Order)
 admin.site.register(Alert)
+admin.site.register(TakeProfit)
 

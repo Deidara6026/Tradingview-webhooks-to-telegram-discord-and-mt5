@@ -652,7 +652,7 @@
                               <th scope="col">Name</th>
                               <th scope="col">Time</th>
                               <th scope="col">Entry</th>
-                              <th scope="col">Take Profit</th>
+                              <th scope="col">Take Profit(s)</th>
                               <th scope="col">Stop Loss</th>
                               <th scope="col">Quantity</th>
                               <th scope="col">magic</th>
@@ -662,28 +662,24 @@
                               {%for order in orders%}
                               <tr class="white-space-no-wrap">
                                  <td>
-                                    <img src="../assets/images/coins/02.png" class="img-fluid avatar avatar-30 avatar-rounded" alt="img23" />
-                                    Trade<a class="button btn-primary badge ms-2" type="button">Buy</a>
+                                    <p>{{order.1}}</p>
                                  </td>
-                                 <td class="text-danger"><svg width="10" height="8" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4 4.5L0.535898 0L7.4641 0L4 4.5Z" fill="#FF2E2E"/>
-                                    </svg>
-                                    {{order.date_created}}
+                                 <td class="text-danger">
+                        
+                                    {{order.0.date_created}}
                                  </td>
-                                 <td class="text-success"><svg width="10" height="8" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4 0.5L7.4641 5H0.535898L4 0.5Z" fill="#00EC42"/>
-                                    </svg>
-                                    {{order.entry}}
+                                 <td class="text-success">
+                                    {{order.0.entry}}
                                  </td>
-                                 <td>{{order.takeprofit_set}}</td>
-                                 <td>{{order.stop_loss}}<br>
+                                 <td>{{order.2}}</td>
+                                 <td>{{order.0.sl}}<br>
                                     <!-- <small class="ms-5">635,237 BTC</small> -->
                                  </td>
-                                 <td class="ms-5">{{order.quantity}}</td>
+                                 <td class="ms-5">{{order.0.quantity}}</td>
                                  <td>
                                     <div class="d-flex justify-content-between">
                                        <div id="sparklinechart-1"></div>             
-                                          {{order.magic}}
+                                          {{order.0.magic}}
                                     </div>
                                  </td>
                               </tr>

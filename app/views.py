@@ -34,7 +34,7 @@ def dashboard(request):
         d = now - datetime.timedelta(days=x)
         l.append(int(d.strftime("%d")))
     last_week_dict = dict.fromkeys(l, 0)
-    print(l)
+
     for alert in last_week_alerts:
         d = alert.date.strftime("%d")
         last_week_dict[d] += 1
@@ -46,9 +46,12 @@ def dashboard(request):
     webhooks= list(mt5_list)+list(discord_list)+list(telegram_list),
     lv = list(last_week_dict.values())
     lv.reverse()
+    order_list = []
+    for order in orders:
+        order_list.append([order,order.mt5_webhook.name, ", ".join([str(tp.price) for tp in order.takeprofit_set.all()])])
     context = {
         # "signalform":SignalForm(),
-        "orders": list(orders),
+        "orders": order_list,
         "last_week_len": len(last_week_alerts),
         "last_week_y": lv,
         "last_week_keys": l,
