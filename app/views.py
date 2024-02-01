@@ -38,7 +38,7 @@ def dashboard(request):
     for alert in last_week_alerts:
         d = alert.date.strftime("%d")
         last_week_dict[d] += 1
-
+    print(last_week_alerts)
     orders=[]
     if mt5_list:
         orders = Order.objects.order_by("-id").filter(reduce(lambda x,y : x | y, [Q(mt5_webhook=webhook) for webhook in mt5_list]))[:10]
@@ -57,7 +57,7 @@ def dashboard(request):
         "last_week_keys": l,
         "webhooks": webhooks,
         "webhook_len": len(webhooks),
-        "alerts": last_week_alerts,
+        "last_week_alerts": last_week_alerts,
         "username": request.user.username,
         "discord_checkout": checkout("e323c57d-b490-4d15-96fb-00b0ccc1a91c", request.user.id),
         "telegram_checkout": checkout("86a9f6d7-1541-48c9-994a-5c65af3f9c0f", request.user.id),

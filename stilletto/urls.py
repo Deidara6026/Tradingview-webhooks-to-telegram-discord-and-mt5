@@ -20,9 +20,11 @@ from signal_api.views import TelegramAPIView, MT5APIView, DiscordAPIView, EAAPIV
 from app.views import *
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('dashboard/', dashboard, name="dashboard"),
+    path('platforms/', platforms, name="platforms"),
     path('', index, name="index"),
     path('submittg/', submit_telegram_link, name="submittg"),
     path('submitmt5/', submit_telegram_link, name="submitmt5"),
