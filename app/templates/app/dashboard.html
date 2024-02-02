@@ -562,7 +562,7 @@
                
             </div>
          </div>
-         <div class="col-lg-5">
+         <div class="col-lg-7">
             <div class="card card-body" style="
             background: rgba(31, 21, 16, 0.87);
             border-radius: 16px;
@@ -570,9 +570,6 @@
             backdrop-filter: blur(3.2px);
             -webkit-backdrop-filter: blur(3.2px);">
                <div class="d-flex justify-content-between flex-wrap">
-                  <div>
-                     <h4 class="mb-2">Alert Overview</h4>        
-                  </div>
                   <div class="d-flex align-items-center align-self-center">
                   </div>
                </div>
@@ -598,7 +595,7 @@
                          }]
                        },
                        options: {
-                         legend: {display: true},
+                         legend: {display: false},
                          scales: {
                          yAxes: [{
                            ticks: {
@@ -714,11 +711,11 @@
                     {% endif%}
                     {% for alert in last_week_alerts %}
                      <li class="d-flex  align-items-center pt-3">
-                        <div class="d-flex justify-content-between rounded-pill"><img src="{% static 'img/'%}{{alert.webhook_name}}" class="img-fluid avatar avatar-40 avatar-rounded" alt="img6">
+                        <div class="d-flex justify-content-between rounded-pill">
                            <div class="ms-3 flex-grow-1">
                            <h5 class="mb-2">{{alert.webhook_name}}</h5>
                             
-                           <p class="fs-6">{{alert.content}}</p>
+                           <p class="fs-6">{{alert.text}}</p>
                            </div>
                            <div class="">
                               <p>{{alert.date|date:"M d, Y"}}</p>

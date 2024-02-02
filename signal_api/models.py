@@ -37,7 +37,7 @@ class MT5_Webhook(models.Model):
     meta_id = models.UUIDField(default=uuid.uuid4, editable=False)
     hits = models.IntegerField(default=0)
     hit_limit = models.IntegerField(null=True, blank=True)
-    old_alerts = GenericRelation(Alert)
+    old_alerts = GenericRelation(Alert, related_query_name='webhook')
 
 class Binance_Webhook(models.Model):
     pass
