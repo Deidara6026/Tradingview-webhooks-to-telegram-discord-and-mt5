@@ -25,6 +25,25 @@
   
   <body class=" ">
  
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Create Webhook</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
    <aside class="sidebar sidebar-body sidebar-default navs-rounded" style="
    background: rgba(31, 21, 16, 0.87);
    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -553,78 +572,41 @@
 </div>
 <div class="row">
    <div class="col-lg-8">
-      <div class="row">
-         <div class="col-lg-12">
-            <div class="row">
-             
-              
-               
-               
-            </div>
+      <div class="row mx-3">
+         <div class="m-auto mb-2">
+          {% for webhook in webhooks %}
+              <div class="d-flex justify-content-between flex-wrap my-auto p-2" style="width: 100%;
+              background: rgba(31, 21, 16, 0.87);
+                  border-radius: 6px;
+                  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                  backdrop-filter: blur(3.2px);
+                  -webkit-backdrop-filter: blur(3.2px);">
+                <span class="d-flex my-auto">
+                <img class="img-fluid avatar avatar-40 avatar-rounded" 
+                {% if webhook.identifier == "mt5" %}
+                src="{% static 'img/Meta.png' %}" alt="meta" id="MT"
+                {%endif%}></span>
+                <span class="card-body col-9">
+                  <h5 class="card-title">{{webhook.name}}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">{{webhook.status.upper}}</h6>
+                  <p class="card-text">{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'mt5_signal_api_endpoint' pk=webhook.pk %}</p>
+                  <h6 class="card-subtitle mb-2 text-muted">Created: {{webhook.date_created}}</h6>
+                  <a href="#" class="card-link"></a>
+                  <a href="#" class="card-link">Manage Subscription</a>
+                </span>
+              </div>
+
+            {%endfor%}
          </div>
-         <div class="col-lg-7">
-            <div class="card card-body" style="
-            background: rgba(31, 21, 16, 0.87);
-            border-radius: 16px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(3.2px);
-            -webkit-backdrop-filter: blur(3.2px);">
-               <div class="d-flex justify-content-between flex-wrap">
-                  <div class="d-flex align-items-center align-self-center">
-                  </div>
-               </div>
-               
-               <br>
-               <div>
-                  
-                  <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-
-                  <script>
-                     const xValues = {{last_week_keys}};
-                     
-                     new Chart("myChart", {
-                       type: "line",
-                       data: {
-                         labels: xValues,
-                         datasets: [{ 
-                           data: {{last_week_y}},
-                           fill: true, 
-                           lineTension: 0.1,
-                           backgroundColor: "orange",
-                           borderColor: "rgba(18, 12, 9, 0.87)",
-                         }]
-                       },
-                       options: {
-                         legend: {display: false},
-                         scales: {
-                         yAxes: [{
-                           ticks: {
-                              beginAtZero: true,
-                              usercallback: function(label, index, labels) {
-                                 // when the floored value is the same as the value we have a whole number
-                                 if (math.floor(label) === label) {
-                                    return label;
-                                 }
-
-                              },
-                           }
-                        }]
-                  }
-
-                       }
-                     });
-                     </script>
-                
-               </div>
-            </div>
+         <br>
          
-         </div>
          <div class="col-lg-12">
-            <div class="card card-block card-body card-stretch custom-scroll" style=" background: rgba(31, 21, 16, 0.87);
+            <div class="card card-block card-body card-stretch custom-scroll overflow-auto" style=" background: rgba(31, 21, 16, 0.87);
             border-radius: 16px;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(3.2px);
-            -webkit-backdrop-filter: blur(3.2px);">
+            -webkit-backdrop-filter: blur(3.2px);
+            height: 700px;">
                <div class="d-flex flex-wrap justify-content-between align-items-center">
                   <div class="caption">
                      <h4 class="font-weight-bold mb-2">Recent Trade Activity</h4>
@@ -694,17 +676,74 @@
       <div class="row">
        
          <div class="col-lg-12">
-            <div class="card card-body" style=" background: rgba(31, 21, 16, 0.87);
+            <div class="card card-body overflow-auto" style=" background: rgba(31, 21, 16, 0.87);
             border-radius: 16px;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(3.2px);
-            -webkit-backdrop-filter: blur(3.2px);">
+            -webkit-backdrop-filter: blur(3.2px);
+            height:800px ;">
                <div>
                   <div>
                         <h4>History</h4>
                   </div>
                </div>
-               <div>
+               <div><div class="">
+                <div class="card card-body" style="
+                background: rgba(31, 21, 16, 0.87);
+                border-radius: 16px;
+                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                backdrop-filter: blur(3.2px);
+                -webkit-backdrop-filter: blur(3.2px);">
+                   <div class="d-flex justify-content-between flex-wrap">
+                      <div class="d-flex align-items-center align-self-center">
+                      </div>
+                   </div>
+                   
+                   <br>
+                   <div>
+                      
+                      <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+    
+                      <script>
+                         const xValues = {{last_week_keys}};
+                         
+                         new Chart("myChart", {
+                           type: "line",
+                           data: {
+                             labels: xValues,
+                             datasets: [{ 
+                               data: {{last_week_y}},
+                               fill: true, 
+                               lineTension: 0.1,
+                               backgroundColor: "orange",
+                               borderColor: "rgba(18, 12, 9, 0.87)",
+                             }]
+                           },
+                           options: {
+                             legend: {display: false},
+                             scales: {
+                             yAxes: [{
+                               ticks: {
+                                  beginAtZero: true,
+                                  usercallback: function(label, index, labels) {
+                                     // when the floored value is the same as the value we have a whole number
+                                     if (math.floor(label) === label) {
+                                        return label;
+                                     }
+    
+                                  },
+                               }
+                            }]
+                      }
+    
+                           }
+                         });
+                         </script>
+                    
+                   </div>
+                </div>
+             
+             </div>
                   <ul class="list-inline m-0 p-0">
                     {% if not last_week_alerts %}
                     <p>Nothing to see here!</p>

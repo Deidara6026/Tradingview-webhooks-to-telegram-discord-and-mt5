@@ -37,7 +37,9 @@ class MT5_Webhook(models.Model):
     meta_id = models.UUIDField(default=uuid.uuid4, editable=False)
     hits = models.IntegerField(default=0)
     hit_limit = models.IntegerField(null=True, blank=True)
+    identifier = models.CharField(default="mt5", max_length=10)
     old_alerts = GenericRelation(Alert, related_query_name='webhook')
+    status = models.CharField(max_length=10)
 
 class Binance_Webhook(models.Model):
     pass
@@ -99,6 +101,7 @@ class Telegram_Webhook(models.Model):
     chat_limit = models.IntegerField(null=True, blank=True)
     old_alerts = GenericRelation(Alert)
     status = models.CharField(max_length=10)
+    identifier = models.CharField(default="tg", max_length=10)
     message_format = models.CharField(max_length=500, null=True, blank=True)
     message_prefix = models.CharField(max_length=200, null=True, blank=True)
     message_suffix = models.CharField(max_length=200, null=True, blank=True)
@@ -123,6 +126,7 @@ class Discord_Webhook(models.Model):
     hit_limit = models.IntegerField(null=True, blank=True)
     chat_limit = models.IntegerField(null=True, blank=True)
     old_alerts = GenericRelation(Alert)
+    identifier = models.CharField(default="disc", max_length=10)
     message_format = models.CharField(max_length=500, null=True, blank=True)
     message_prefix = models.CharField(max_length=200, null=True, blank=True)
     message_suffix = models.CharField(max_length=200, null=True, blank=True)
