@@ -8,7 +8,7 @@
       
       <title>Stiletto Dashboard</title>
       <link rel="stylesheet" href="{% static 'assets/css/libs.min.css' %}">
-      <link rel="shortcut icon" href="{% static 'img/logo.png' %}" />
+      <link rel="shortcut icon" href="{% static 'img/logoo.png' %}" />
       <link rel="stylesheet" href="{% static 'css/coinex.css' %}">
 
       <style>
@@ -51,7 +51,7 @@
    -webkit-backdrop-filter: blur(3.2px);">
         <div class="d-flex align-items-center justify-content-start">
             <a href="../dashboard/dashboard.html" class="navbar-brand dis-none align-items-center justify-content-center">
-                       <h4 class="logo-title m-0">Stiletto</h4>
+                       <h4 class="logo-title m-0">TOT</h4>
             </a>
             <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                 <i class="icon">
@@ -527,10 +527,39 @@
                               <span class=" text-primary">
                                  This Week's Alerts<br>
                                  <small>{{last_week_len}}</small>
+                              </span><br><br>
+                              <span>
+                                  <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="25" fill="white" class="bi bi-pause-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0z"/>
+                                  </svg></a> 
+                              </span><br>
+                              <span>
+                                <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="25" fill="white" class="bi bi-clipboard-data" viewBox="0 0 16 16">
+                                  <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z"/>
+                                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                                </svg></a> 
+                              </span><br>
+                              <span>
+                                <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="25" fill="white" class="bi bi-gear-wide-connected" viewBox="0 0 16 16">
+                                   <path d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
+                                 </svg></a> 
                               </span>
+                             
                                                    
                            </div>
                         </div>
+                        <div class="d-none d-lg-block w-20">
+                          <div class="d-flex justify-content-evenly flex-1">
+                           <p><a href="#"><i class="bi bi-pause-circle"></i></a></p>
+                           <br>
+                           <span><i class="bi bi-clipboard-data"></i></span>
+                           <br>
+                           <span><i class="bi bi-gear-wide-connected"></i></span>
+                                                  
+                          </div>
+                       </div>
                         <div class="d-flex align-items-center justify-content-between">
                            <span class="">
                               <svg width="32" height="32" viewBox="0 0 34 53" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -552,6 +581,7 @@
                   </div>
                </div>     
             </div>      
+    
             <div class="col-xl-3">
                <div class="d-grid grid-4-auto gap-card my-auto">        
                   <div class="dropdown">
