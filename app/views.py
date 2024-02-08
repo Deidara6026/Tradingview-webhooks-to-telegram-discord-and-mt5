@@ -34,10 +34,13 @@ def dashboard(request):
         d = now - datetime.timedelta(days=x)
         l.append(int(d.strftime("%d")))
     last_week_dict = dict.fromkeys(l, 0)
-
+    print(last_week_dict)
     for alert in last_week_alerts:
         d = alert.date.strftime("%d")
-        last_week_dict[int(d)] += 1
+        try:
+            last_week_dict[int(d)] += 1
+        except KeyError:
+            continue
     print(last_week_alerts)
     orders=[]
     if mt5_list:
