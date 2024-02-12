@@ -29,3 +29,9 @@ function get_note(wid, w) {
     })
     
 }
+
+function copy_link(e) {
+    link = e.innerText;
+    navigator.clipboard.writeText(link).then(
+    alert("Copied the Link"));
+}
