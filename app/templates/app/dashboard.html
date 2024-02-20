@@ -24,8 +24,10 @@
             background-size: cover;
             background-repeat: no-repeat;
          }
-        
-    
+         #logoo{
+            max-height: 200px;
+            max-width: 13%;
+         }
 
          
       </style> 
@@ -80,7 +82,7 @@
     -webkit-backdrop-filter: blur(3.2px);">
          <div class="d-flex align-items-center justify-content-start">
              <a href="../dashboard/dashboard.html" class="navbar-brand dis-none align-items-center justify-content-center">
-                        <h4 class="logo-title m-0">Stiletto</h4>
+                        <h4 class="logo-title m-0">TOT</h4>
              </a>
              <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                  <i class="icon">
@@ -360,9 +362,15 @@
        </nav>  
                  <!--Nav End-->
                  
-        <br><br><br>
+</div>
 
-      </div>
+
+<div class="row justify-content-center text-center align-items-center" id="slidein">
+    <img class="img-fluid" src="{% static 'img/logoo.png' %}" alt="sankofa" id="logoo">
+</div>
+
+
+
       <div class="container-fluid content-inner pb-0">
 <div class="row">
    <div class="col-lg-12">
@@ -536,9 +544,23 @@
                            <tr>
                               <th scope="col">Name</th>
                               <th scope="col">Time</th>
-                              <th scope="col">Entry</th>
-                              <th scope="col">Take Profit(s)</th>
-                              <th scope="col">Stop Loss</th>
+                              <th scope="col" style="  background: rgba(229, 99, 24, 0.71);
+                              box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                              backdrop-filter: blur(14.3px);
+                              -webkit-backdrop-filter: blur(14.3px);
+                              border: 1px solid rgba(229, 99, 24, 0.3);">Entry</th>
+                              <th scope="col" style="/* From https://css.glass */
+                              background: rgba(25, 146, 24, 0.72);
+                              box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                              backdrop-filter: blur(14.9px);
+                              -webkit-backdrop-filter: blur(14.9px);
+                              border: 1px solid rgba(25, 146, 24, 0.3);">Take Profit(s)</th>
+                              <th scope="col" style="/* From https://css.glass */
+                              background: rgba(222, 14, 14, 0.72);
+                              box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                              backdrop-filter: blur(14.9px);
+                              -webkit-backdrop-filter: blur(14.9px);
+                              border: 1px solid rgba(222, 14, 14, 0.3);">Stop Loss</th>
                               <th scope="col">Quantity</th>
                               <th scope="col">magic</th>
                            </tr>
@@ -562,11 +584,25 @@
                         
                                     {{order.0.date_created}}
                                  </td>
-                                 <td class="text-success">
+                                 <td class="text-success" style="  background: rgba(229, 99, 24, 0.71);
+                                 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                                 backdrop-filter: blur(14.3px);
+                                 -webkit-backdrop-filter: blur(14.3px);
+                                 border: 1px solid rgba(229, 99, 24, 0.3);">
                                     {{order.0.entry}}
                                  </td>
-                                 <td>{{order.2}}</td>
-                                 <td>{{order.0.sl}}<br>
+                                 <td style="/* From https://css.glass */
+                                 background: rgba(25, 146, 24, 0.72);
+                                 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                                 backdrop-filter: blur(14.9px);
+                                 -webkit-backdrop-filter: blur(14.9px);
+                                 border: 1px solid rgba(25, 146, 24, 0.3);">{{order.2}}</td>
+                                 <td style="/* From https://css.glass */
+                                 background: rgba(222, 14, 14, 0.72);
+                                 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                                 backdrop-filter: blur(14.9px);
+                                 -webkit-backdrop-filter: blur(14.9px);
+                                 border: 1px solid rgba(222, 14, 14, 0.3);">{{order.0.sl}}<br>
                                     <!-- <small class="ms-5">635,237 BTC</small> -->
                                  </td>
                                  <td class="ms-5">{{order.0.quantity}}</td>
