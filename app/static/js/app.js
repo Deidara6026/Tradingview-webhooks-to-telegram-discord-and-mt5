@@ -1,4 +1,4 @@
-import { Modal } from './bootstrap.esm.min.js'
+import { Modal } from './bundle.js'
 
 function post_note(wid) {
     note_element = document.getElementById("note-msg-id");
