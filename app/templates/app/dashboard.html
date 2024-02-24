@@ -8,15 +8,15 @@
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"></script>
-      <script src="{% static 'js/node_modules/@popper.js' %}"></script>
+   
       
       <title>Stiletto Dashboard</title>
+      <script src="{% static 'js/app1.js'%}"></script>
       <link rel="stylesheet" href="{% static 'assets/css/libs.min.css' %}">
       <link rel="shortcut icon" href="{% static 'img/logoo.png' %}" />
       <link rel="stylesheet" href="{% static 'css/coinex.css' %}">
+
+
 
       <style>
          body{
@@ -54,14 +54,20 @@
     </div>
     
     <div class="modal fade" id="note-create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Create Webhook</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Add Note</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            ...
+            <form action="{% url 'note_api_endpoint' %}" method="post">
+                <label for="note-text">Note Text (Max 1000 chars)</label><br><br>
+
+                <textarea style="height: 400px; width: 70%;" id="note-text" name="note-text" maxlength="1000" required></textarea> <br><br><br>
+                <label for="note-rating">Trade Rating (0-5 stars)</label>
+                <input type="number" id="note-rating" name="note-rating" min="0" max="5" step="0.1" required>
+            </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -544,19 +550,19 @@
                            <tr>
                               <th scope="col">Name</th>
                               <th scope="col">Time</th>
-                              <th scope="col" style="  background: rgba(229, 99, 24, 0.71);
+                              <th scope="col" style="  background: rgba(229, 99, 24, 0.264);
                               box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
                               backdrop-filter: blur(14.3px);
                               -webkit-backdrop-filter: blur(14.3px);
                               border: 1px solid rgba(229, 99, 24, 0.3);">Entry</th>
                               <th scope="col" style="/* From https://css.glass */
-                              background: rgba(25, 146, 24, 0.72);
+                              background: rgba(24, 146, 24, 0.282);
                               box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
                               backdrop-filter: blur(14.9px);
                               -webkit-backdrop-filter: blur(14.9px);
                               border: 1px solid rgba(25, 146, 24, 0.3);">Take Profit(s)</th>
                               <th scope="col" style="/* From https://css.glass */
-                              background: rgba(222, 14, 14, 0.72);
+                              background: rgba(222, 14, 14, 0.323);
                               box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
                               backdrop-filter: blur(14.9px);
                               -webkit-backdrop-filter: blur(14.9px);
@@ -571,7 +577,7 @@
                                  <td>
                                     <p>{{order.1}}
                                         <span>
-                                            <button type="button" class="btn" data-toggle="tooltip" onclick="toggle_note({{order.0.id}});" data-placement="top" title="Add a note for this Trade to your Journal">
+                                            <button type="button" class="btn" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#note-create" onclick="toggle_note({{order.0.id}});" data-placement="top" title="Add a note for this Trade to your Journal">
                                             <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="25" fill="white" class="bi bi-clipboard-data" viewBox="0 0 16 16">
                                               <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z"/>
                                               <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
@@ -736,8 +742,8 @@
           </div>
       </footer>    </main>
     <!-- Backend Bundle JavaScript -->
-    <script type="module" src="{% static 'js/bootstrap.esm.min.js'%}"></script>
-    <script type="module" src="{% static 'js/app.js'%}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
 
   </body>
 </html>

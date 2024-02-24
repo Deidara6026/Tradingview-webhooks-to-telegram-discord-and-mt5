@@ -1,5 +1,3 @@
-import { Modal } from './bundle.js'
-
 function post_note(wid) {
     note_element = document.getElementById("note-msg-id");
     rating_element = document.getElementById("note-rating-id");
@@ -41,7 +39,7 @@ function toggle_note(pk) {
     console.log("kk")
     id = document.getElementById("note-webhook-id");
     id.setAttribute('value', pk);
-    var myModal = new Modal(document.getElementById('note-create'), options);
-    myModal.show();
+    // var myModal = new Modal(document.getElementById('note-create'), options);
+    // myModal.show();
 
 }
