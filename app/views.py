@@ -27,7 +27,7 @@ def dashboard(request):
     discord_list = Discord_Webhook.objects.filter(user=request.user).all()
     telegram_list = Telegram_Webhook.objects.filter(user=request.user).all()
     mt5_list = MT5_Webhook.objects.filter(user=request.user).all()
-    last_week_alerts = Alert.objects.filter(webhook__user=request.user) # Finish this shit
+    last_week_alerts = Alert.objects.filter(webhook__user=request.user) # Finish this shit... lol
     now = datetime.datetime.now()
     l = []
     for x in range(7):
@@ -51,7 +51,7 @@ def dashboard(request):
     lv.reverse()
     order_list = []
     for order in orders:
-        order_list.append([order,order.mt5_webhook.name, ", ".join([str(tp.price) for tp in order.takeprofit_set.all()])])
+        order_list.append([order, order.mt5_webhook.name, ", ".join([str(tp.price) for tp in order.takeprofit_set.all()]), order.mt5_webhook.webhook_id])
     print(webhooks)
     context = {
         # "signalform":SignalForm(),

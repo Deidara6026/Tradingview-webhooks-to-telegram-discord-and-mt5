@@ -25,7 +25,7 @@ class Alert(models.Model):
     
 
 class MT5_Webhook(models.Model):
-    webhook_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)  
+    webhook_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False) #tview 
     mt5_id = models.UUIDField(default=uuid.uuid4, editable=False)  
     subscription_id = models.CharField(max_length=15, null=True, blank=True)
     product_id = models.UUIDField(null=True, blank=True)

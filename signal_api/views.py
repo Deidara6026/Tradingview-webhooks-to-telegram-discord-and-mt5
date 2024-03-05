@@ -218,12 +218,14 @@ class NoteAPIView(APIView):
 
     def post(self, request, *args, **kwargs):    
         data = request.data
+        print(data, (dict(data).get("note-rating"))[0])
         order = get_object_or_404(Order, id=data.get("pk")) 
-        note = data.get("note", order.trader_notes)
-        rating = data.get("rating", order.rating)
+        note = data.get("note-text", order.trader_notes)
+        rating = (dict(data).get("note-rating"))[0]
         order.trader_notes = note
         order.rating = rating
         order.save()
+        print(note, rating)
         return JsonResponse({"status": "success"})
 
     def get_queryset(self):

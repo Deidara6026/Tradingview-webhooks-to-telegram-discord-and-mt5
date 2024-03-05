@@ -11,7 +11,7 @@
    
       
       <title>Stiletto Dashboard</title>
-      <script src="{% static 'js/app1.js'%}"></script>
+      <script src="{% static 'js/app1.js'%}?v=1.0"></script>
       <link rel="stylesheet" href="{% static 'assets/css/libs.min.css' %}">
       <link rel="shortcut icon" href="{% static 'img/logoo.png' %}" />
       <link rel="stylesheet" href="{% static 'css/coinex.css' %}">
@@ -57,22 +57,24 @@
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Add Note</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Trade Notes</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <form action="{% url 'note_api_endpoint' %}" method="post">
-                <label for="note-text">Note Text (Max 1000 chars)</label><br><br>
-
+          <form action="{% url 'note_api_endpoint' %}" method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+                <label for="note-text">Trade Summary (Max 1000 chars)</label><br><br>
                 <textarea style="height: 400px; width: 70%;" id="note-text" name="note-text" maxlength="1000" required></textarea> <br><br><br>
                 <label for="note-rating">Trade Rating (0-5 stars)</label>
                 <input type="number" id="note-rating" name="note-rating" min="0" max="5" step="0.1" required>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
+                <input type="hidden" id="note-webhook-id" name="pk" min="0" max="5" step="0.1" required>
+                <input type="hidden" id="note-webhook-wid" name="note-rating" min="0" max="5" step="0.1" required>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" onclick="post_note()" class="btn btn-primary">Save changes</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -577,7 +579,7 @@
                                  <td>
                                     <p>{{order.1}}
                                         <span>
-                                            <button type="button" class="btn" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#note-create" onclick="toggle_note({{order.0.id}});" data-placement="top" title="Add a note for this Trade to your Journal">
+                                            <button type="button" class="btn" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#note-create" onclick="toggle_note({{order.0.id}}, '{{order.3}}');" data-placement="top" title="Add a note for this Trade to your Journal">
                                             <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="25" fill="white" class="bi bi-clipboard-data" viewBox="0 0 16 16">
                                               <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z"/>
                                               <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
