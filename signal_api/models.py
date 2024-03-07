@@ -41,54 +41,6 @@ class MT5_Webhook(models.Model):
     old_alerts = GenericRelation(Alert, related_query_name='webhook')
     status = models.CharField(max_length=10)
 
-class Binance_Webhook(models.Model):
-    pass
-
-
-
-class Order(models.Model):
-    is_active = models.BooleanField()
-    mt5_webhook = models.ForeignKey(MT5_Webhook, on_delete=models.CASCADE)
-    entry = models.FloatField()
-    magic = models.IntegerField(null=True, blank=True)
-    tt = models.IntegerField(null=True, blank=True)
-    td = models.IntegerField(null=True, blank=True)
-    ts = models.IntegerField(null=True, blank=True)
-    trailing_type = models.IntegerField(null=True, blank=True) # -1 for percent, 1 for points
-    sl = models.FloatField()
-    side = models.CharField(max_length=5)
-    quantity = models.FloatField()
-    q_type = models.IntegerField(null=True, blank=True) # -1 for percent, 1 for qty
-    ticker = models.CharField(max_length=10, null=True, blank=True)
-    img_url = models.CharField(max_length=100, null=True, blank=True)
-    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    trader_notes = models.CharField(max_length=5000, null=True, blank=True)
-    rating = models.FloatField(default=0.0)
-
-
-class TakeProfit(models.Model):
-    price = models.FloatField()
-    is_active = models.BooleanField(default=True)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-
-
-class CloseOrder(models.Model):
-    is_active = models.BooleanField()
-    mt5_webhook = models.ForeignKey(MT5_Webhook, on_delete=models.CASCADE)
-    magic = models.IntegerField(null=True, blank=True)
-    ticker = models.CharField(max_length=10, null=True, blank=True)
-    _all = models.BooleanField(null=True, blank=True)
-
-
-class ModifyOrder(models.Model):
-    is_active = models.BooleanField()
-    mt5_webhook = models.ForeignKey(MT5_Webhook, on_delete=models.CASCADE)
-    magic = models.IntegerField(null=True, blank=True)
-    ticker = models.CharField(max_length=10, null=True, blank=True)
-    sl = models.FloatField(null=True, blank=True)
-    tp = models.FloatField(null=True, blank=True)
-    
-
 
 class Telegram_Webhook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -115,7 +67,7 @@ class TelegramChat(models.Model):
 class Discord_Webhook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=30, null=True, blank=True)
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    webhook_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     subscription_id = models.UUIDField(null=True, blank=True)
     product_id = models.UUIDField(null=True, blank=True)
     variant_id = models.UUIDField(null=True, blank=True)
@@ -134,3 +86,46 @@ class Discord_Webhook(models.Model):
 class DiscordChat(models.Model):
     channel_webhook_url = models.CharField(max_length=200)
     webhook = models.ForeignKey(Discord_Webhook, on_delete=models.CASCADE)
+
+
+
+class Order(models.Model):
+    is_active = models.BooleanField()
+    literal_webhook_id = models.UUIDField(null=True, blank=True)
+    entry = models.FloatField()
+    magic = models.IntegerField(null=True, blank=True)
+    tt = models.IntegerField(null=True, blank=True)
+    td = models.IntegerField(null=True, blank=True)
+    ts = models.IntegerField(null=True, blank=True)
+    trailing_type = models.IntegerField(null=True, blank=True) # -1 for percent, 1 for points
+    sl = models.FloatField()
+    side = models.CharField(max_length=5)
+    quantity = models.FloatField()
+    q_type = models.IntegerField(null=True, blank=True) # -1 for percent, 1 for qty
+    ticker = models.CharField(max_length=10, null=True, blank=True)
+    img_url = models.CharField(max_length=100, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    trader_notes = models.CharField(max_length=5000, null=True, blank=True)
+    rating = models.FloatField(default=0.0)
+
+
+class TakeProfit(models.Model):
+    price = models.FloatField()
+    is_active = models.BooleanField(default=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+
+class CloseOrder(models.Model):
+    is_active = models.BooleanField()
+    literal_webhook_id = models.UUIDField(null=True, blank=True)
+    magic = models.IntegerField(null=True, blank=True)
+    ticker = models.CharField(max_length=10, null=True, blank=True)
+    _all = models.BooleanField(null=True, blank=True)
+
+class ModifyOrder(models.Model):
+    is_active = models.BooleanField()
+    literal_webhook_id = models.UUIDField(null=True, blank=True)
+    magic = models.IntegerField(null=True, blank=True)
+    ticker = models.CharField(max_length=10, null=True, blank=True)
+    sl = models.FloatField(null=True, blank=True)
+    tp = models.FloatField(null=True, blank=True)

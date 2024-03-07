@@ -23,11 +23,11 @@ def platforms(request):
 
 @login_required
 def dashboard(request):
-    # Get the webhooks that the user has, serialize for json, and add to context
+    # Get the webhooks that the user has, serialize for json, and add to webpage context
     discord_list = Discord_Webhook.objects.filter(user=request.user).all()
     telegram_list = Telegram_Webhook.objects.filter(user=request.user).all()
     mt5_list = MT5_Webhook.objects.filter(user=request.user).all()
-    last_week_alerts = Alert.objects.filter(webhook__user=request.user) # Finish this shit... lol
+    last_week_alerts = Alert.objects.filter(webhook__user=request.user, date__gte=datetime.datetime.today()-datetime.timedelta(days=7)) # Finish this shit... lol
     now = datetime.datetime.now()
     l = []
     for x in range(7):

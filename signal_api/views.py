@@ -26,36 +26,35 @@ std_logger = logging.getLogger(__name__)
 lemon_logger = logging.getLogger("lemon")
 
 
-def send_telegram_message(data: list):
-    telegram_settings = settings.TELEGRAM
-    bot = telebot.TeleBot(telegram_settings["token"])
-    for x in data:
-        try:
-            if x[3] is not None:
-                bot.send_photo(x[0], x[3], x[2])
-            bot.send_message(x[0], x[1])
-        except:
-            std_logger.error(e)
-
-
-def send_discord_message(data: list[list]):
-    discord_settings = settings.DISCORD
-    for x in data:
-        try:
-            webhook_url = x[0]
-            message = x[1]
-            webhook = DiscordWebhook(webhook_url)
-            embed = DiscordEmbed(
-                title="Alert Triggered Via Stiletto",
-                description=message,
-                color="03b2f8",
-            )
-            if x[3] is not None:
-                embed.set_image(url=x[3])
-                webhook.add_embed(embed)
-            webhook.execute()
-        except Exception as e:
-            std_logger.error(e)
+def send_messages(data:list, w):
+    if w == "telegram":
+        telegram_settings = settings.TELEGRAM
+        bot = telebot.TeleBot(telegram_settings["token"])
+        for x in data:
+            try:
+                if x[3] is not None:
+                    bot.send_photo(x[0], x[3], x[2])
+                bot.send_message(x[0], x[1])
+            except:
+                std_logger.error(e)
+    elif w=="discord":
+        discord_settings = settings.DISCORD
+        for x in data:
+            try:
+                webhook_url = x[0]
+                message = x[1]
+                webhook = DiscordWebhook(webhook_url)
+                embed = DiscordEmbed(
+                    title="Alert Triggered Via Stiletto",
+                    description=message,
+                    color="03b2f8",
+                )
+                if x[3] is not None:
+                    embed.set_image(url=x[3])
+                    webhook.add_embed(embed)
+                webhook.execute()
+            except Exception as e:
+                std_logger.error(e)
 
 
 def parse_signal_hit(m: str):
@@ -188,27 +187,89 @@ Close {params.get("symbol", None) or params.get("m", None)  or "all previously o
     )
     return m
 
+def parse_incoming_webhook_request(w, pk, data):
+    webhook = MT5_Webhook.get(id=pk).first() or Telegram_Webhook.get(id=pk).first() or Discord_Webhook.get(id=pk).first()
+    if webhook.hits > webhook.limit:
+        return JsonResponse({"status": "limit exceeded"})
+    tradingview_message = data.get("message")
+    for params in parse_signal_hit(tradingview_message):
+        if params.get("side").lower() == "close":
+            o = CloseOrder.objects.create(
+                is_active=True,
+                literal_webhook_id=webhook.webhook_id,
+                ticker=params.get("symbol", None),
+                magic=params.get("m", None),
+                _all=params.get("all", False),
+            )
+            o.save()
+        elif params.get("side").lower() == "modify":
+            o = ModifyOrder.objects.create(
+                is_active=True,
+                literal_webhook_id=webhook.webhook_id,
+                ticker=params.get("symbol", None),
+                magic=params.get("m", None),
+                sl=params.get("sl", None),
+                tp=params.get("tp", None),
+            )
+            o.save()
+        elif params.get("side").lower() in ["buy", "sell"]:
+            o = Order.objects.create(
+                is_active=True,
+                literal_webhook_id=webhook.webhook_id,
+                ticker=params.get("symbol", ""),
+                side=params.get("side", ""),
+                tt=params.get("tt", None),
+                ts=params.get("ts", None),
+                td=params.get("td", None),
+                sl=params.get("sl", None),
+                magic=params.get("m", None),
+                quantity=params.get("q", None),
+                entry=params.get("e", None),
+                q_type=params.get("qt", None),
+                trailing_type=params.get("trail_type"),
+            )
+
+            o.save()
+            tp_values = params.get("tp", [])
+            for tp_value in tp_values:
+                tp = TakeProfit.objects.create(
+                    is_active=True, order=o, price=tp_value
+                )
+            tp.save()
+    chats = None
+    if w == "telegram":
+        chats = webhook.telegramchat_set.all()
+    elif w == "discord":
+        chats = webhook.discordchat_set.all()
+    if chats:
+        data = parse(params, telegram_webhook)
+        res = [
+            [chat.chat_id, data, params.get("img", None)] for chat in chats
+        ]
+        send_message(res, w)
+    a = Alert(content_object=webhook, webhook_type=w, user=webhook.user, text=str(data.get("message")))
+    a.save()
+    webhook.hits += 1
+    webhook.save()
+    return JsonResponse({"status": "success"})
+
+
+        
+        
+       
+
 
 class TelegramAPIView(APIView):
     def post(self, request, *args, **kwargs):
-        telegram_webhook = get_object_or_404(Telegram_Webhook, id=self.kwargs["pk"])
-        if telegram_webhook.hits > telegram_webhook.limit:
-            return JsonResponse({"status": "limit exceeded"})
+        return parse_incoming_webhook_request("telegram", self.kwargs["pk"], self.request.data)
 
-        data = request.data
-        telegram_chats = telegram_webhook.telegramchat_set.all()
-        tradingview_message = data.get("message")
-        for params in parse_signal_hit(tradingview_message):
-            if telegram_chats:
-                data = parse(params, telegram_webhook)
-            res = [
-                [chat.chat_id, data, params.get("img", None)] for chat in telegram_chats
-            ]
+class MT5APIView(APIView):
+    def post(self, *args, **kwargs):
+        return parse_incoming_webhook_request("mt5", self.kwargs["pk"], self.request.data)
 
-            send_telegram_message(res)
-        telegram_webhook.hits += 1
-        telegram_webhook.save()
-        return JsonResponse({"status": "success"})
+class DiscordAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        return parse_incoming_webhook_request("discord", self.kwargs["pk"], self.request.data)
 
 
 class NoteAPIView(APIView):
@@ -277,90 +338,6 @@ class NoteAPIView(APIView):
             encoded_pdf = base64.b64encode(buffer.read()).decode('utf-8')
             return encoded_pdf
         
-
-class MT5APIView(APIView):
-    def post(self, *args, **kwargs):
-        mt5_webhook = get_object_or_404(MT5_Webhook, webhook_id=self.kwargs["pk"])
-        if mt5_webhook.hits > mt5_webhook.hit_limit:
-            return JsonResponse({"status": "limit exceeded"})
-        data = self.request.data
-        tradingview_messages = data.get("message").split("\n")
-        for message in tradingview_messages:
-            for params in parse_signal_hit(message):
-                if params.get("side").lower() in ["buy", "sell"]:
-                    print(params)
-                    o = Order.objects.create(
-                        is_active=True,
-                        mt5_webhook=mt5_webhook,
-                        ticker=params.get("symbol", ""),
-                        side=params.get("side", ""),
-                        tt=params.get("tt", None),
-                        ts=params.get("ts", None),
-                        td=params.get("td", None),
-                        sl=params.get("sl", None),
-                        magic=params.get("m", None),
-                        quantity=params.get("q", None),
-                        entry=params.get("e", None),
-                        q_type=params.get("qt", None),
-                        trailing_type=params.get("trail_type"),
-                    )
-                    o.mt5_webhook = mt5_webhook
-                    o.save()
-                    tp_values = params.get("tp", [])
-                    for tp_value in tp_values:
-                        tp = TakeProfit.objects.create(
-                            is_active=True, order=o, price=tp_value
-                        )
-                    tp.save()
-
-                elif params.get("side").lower() == "close":
-                    o = CloseOrder.objects.create(
-                        is_active=True,
-                        mt5_webhook=mt5_webhook,
-                        ticker=params.get("symbol", None),
-                        magic=params.get("m", None),
-                        _all=params.get("all", False),
-                    )
-                    o.mt5_webhook = mt5_webhook
-                    o.save()
-
-                elif params.get("side").lower() == "modify":
-                    o = ModifyOrder.objects.create(
-                        is_active=True,
-                        mt5_webhook=mt5_webhook,
-                        ticker=params.get("symbol", None),
-                        magic=params.get("m", None),
-                        sl=params.get("sl", None),
-                        tp=params.get("tp", None),
-                    )
-                    o.mt5_webhook = mt5_webhook
-                    o.save()
-        a = Alert(content_object=mt5_webhook, webhook_type="mt5", user=mt5_webhook.user, text=str(data.get("message")))
-        a.save()
-        mt5_webhook.save()
-        return JsonResponse({"ok": 200})
-
-
-class DiscordAPIView(APIView):
-    def post(self, request, *args, **kwargs):
-        discord_webhook = get_object_or_404(Discord_Webhook, id=self.kwargs["pk"])
-        if discord_webhook.hits > discord_webhook.limit:
-            return JsonResponse({"status": "limit exceeded"})
-
-        data = request.data
-        discord_chats = discord_webhook.discordchat_set.all()
-        tradingview_message = data.get("message")
-        for params in parse_signal_hit(tradingview_message):
-            if discord_chats:
-                data = parse(params, discord_webhook)
-            res = [
-                [chat.channel_webhook_url, data, params.get("img", None)]
-                for chat in discord_chats
-            ]
-            send_discord_message(res)
-        discord_webhook.hits += 1
-        discord_webhook.save()
-        return JsonResponse({"ok": 200})
 
 
 def handle_lemon_webhook(id, wid, reason):

@@ -15,9 +15,9 @@ function post_note() {
     )
 }
 
-function get_note(wid, w) {
+function get_notes(wid, w) {
     fetch(
-        "localhost:8000/journal_note_api?w=w&wid=wid",{"method":"GET"}
+        `localhost:8000/journal_note_api?w=${w}&wid=${wid}`,{"method":"GET"}
     ).then((res) => res.json()
     ).then((data) => {
         message = data.message;
@@ -31,6 +31,21 @@ function get_note(wid, w) {
     
 }
 
+function get_note(wid, w) {
+    fetch(
+        `localhost:8000/journal_note_api?w=${w}&wid=${wid}`,{"method":"GET"}
+    ).then((res) => res.json()
+    ).then((data) => {
+        message = data.message;
+        note_element = document.getElementById("note-text");
+        rating_element = document.getElementById("note-rating");
+        note_element.innerText = message.note;
+        rating_element.innerText = message.rating;
+    })
+}
+
+
+
 function copy_link(e) {
     navigator.clipboard.writeText(e).then(
     alert("Copied the Link"));
@@ -42,6 +57,7 @@ function toggle_note(pk, wid) {
     wid = document.getElementById("note-webhook-wid");
     id.setAttribute('value', pk);
     wid.setAttribute('value', wid);
+    get_note(wid, pk)
     // var myModal = new Modal(document.getElementById('note-create'), options);
     // myModal.show();
 
