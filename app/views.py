@@ -44,14 +44,14 @@ def dashboard(request):
     print(last_week_alerts)
     orders=[]
     if mt5_list:
-        orders = Order.objects.order_by("-id").filter(reduce(lambda x,y : x | y, [Q(mt5_webhook=webhook) for webhook in mt5_list]))[:10]
+        orders = Order.objects.order_by("-id").filter(reduce(lambda x,y : x | y, [Q(literal_webhook_id=webhook.webhook_id) for webhook in mt5_list]))[:10]
 
     webhooks= list(mt5_list)+list(discord_list)+list(telegram_list),
     lv = list(last_week_dict.values())
     lv.reverse()
     order_list = []
     for order in orders:
-        order_list.append([order, order.mt5_webhook.name, ", ".join([str(tp.price) for tp in order.takeprofit_set.all()]), order.mt5_webhook.webhook_id])
+        order_list.append([order, 1, ", ".join([str(tp.price) for tp in order.takeprofit_set.all()]), order.literal_webhook_id])
     print(webhooks)
     context = {
         # "signalform":SignalForm(),
