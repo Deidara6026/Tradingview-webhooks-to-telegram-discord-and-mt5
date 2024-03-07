@@ -91,6 +91,7 @@ class DiscordChat(models.Model):
 
 class Order(models.Model):
     is_active = models.BooleanField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     literal_webhook_id = models.UUIDField(null=True, blank=True)
     entry = models.FloatField()
     magic = models.IntegerField(null=True, blank=True)
@@ -116,6 +117,7 @@ class TakeProfit(models.Model):
 
 
 class CloseOrder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     is_active = models.BooleanField()
     literal_webhook_id = models.UUIDField(null=True, blank=True)
     magic = models.IntegerField(null=True, blank=True)
@@ -123,6 +125,7 @@ class CloseOrder(models.Model):
     _all = models.BooleanField(null=True, blank=True)
 
 class ModifyOrder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     is_active = models.BooleanField()
     literal_webhook_id = models.UUIDField(null=True, blank=True)
     magic = models.IntegerField(null=True, blank=True)
