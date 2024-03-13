@@ -188,8 +188,8 @@ Close {params.get("symbol", None) or params.get("m", None)  or "all previously o
     return m
 
 def parse_incoming_webhook_request(w, pk, data):
-    webhook = MT5_Webhook.get(id=pk).first() or Telegram_Webhook.get(id=pk).first() or Discord_Webhook.get(id=pk).first()
-    if webhook.hits > webhook.limit:
+    webhook = MT5_Webhook.get(id=pk).first() or Telegram_Webhook.get(id=pk).first() or Discord_Webhook.get(id=pk).first() or Journal.get(id=pk).first()
+    if webhook.hits > webhook.hit_limit:
         return JsonResponse({"status": "limit exceeded"})
     tradingview_message = data.get("message")
     for params in parse_signal_hit(tradingview_message):
@@ -262,6 +262,10 @@ def parse_incoming_webhook_request(w, pk, data):
 class TelegramAPIView(APIView):
     def post(self, request, *args, **kwargs):
         return parse_incoming_webhook_request("telegram", self.kwargs["pk"], self.request.data)
+
+class JournalAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        return parse_incoming_webhook_request("journal", self.kwargs["pk"], self.request.data)
 
 class MT5APIView(APIView):
     def post(self, *args, **kwargs):
@@ -424,7 +428,7 @@ class LemonAPIView(APIView):
         subscription_id = data["data"]["attributes"]["subscription_id"]
         reason = data["meta"]["event_name"]
         if reason == "renewal":
-            return
+            return # cant remember if this is finished, prolly is but investigate
         webhook_id = data["meta"]["custom_data"]["webhook_id"]
         handle_lemon_webhook(subscription_id, webhook_id, reason)
 

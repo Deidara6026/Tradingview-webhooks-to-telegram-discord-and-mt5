@@ -39,7 +39,7 @@ class MT5_Webhook(models.Model):
     hit_limit = models.IntegerField(null=True, blank=True)
     identifier = models.CharField(default="mt5", max_length=10)
     old_alerts = GenericRelation(Alert, related_query_name='webhook')
-    status = models.CharField(max_length=10)
+    status = models.CharField(max_length=10, default="inactive")
 
 
 class Telegram_Webhook(models.Model):
@@ -52,7 +52,7 @@ class Telegram_Webhook(models.Model):
     hit_limit = models.IntegerField(null=True, blank=True)
     chat_limit = models.IntegerField(null=True, blank=True)
     old_alerts = GenericRelation(Alert)
-    status = models.CharField(max_length=10)
+    status = models.CharField(max_length=10, default="inactive")
     identifier = models.CharField(default="tg", max_length=10)
     message_format = models.CharField(max_length=500, null=True, blank=True)
     message_prefix = models.CharField(max_length=200, null=True, blank=True)
@@ -75,6 +75,7 @@ class Discord_Webhook(models.Model):
     ends_at = models.DateTimeField(null=True, blank=True)
     parse = models.BooleanField(default=False)
     hits = models.IntegerField(default=0)
+    status = models.CharField(max_length=10, default="inactive")
     hit_limit = models.IntegerField(null=True, blank=True)
     chat_limit = models.IntegerField(null=True, blank=True)
     old_alerts = GenericRelation(Alert)
@@ -87,6 +88,19 @@ class DiscordChat(models.Model):
     channel_webhook_url = models.CharField(max_length=200)
     webhook = models.ForeignKey(Discord_Webhook, on_delete=models.CASCADE)
 
+class Journal(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=30, null=True, blank=True)
+    webhook_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    subscription_id = models.UUIDField(null=True, blank=True)
+    product_id = models.UUIDField(null=True, blank=True)
+    variant_id = models.UUIDField(null=True, blank=True)
+    renews_at = models.DateTimeField(null=True, blank=True)
+    ends_at = models.DateTimeField(null=True, blank=True)
+    old_alerts = GenericRelation(Alert)
+    hits = models.IntegerField(default=0)
+    status = models.CharField(max_length=10, default="inactive")
+    hit_limit = models.IntegerField(null=True, blank=True)
 
 
 class Order(models.Model):
@@ -108,6 +122,7 @@ class Order(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     trader_notes = models.CharField(max_length=5000, null=True, blank=True)
     rating = models.FloatField(default=0.0)
+
 
 
 class TakeProfit(models.Model):
