@@ -26,6 +26,9 @@
       background-color: rgb(240, 239, 239);
       transition: background-color 0.7s;
     }
+    #MT{
+            max-width: 15%;
+        }
 
     
   </style>
@@ -47,7 +50,7 @@
               <a class="nav-link active" href="#">Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="#">Platforms</a>
+              <a class="nav-link active" href="#platforms">Platforms</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active" href="#">Pricing</a>
@@ -62,7 +65,7 @@
       
 
    
-    <div class="row justify-content-center text-center align-items-center" id="slidein">
+    <div class="justify-content-center text-center align-items-center" id="slidein">
       <h3 class="display-2 font-monospace" style="color: #cd5008;"> TheOrange Team</h3>
     </div>
 
@@ -129,12 +132,81 @@
 
     </div></div>
   </div>
-  </div><br><br><br><br><br><br>
+  </div><br><br><br><br><br><br><br>
 
   
+  <div id="platforms">
+    <div class="text-center">
+        <h3 class="display-4 font-monospace" style="color: #cd5008;">Platforms</h3>
+    </div>
+
+   
 
     <div>
-      <div class="card mx-auto w-50 mb-3 text-center" style="
+      <p class="fw-bold font-monospace text-center">Select a platform you would like to receive alerts on!</p> 
+    </div>
+
+
+    <br><br>
+
+    <div>
+      <div class="row">
+       
+        <div class="col-sm-4 mb-3 mb-sm-0 mx-auto">
+          <div class="card text-center" id="card-body">
+            <div class="card-body">
+              <h6 class="card-title display-6"><i class="bi bi-discord" style="color: black;"></i></h6>
+              <h3 class="card-text">Discord</h3>
+              <a href="#" class="btn" style="border-radius: 10px; color: #cd5008; border-color: black;">CONNECT</a>
+            </div>
+          </div>
+        </div>
+      
+        <div class="col-sm-4 mx-auto">
+          <div class="card text-center" id="card-body">
+            <div class="card-body">
+              <h6 class="card-title display-6"><i class="bi bi-telegram" style="color: black;"></i></h6>
+              <h3 class="card-text">Telegram</h3>
+              <a href="#" class="btn" style="border-radius: 10px; color: #cd5008; border-color: black;">CONNECT</a>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <br><br><br>
+
+      <div class="row">
+        
+       <div class="col-sm-4 mb-3 mb-sm-0 mx-auto">
+          <div class="card text-center" id="card-body">
+            <div class="card-body">
+              <h6 class="card-title display-6"><img class="img-fluid" src="Meta.png" alt="meta" id="MT"></h6>
+              <h3 class="card-text ">MetaTrader 5</h3>
+              <a href="#" class="btn" style="border-radius: 10px; color: #cd5008; border-color: black;">CONNECT</a>
+            </div>
+          </div>
+        </div>
+       
+        <div class="col-sm-4 mx-auto">
+          <div class="card text-center" id="card-body">
+            <div class="card-body">
+              <h6 class="card-title display-6"><i class="bi bi-journal" style="color: black;"></i></h6>
+              <h3 class="card-text">MyJournal</h3>
+              <a href="#" class="btn" style="border-radius: 10px; color: #cd5008; border-color: black;">CONNECT</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+<br><br><br><br><br><br>
+
+    <div>
+      <div class="card mx-auto w-75 mb-3 text-center" style="
       background: rgba(255, 255, 255, 0.79);
       border-radius: 16px;
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -152,14 +224,14 @@
             <div class="text-center">
               &ensp; <a href="#"class="text-decoration-none text-black">About &emsp; &emsp;</a>
               <a href="#" class="text-decoration-none text-black">Contact Us &emsp; &emsp; </a> 
-              <a href="#" class="text-decoration-none text-black">Terms of Service &emsp; &ensp;</a>
+              <a href="#" class="text-decoration-none text-black">TOS &emsp; &ensp;</a>
               <a href="#" class="text-decoration-none text-black">Privacy Policy</a>
             </div>
           
            <br>
 
             <div style="color: #cd5008;">
-              ©<script>document.write(new Date().getFullYear())</script> TheOrangeTeam
+              ©<script>document.write(new Date().getFullYear())</script>&nbsp; TheOrange Team
             </div>
 
           </div>
