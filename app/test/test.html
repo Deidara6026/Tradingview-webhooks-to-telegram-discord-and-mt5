@@ -13,6 +13,22 @@
     body{
       max-width: 97%;
     }
+    
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 40% }
+    }
+    @keyframes blinking {
+      from { border-color: transparent }
+      to { border-color: #cd5008; }
+    }
+    .typed-out{
+      overflow: hidden;
+      border-right: .15em solid #cd5008;
+      white-space: nowrap;
+      animation: typing 2.5s steps(40, end) forwards,  blinking 1s infinite;
+      margin: auto;
+    }
     #card-body{
       background: rgba(255, 255, 255, 0.22);
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -21,15 +37,13 @@
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
     #card-body:hover {
-      position: relative;
-      top: -10px;
       background-color: rgb(240, 239, 239);
       transition: background-color 0.7s;
     }
     #MT{
             max-width: 15%;
         }
-
+    
     
   </style>
 
@@ -76,7 +90,7 @@
     <br>
 
     <div>
-      <p class="fw-bold fst-italic font-monospace text-center"> TOT is where good trading practices, and seamless connections meet</p>
+      <p class="fw-bold fst-italic font-monospace text-center typed-out"> TOT is where good trading practices, and seamless connections meet</p>
     </div>
     <br><br><br><br><br><br>
 
@@ -206,33 +220,33 @@
 <br><br><br><br><br><br>
 
     <div>
-      <div class="card mx-auto w-75 mb-3 text-center" style="
+      <div class="card mx-auto mb-3 text-center" style="
       background: rgba(255, 255, 255, 0.79);
       border-radius: 16px;
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.3); height: 13rem;">
+      border: 1px solid rgba(255, 255, 255, 0.3); height: 5rem; width: 30rem;">
         <div class="card-body">
           <div>
              
             <div class="text-center">
-              <img class="img-fluid" style="max-height: 80px; max-width: 30%;" src="logoo.png" id="logoo">
+              <h5>
+                <a href="#"  style="color: black;"><i class="bi bi-instagram"></i></a> &emsp;
+                <a href="#"  style="color: black;"><i class="bi bi-twitter-x"></i></a> &emsp;
+                <a href="#"  style="color: black;"><i class="bi bi-envelope"></i></a>
+              </h5>
             </div>
              
 
             <div class="text-center">
-              &ensp; <a href="#"class="text-decoration-none text-black">About &emsp; &emsp;</a>
-              <a href="#" class="text-decoration-none text-black">Contact Us &emsp; &emsp; </a> 
-              <a href="#" class="text-decoration-none text-black">TOS &emsp; &ensp;</a>
-              <a href="#" class="text-decoration-none text-black">Privacy Policy</a>
-            </div>
-          
-           <br>
-
-            <div style="color: #cd5008;">
+              <a href="#" class="text-decoration-none text-black text-muted">ToS &emsp;</a>
+              <a href="#" class="text-decoration-none text-black text-muted">Privacy Policy &emsp;</a>
               ©<script>document.write(new Date().getFullYear())</script>&nbsp; TheOrange Team
             </div>
+            <br>
+
+            
 
           </div>
 
@@ -243,6 +257,7 @@
       </div>    
     </div>
   
+    
   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
   </body>
