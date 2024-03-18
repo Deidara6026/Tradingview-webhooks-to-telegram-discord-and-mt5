@@ -21,6 +21,11 @@ def index(request):
 def platforms(request):
     return render(request, "app/platforms.html")
 
+
+@login_required
+def dashboard2
+
+
 @login_required
 def dashboard(request):
     # Get the webhooks that the user has, serialize for json, and add to webpage context
