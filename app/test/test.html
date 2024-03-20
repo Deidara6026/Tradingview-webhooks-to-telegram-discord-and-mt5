@@ -13,8 +13,8 @@
     body{
       max-width: 97%;
     }
-    
-    @keyframes typing {
+    @media only screen and (min-width: 1520px) {
+      @keyframes typing {
       from { width: 0 }
       to { width: 40% }
     }
@@ -29,6 +29,8 @@
       animation: typing 2.5s steps(40, end) forwards,  blinking 1s infinite;
       margin: auto;
     }
+}
+    
     #card-body{
       background: rgba(255, 255, 255, 0.22);
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -58,7 +60,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" style="color: #cd5008;" href="#">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active" href="#">Dashboard</a>
@@ -79,7 +81,7 @@
       
 
    
-    <div class="justify-content-center text-center align-items-center" id="slidein">
+    <div class="justify-content-center text-center align-items-center">
       <h3 class="display-2 font-monospace" style="color: #cd5008;"> TheOrange Team</h3>
     </div>
 
@@ -101,7 +103,7 @@
 
 
     <div class="p-5 mx-auto text-center" class="text-center">
-      <img src="ico.svg" alt="Really cool image" class="d-inline mx-6" style="height: 200px;">
+      <img src="financial-graph.svg" alt="Really cool image" class="d-inline mx-6" style="height: 300px;">
       <p class="d-inline font-monospace">“Effortlessly stay ahead of market trends with our integration platform, eliminating manual updates.”</p>
     </div>
   
@@ -113,7 +115,7 @@
   <div class="text-center row ">
   <div class="card col-3 mx-auto" style="width: 18rem;" id="card-body">
     <div>
-      <img src="peek.png" style="height: 150px;">
+      <img src="time-is-money.svg" style="height: 150px;">
     <div class="card-body">
       <h5 class="card-title">Instantly Share Your Trades</h5>
       <h6 class="card-subtitle mb-2 text-muted">Quickest execution</h6>
@@ -124,7 +126,7 @@
 
   <div class="card col-3 mx-auto" style="width: 18rem;" id="card-body">
     <div>
-    <img src="peek2.png" style="height: 150px;">
+    <img src="financial-analysis.svg" style="height: 150px;">
     <div class="card-body">
       <h5 class="card-title">Alert History</h5>
       <h6 class="card-subtitle mb-2 text-muted">Its Important!</h6>
@@ -136,7 +138,7 @@
   
   <div class="card col-3 mx-auto" style="width: 18rem;" id="card-body">
     <div>
-    <img src="peek3.png" style="height: 150px;">
+    <img src="financial-calculation.svg" style="height: 150px;">
     <div class="card-body">
       <h5 class="card-title">Journal Your Trades</h5>
       <h6 class="card-subtitle mb-2 text-muted">Just do it!</h6>
