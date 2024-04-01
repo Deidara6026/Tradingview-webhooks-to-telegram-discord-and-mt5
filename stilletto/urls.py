@@ -25,6 +25,7 @@ urlpatterns = [
     path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('dashboard/', dashboard, name="dashboard"),
     path('platforms/', platforms, name="platforms"),
+    path('pricing/', pricing, name="pricing"),
     path('', index, name="index"),
     path('submittg/', submit_telegram_link, name="submittg"),
     path('submitmt5/', submit_telegram_link, name="submitmt5"),
