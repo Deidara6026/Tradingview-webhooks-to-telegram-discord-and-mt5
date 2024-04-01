@@ -23,7 +23,14 @@ def platforms(request):
 
 
 @login_required
-def dashboard2
+def dashboard2(request):
+    discord_list = Discord_Webhook.objects.filter(user=request.user).prefetch_related("discordchat_set").all()
+    telegram_list = Telegram_Webhook.objects.filter(user=request.user).prefetch_related("telegramchat_set").all()
+    mt5_list = MT5_Webhook.objects.filter(user=request.user).prefetch_related("takeprofit_set").all()
+    orders = Order.object.filter(user=request.user).order_by("-id").all()[:100]
+    alerts = list(Alert.objects.filter(webhook__user=request.user).order_by("-id")[:100])
+    webhooks= list(mt5_list)+list(discord_list)+list(telegram_list),
+
 
 
 @login_required
