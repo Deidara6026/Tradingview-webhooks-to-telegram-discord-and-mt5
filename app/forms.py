@@ -29,8 +29,7 @@ class Discord_Webhook_Form(ModelForm):
 class MT5_Webhook_Form(ModelForm):
     class Meta:
         model = MT5_Webhook
-        fields = ["name","mt5_login", "mt5_password", "mt5_server", "mt5_lot"]
+        fields = ["name"]
         widgets = {
             "name": TextInput(attrs={"class":"form-control", "placeholder":"name...", "style":"background-color: #131516; color: aliceblue;border-color:#766e61;"}),
-            "mt5_lot": TextInput(attrs={"class":"form-control", "placeholder":"Position Size(lot size)", "style":"background-color: #131516; color: aliceblue;border-color:#766e61;"}),
         }

@@ -21,58 +21,79 @@ def index(request):
 def platforms(request):
     return render(request, "app/platforms.html")
 
-
-@login_required
-def dashboard2
+def pricing(request):
+    return render(request, "app/pricing.html")
 
 
 @login_required
 def dashboard(request):
-    # Get the webhooks that the user has, serialize for json, and add to webpage context
-    discord_list = Discord_Webhook.objects.filter(user=request.user).all()
-    telegram_list = Telegram_Webhook.objects.filter(user=request.user).all()
-    mt5_list = MT5_Webhook.objects.filter(user=request.user).all()
-    last_week_alerts = Alert.objects.filter(webhook__user=request.user, date__gte=datetime.datetime.today()-datetime.timedelta(days=7)) # Finish this shit... lol
-    now = datetime.datetime.now()
-    l = []
-    for x in range(7):
-        d = now - datetime.timedelta(days=x)
-        l.append(int(d.strftime("%d")))
-    last_week_dict = dict.fromkeys(l, 0)
-    print(last_week_dict)
-    for alert in last_week_alerts:
-        d = alert.date.strftime("%d")
-        try:
-            last_week_dict[int(d)] += 1
-        except KeyError:
-            continue
-    print(last_week_alerts)
-    orders=[]
-    if mt5_list:
-        orders = Order.objects.order_by("-id").filter(reduce(lambda x,y : x | y, [Q(literal_webhook_id=webhook.webhook_id) for webhook in mt5_list]))[:10]
-
-    webhooks= list(mt5_list)+list(discord_list)+list(telegram_list),
-    lv = list(last_week_dict.values())
-    lv.reverse()
-    order_list = []
-    for order in orders:
-        order_list.append([order, 1, ", ".join([str(tp.price) for tp in order.takeprofit_set.all()]), order.literal_webhook_id])
-    print(webhooks)
+    discord_list = Discord_Webhook.objects.filter(user=request.user).prefetch_related("discordchat_set").all()
+    telegram_list = Telegram_Webhook.objects.filter(user=request.user).prefetch_related("telegramchat_set").all()
+    mt5_list = MT5_Webhook.objects.filter(user=request.user).prefetch_related("takeprofit_set").all()
+    orders = Order.objects.filter(user=request.user).order_by("-id").all()[:100]
+    alerts = list(Alert.objects.filter(webhook__user=request.user).order_by("-id")[:100])
+    webhooks = list(mt5_list) + list(discord_list) + list(telegram_list)
+    
     context = {
-        # "signalform":SignalForm(),
-        "orders": order_list,
-        "last_week_len": len(last_week_alerts),
-        "last_week_y": lv,
-        "last_week_keys": l,
-        "webhooks": webhooks[0],
-        "webhook_len": len(webhooks),
-        "last_week_alerts": last_week_alerts,
-        "username": request.user.username,
+        "webhooks": webhooks,
+        "orders": orders,
+        "alerts": alerts,
         "discord_checkout": checkout("e323c57d-b490-4d15-96fb-00b0ccc1a91c", request.user.id),
         "telegram_checkout": checkout("86a9f6d7-1541-48c9-994a-5c65af3f9c0f", request.user.id),
         "mt5_checkout": checkout("380c7a5a-cab6-445c-af52-733410b62e4c", request.user.id)
     }
+
     return render(request, "app/dashboard.html", context)
+
+
+
+# @login_required
+# def dashboard(request):
+#     # Get the webhooks that the user has, serialize for json, and add to webpage context
+#     discord_list = Discord_Webhook.objects.filter(user=request.user).all()
+#     telegram_list = Telegram_Webhook.objects.filter(user=request.user).all()
+#     mt5_list = MT5_Webhook.objects.filter(user=request.user).all()
+#     last_week_alerts = Alert.objects.filter(webhook__user=request.user, date__gte=datetime.datetime.today()-datetime.timedelta(days=7)) # Finish this shit... lol
+#     now = datetime.datetime.now()
+#     l = []
+#     for x in range(7):
+#         d = now - datetime.timedelta(days=x)
+#         l.append(int(d.strftime("%d")))
+#     last_week_dict = dict.fromkeys(l, 0)
+#     print(last_week_dict)
+#     for alert in last_week_alerts:
+#         d = alert.date.strftime("%d")
+#         try:
+#             last_week_dict[int(d)] += 1
+#         except KeyError:
+#             continue
+#     print(last_week_alerts)
+#     orders=[]
+#     if mt5_list:
+#         orders = Order.objects.order_by("-id").filter(reduce(lambda x,y : x | y, [Q(literal_webhook_id=webhook.webhook_id) for webhook in mt5_list]))[:10]
+
+#     webhooks= list(mt5_list)+list(discord_list)+list(telegram_list),
+#     lv = list(last_week_dict.values())
+#     lv.reverse()
+#     order_list = []
+#     for order in orders:
+#         order_list.append([order, 1, ", ".join([str(tp.price) for tp in order.takeprofit_set.all()]), order.literal_webhook_id])
+#     print(webhooks)
+#     context = {
+#         # "signalform":SignalForm(),
+#         "orders": order_list,
+#         "last_week_len": len(last_week_alerts),
+#         "last_week_y": lv,
+#         "last_week_keys": l,
+#         "webhooks": webhooks[0],
+#         "webhook_len": len(webhooks),
+#         "last_week_alerts": last_week_alerts,
+#         "username": request.user.username,
+#         "discord_checkout": checkout("e323c57d-b490-4d15-96fb-00b0ccc1a91c", request.user.id),
+#         "telegram_checkout": checkout("86a9f6d7-1541-48c9-994a-5c65af3f9c0f", request.user.id),
+#         "mt5_checkout": checkout("380c7a5a-cab6-445c-af52-733410b62e4c", request.user.id)
+#     }
+#     return render(request, "app/dashboard.html", context)
 
 
 checkout = lambda uid, vid : f"https://stiletto.lemonsqueezy.com/checkout/buy/{vid}?checkout[custom][user_id]={uid}&checkout[custom][vid]={vid}"
