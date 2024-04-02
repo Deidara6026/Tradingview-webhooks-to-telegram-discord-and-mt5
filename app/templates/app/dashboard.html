@@ -12,9 +12,26 @@
     <link rel="shortcut icon" href="{% static 'img/logoo.png' %}" />
   </head>
   <style>
-    body{
+     body{
       max-width: 97%;
     }
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #d4d4d4; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
     @media only screen and (min-width: 1520px) {
       @keyframes typing {
       from { width: 0 }
@@ -31,7 +48,25 @@
       animation: typing 2.5s steps(40, end) forwards,  blinking 1s infinite;
       margin: auto;
     }
-}
+}    
+
+    #myTab{
+      background: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+    }
+    #webhook{
+      background: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+    }
+
     
     #card-body{
       background: rgba(255, 255, 255, 0.22);
@@ -40,15 +75,66 @@
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
-    #card-body:hover {
+    #data:hover{
       background-color: rgb(240, 239, 239);
       transition: background-color 0.7s;
     }
+    #tinycard{
+      background: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+    }
+    #tinycard:hover{
+      background-color: rgb(240, 239, 239);
+      transition: background-color 0.7s;
+    }
+    .list-group-item:hover {
+      background-color: rgb(240, 239, 239);
+      transition: background-color 0.7s;
+      border-radius: 3px;
+      color: black;
+    }
     #MT{
-            max-width: 15%;
+          max-width: 15%;
         }
-    
-    
+    #mid{
+         max-height: 80%;
+        }
+        .tableFixHead{
+          background: rgba(255, 255, 255, 0.22);
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+
+        }
+        .tableFixHead {
+        overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
+        height: 210px; /* gives an initial height of 200px to the table */
+      }
+      .tableFixHead thead th {
+        position: sticky; /* make the table heads sticky */
+        top: -0.5px; /* table head will be placed from the top of the table and sticks to it */
+      }
+      table {
+        border-collapse: collapse; /* make the table borders collapse to each other */
+        width: 1200px;
+        height: 250px;
+      }
+      th,
+      td {
+        padding: 8px 16px;
+        border: 1px solid #ccc;
+      }
+      th {
+        background: #eee;
+      }
+      #cardscroll{
+        overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
+        height: 320px; /* gives an initial height of 200px to the table */
+      }
   </style>
 
 
@@ -234,8 +320,204 @@
               </div>
               
         </div>
-        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">...</div>
-        <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">...</div>
+        <br>
+        <div class="row">
+          <div class="col-sm-3 mb-3 mb-sm-0 mx-auto">
+            <div class="card" style="height: 10rem;" id="card-body">
+              <div class="card-body">
+                <h5 class="card-title"> <i  style="color: #795642;"  class=" bi bi-calculator"></i> Study</h5>
+                <div class="list-group list-group-flush text-center">
+                  <button type="button" class="list-group-item list-group-item-action" aria-current="true">
+                    <a href="#" class="text-decoration-none text-black"><i style="color: #795642;" class="bi bi-lightbulb fs-5"></i> &ensp; 
+                      Thought Journal </a>
+                  </button>
+
+                  <button  class="list-group-item list-group-item-action">
+                    <a href="#" class="text-decoration-none text-black"><i style="color: #795642;"  class="bi bi-archive fs-5"></i> &ensp; 
+                      Trade Archive </a>
+                  </button>
+
+                </div>
+               
+              </div>
+            </div><br>
+
+            <div class="card" style="height: 10rem;"  id="card-body">
+              <div class="card-body">
+                <h5 class="card-title"> <i  style="color: #795642;"  class=" bi bi-pencil-square"></i> Fast Button</h5>
+                <div class="list-group list-group-flush text-center">
+                  <button type="button" class="list-group-item list-group-item-action" aria-current="true">
+                    <a href="#" class="text-decoration-none text-black"><i style="color: #795642;" class="bi bi-arrow-right-square-fill fs-5"></i> &ensp; 
+                      Quick Trade </a>
+                  </button>
+
+                  <button  class="list-group-item list-group-item-action">
+                    <a href="#" class="text-decoration-none text-black"><i style="color: #795642;"  class="bi bi-lightbulb fs-5"></i> &ensp; 
+                      Today's Thought </a>
+                  </button>
+
+                </div>
+              </div>
+            </div><br>
+
+            <div class="card" style="height: 13rem;"  id="card-body">
+              <div class="card-body">
+                <h5 class="card-title"> <i  style="color: #795642;"  class=" bi bi-database"></i> Database</h5>
+                <div class="list-group list-group-flush text-center">
+                  <button type="button" class="list-group-item list-group-item-action" aria-current="true">
+                    <a href="#" class="text-decoration-none text-black"><i style="color: #795642;" class="bi bi-arrow-right-square fs-5"></i> &ensp; 
+                      Single Trade </a>
+                  </button>
+
+                  <button  class="list-group-item list-group-item-action">
+                    <a href="#" class="text-decoration-none text-black"><i style="color: #795642;"  class="bi bi-calendar fs-5"></i> &ensp; 
+                      Day </a>
+                  </button>
+
+                  <button  class="list-group-item list-group-item-action">
+                    <a href="#" class="text-decoration-none text-black"><i style="color: #795642;"  class="bi bi-calendar3 fs-5"></i> &ensp; 
+                      Month </a>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-sm-8 mx-auto">
+            <div class="card" id="card-body" style="height: 17rem;">
+              <div class="card-body">
+                <h5 class="card-title"> <i style="color: #795642;"  class="bi bi-calendar fs-5"></i> &ensp; Daily Progress</h5>
+             
+
+                <div class="tableFixHead">
+                  <table class="caption-top">
+                    <thead>
+                      <tr>
+                        <th class="fw-light"> <i style="color: #795642;"  class="bi bi-calendar-check fs-6"></i> &ensp; Date</th>
+                        <th class="fw-light"> <i style="color: #795642;"  class="bi bi-cash-stack fs-6"></i> &ensp; Take Profit</th>
+                        <th class="fw-light"> <i style="color: #795642;"  class="bi bi-hash fs-6"></i> &ensp; Win Trade</th>
+                        <th class="fw-light"> <i style="color: #795642;"  class="bi bi-hash fs-6"></i> &ensp; Loss Trade</th>
+                        <th class="fw-light"> <i style="color: #795642;"  class="bi bi-arrow-up-right fs-6"></i> &ensp; Last Updated</th>
+                        <th class="fw-light"> <button style="border-color:#eee;"><i style="color: #795642;"  class="bi bi-plus-lg fs-6"></i> &ensp; New</th></button>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td id="data">12th February, 2024.</td>
+                        <td id="data">$150.00</td>
+                        <td id="data">1</td>
+                        <td id="data">1</td>
+                        <td id="data">31/03/2024</td>
+                        <td id="data"></td>
+                      </tr>
+                      <tr>
+                        <td id="data">13th March, 2024.</td>
+                        <td id="data">$69.00</td>
+                        <td id="data">6</td>
+                        <td id="data">7</td>
+                        <td id="data">31/03/2024</td>
+                        <td id="data"></td>
+                      </tr>
+                      <tr>
+                        <td id="data">14th March, 2024.</td>
+                        <td id="data">$210.00</td>
+                        <td id="data">4</td>
+                        <td id="data">1</td>
+                        <td id="data">31/03/2024</td>
+                        <td id="data"></td>
+                      </tr>
+                      <tr>
+                        <td id="data">18th March, 2024.</td>
+                        <td id="data">-$57.00</td>
+                        <td id="data">0</td>
+                        <td id="data">3</td>
+                        <td id="data">31/03/2024</td>
+                        <td id="data"></td>
+                      </tr>
+                      <tr>
+                        <td id="data">21st March, 2024</td>
+                        <td id="data">$30.00</td>
+                        <td id="data">2</td>
+                        <td id="data">0</td>
+                        <td id="data">31/03/2024</td>
+                        <td id="data"></td>
+                      </tr>
+                      <tr>
+                        <td id="data">30th March, 2024.</td>
+                        <td id="data">-$98.00</td>
+                        <td id="data">2</td>
+                        <td id="data">5</td>
+                        <td id="data">31/03/2024</td>
+                        <td id="data"></td>
+                      </tr>
+                       <tfoot style="background-color: #eee;">
+                        <td>
+                          <button style="border-color:#eee;"><i style="color: #795642;"  class="bi bi-plus-lg fs-6"></i> &ensp; New</button>
+                        </td>
+                       </tfoot>
+                    </tbody>
+                  </table>
+                </div>
+
+              
+                  
+              </div>
+            </div><br>
+
+            <div class="card" id="webhook" style="height: 25rem;">
+              <div class="card-body">
+                <h5 class="card-title"><i style="color: #795642;"  class="bi bi-calendar3 fs-5"></i> &ensp; Monthly Progress</h5>
+                 <br>
+                <div class="row" id="cardscroll">
+                  <div class="col-sm-3 mb-3 mb-sm-0">
+                    <div class="card w-75" id="tinycard" style="height: 6rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">February</h5>
+                        <p style="color: rgb(2, 164, 2);">$540.00</p>
+                      </div>
+                    </div>
+                      
+                  </div>
+
+                  <div class="col-sm-3 mb-3 mb-sm-0">
+                    <div class="card w-75" id="tinycard" style="height: 6rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">March</h5>
+                        <p style="color: rgb(224, 4, 4);">-$156.00</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-3 mb-3 mb-sm-0">
+                    <div class="card w-75" id="tinycard" style="height: 6rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">April</h5>
+                        <p>$0.00</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-3 mb-3 mb-sm-0">
+                    <div class="card w-75" style="height: 6rem;">
+                      <div class="card-body">
+                        <h6 class="card-title"> <i style="color: #795642;"  class="bi bi-plus-lg fs-6"></i> &ensp; New Month</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
+    </div>
+
         <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
       </div>
       
