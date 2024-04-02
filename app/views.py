@@ -29,8 +29,8 @@ def pricing(request):
 def dashboard(request):
     discord_list = Discord_Webhook.objects.filter(user=request.user).prefetch_related("discordchat_set").all()
     telegram_list = Telegram_Webhook.objects.filter(user=request.user).prefetch_related("telegramchat_set").all()
-    mt5_list = MT5_Webhook.objects.filter(user=request.user).prefetch_related("takeprofit_set").all()
-    orders = Order.objects.filter(user=request.user).order_by("-id").all()[:100]
+    mt5_list = MT5_Webhook.objects.filter(user=request.user).all()
+    orders = Order.objects.filter(user=request.user).order_by("-id").prefetch_related("takeprofit_set").all()[:100]
     alerts = list(Alert.objects.filter(webhook__user=request.user).order_by("-id")[:100])
     webhooks = list(mt5_list) + list(discord_list) + list(telegram_list)
     
