@@ -7,11 +7,11 @@ from .models import CustomUser
 class SignUpForm(UserCreationForm):
     password1 = forms.CharField(
         label="Password",
-        widget=forms.PasswordInput(attrs={"class":"form-control", 'id':"password1", "placeholder":"Enter Password"}),
+        widget=forms.PasswordInput(attrs={"class":"input", 'id':"password1", "placeholder":"a"}),
     )
     password2 = forms.CharField(
         label="Confirm password",
-        widget=forms.PasswordInput(attrs={"class":"form-control", 'id':"password2", "placeholder":"Confirm Password"}),
+        widget=forms.PasswordInput(attrs={"class":"input", 'id':"password2", "placeholder":"a "}),
     )
 
     
@@ -19,11 +19,11 @@ class SignUpForm(UserCreationForm):
         model = CustomUser
         fields = ("username", "email", "phone_no")
         widgets = {
-            "username": TextInput(attrs={"class":"form-control", 'id':"userName", "placeholder":"Username"}),
-            "email": TextInput(attrs={"class":"form-control", 'id':"email", "placeholder":"Email"}),
-            "phone_no": TextInput(attrs={"class":"form-control", 'id':"phoneNumber", "placeholder":"Phone Number"}),
+            "username": TextInput(attrs={"class":"input", 'id':"userName", "placeholder":"a"}),
+            "email": TextInput(attrs={"class":"input", 'id':"email", "placeholder":"a"}),
+            "phone_no": TextInput(attrs={"class":"input", 'id':"phoneNumber", "placeholder":"a"}),
         }
 
 class LogInForm(forms.Form):
-    email = forms.EmailField(widget=TextInput(attrs={"class":"form-control", "id":"floatingInput", "placeholder":"name@example.com"}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={"class":"form-control", "id":"Password", "placeholder":"Password"}))
+    email = forms.EmailField(widget=TextInput(attrs={"class":"input", "id":"floatingInput", "placeholder":"name@example.com"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"class":"input", "id":"Password", "placeholder":"Password"}))
