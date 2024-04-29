@@ -7,12 +7,14 @@ from .forms import SignUpForm, LogInForm
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
+        print(form.is_valid())
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('dashboard')
     else:
-        form = SignUpForm()   
+        form = SignUpForm()  
+        print("h") 
     return render(request, 'accounts/sign-up.html', {'form': form})
 
 

@@ -77,6 +77,10 @@ body{
   margin-top: 30px;
 }
 
+.error-popup{
+  color:#cd5008;
+}
+
 .submitBtn:hover {
   background-color: #d16425;
   transform: translateY(-2px);
