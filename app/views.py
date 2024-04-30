@@ -33,17 +33,69 @@ def dashboard(request):
     orders = Order.objects.filter(user=request.user).order_by("-id").prefetch_related("takeprofit_set").all()[:100]
     alerts = list(Alert.objects.filter(webhook__user=request.user).order_by("-id")[:100])
     webhooks = list(mt5_list) + list(discord_list) + list(telegram_list)
+    print(webhooks)
     
     context = {
         "webhooks": webhooks,
         "orders": orders,
         "alerts": alerts,
+        "telegram_form": Telegram_Webhook_Form(),
+        "discord_form": Discord_Webhook_Form(),
+        "mt5_form": MT5_Webhook_Form(),
+        # "myjournal_form": Telegram_Webhook_Form(),
         "discord_checkout": checkout("e323c57d-b490-4d15-96fb-00b0ccc1a91c", request.user.id),
         "telegram_checkout": checkout("86a9f6d7-1541-48c9-994a-5c65af3f9c0f", request.user.id),
         "mt5_checkout": checkout("380c7a5a-cab6-445c-af52-733410b62e4c", request.user.id)
     }
 
     return render(request, "app/dashboard.html", context)
+
+
+
+@login_required
+def submit_telegram_webhook(request):
+    if request.method == "POST":
+        data = request.POST
+        form = Telegram_Webhook_Form(data)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.user = request.user
+            form.save()
+            return HttpResponse("Webhook data received and processed successfully")
+        else:
+            return HttpResponse("Invalid form data. Please check your input.")
+    else:
+        return HttpResponse("Only POST requests are allowed")
+
+@login_required
+def submit_mt5_webhook(request):
+    if request.method == "POST":
+        data = request.POST
+        form = MT5_Webhook_Form(data)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.user = request.user
+            form.save()
+            return HttpResponse("Webhook data received and processed successfully")
+        else:
+            return HttpResponse("Invalid form data. Please check your input.")
+    else:
+        return HttpResponse("Only POST requests are allowed")
+
+@login_required
+def submit_discord_webhook(request):
+    if request.method == "POST":
+        data = request.POST
+        form = Discord_Webhook_Form(data)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.user = request.user
+            form.save()
+            return HttpResponse("Webhook data received and processed successfully")
+        else:
+            return HttpResponse("Invalid form data. Please check your input.")
+    else:
+        return HttpResponse("Only POST requests are allowed")
 
 
 
@@ -158,3 +210,4 @@ def submit_discord_link(request, pk):
         return HttpResponse("Data received and processed successfully")
     else:
         return HttpResponse("Only POST requests are allowed")
+
