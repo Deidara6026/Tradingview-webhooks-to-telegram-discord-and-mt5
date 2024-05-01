@@ -39,14 +39,15 @@ class MT5_Webhook(models.Model):
     hit_limit = models.IntegerField(null=True, blank=True)
     identifier = models.CharField(default="mt5", max_length=10)
     old_alerts = GenericRelation(Alert, related_query_name='webhook')
-    status = models.CharField(max_length=10, default="inactive")
+    status = models.CharField(max_length=10, default="inactive") #lemon
+    pause = models.CharField(max_length=10, default="inactive") #user
 
 
 class Telegram_Webhook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30, null=True, blank=True)
     # update_payment_method = models.CharField(max_length=50, null=True, blank=True)
-    webhook_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    webhook_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False) # same as id, for referencing in orders
     subscription_id = models.UUIDField(null=True, blank=True)
     product_id = models.UUIDField(null=True, blank=True)
     variant_id = models.UUIDField(null=True, blank=True)

@@ -43,13 +43,69 @@ def dashboard(request):
         "discord_form": Discord_Webhook_Form(),
         "mt5_form": MT5_Webhook_Form(),
         # "myjournal_form": Telegram_Webhook_Form(),
-        "discord_checkout": checkout("e323c57d-b490-4d15-96fb-00b0ccc1a91c", request.user.id),
-        "telegram_checkout": checkout("86a9f6d7-1541-48c9-994a-5c65af3f9c0f", request.user.id),
-        "mt5_checkout": checkout("380c7a5a-cab6-445c-af52-733410b62e4c", request.user.id)
+        "customer_portal": "https://stiletto.lemonsqueezy.com/billing",
+        "discord_checkout": checkout(request.user.id, "e323c57d-b490-4d15-96fb-00b0ccc1a91c"),
+        "telegram_checkout": checkout(request.user.id, "86a9f6d7-1541-48c9-994a-5c65af3f9c0f"),
+        "mt5_checkout": checkout(request.user.id, "380c7a5a-cab6-445c-af52-733410b62e4c")
     }
 
     return render(request, "app/dashboard.html", context)
 
+
+@login_required
+def toggle_webhook_status(request, webhook_id, identifier):
+    # Attempt to retrieve the appropriate webhook with the given id that belongs to the current user based on the identifier
+    
+    if identifier == "tg":
+        webhook = Telegram_Webhook.objects.filter(pk=webhook_id, user=request.user).first()
+    elif identifier == "discord":
+        webhook = Discord_Webhook.objects.filter(pk=webhook_id, user=request.user).first()
+    elif identifier == "mt5":
+        webhook = MT5_Webhook.objects.filter(pk=webhook_id, user=request.user).first()
+    else:
+        webhook = None
+    
+    if not webhook:
+        return HttpResponse("Webhook not found.", status=404)
+    
+    # Toggle the status of the webhook
+    if webhook.pause == 'active':
+        webhook.pause = 'inactive'
+    else:
+        webhook.pause = 'active'
+    
+    # Save the updated webhook
+    webhook.save()
+    
+    return HttpResponse(f"Webhook status changed to {webhook.pause}.", status=200)
+
+@login_required
+def get_webhook_form(request, webhook_id, identifier):
+    # Determine the model based on the identifier and retrieve the instance
+    if identifier == "tg":
+        model = Telegram_Webhook
+        form_class = Telegram_Webhook_Form
+    elif identifier == "discord":
+        model = Discord_Webhook
+        form_class = Discord_Webhook_Form
+    elif identifier == "mt5":
+        model = MT5_Webhook
+        form_class = MT5_Webhook_Form
+    else:
+        return JsonResponse({"error": "Invalid identifier"}, status=400)
+
+    # Retrieve the webhook instance
+    webhook = model.objects.filter(pk=webhook_id, user=request.user).first()
+    if not webhook:
+        return JsonResponse({"error": "Webhook not found"}, status=404)
+
+    # Generate the form with the instance
+    form = form_class(instance=webhook)
+
+    # Render form as HTML
+    form_html = render_to_string('app/webhook_form.html', {'form': form}, request=request)
+
+    return JsonResponse({"form": form_html}, status=200)
 
 
 @login_required
@@ -148,7 +204,7 @@ def submit_discord_webhook(request):
 #     return render(request, "app/dashboard.html", context)
 
 
-checkout = lambda uid, vid : f"https://stiletto.lemonsqueezy.com/checkout/buy/{vid}?checkout[custom][user_id]={uid}&checkout[custom][vid]={vid}"
+checkout = lambda uid, vid : f"https://stiletto.lemonsqueezy.com/buy/{vid}?checkout[custom][user_id]={uid}"
 
 
 @login_required
@@ -210,4 +266,27 @@ def submit_discord_link(request, pk):
         return HttpResponse("Data received and processed successfully")
     else:
         return HttpResponse("Only POST requests are allowed")
+
+
+@login_required
+def delete_webhook(request, webhook_id, identifier):
+    # Determine the model based on the identifier
+    if identifier == "tg":
+        model = Telegram_Webhook
+    elif identifier == "discord":
+        model = Discord_Webhook
+    elif identifier == "mt5":
+        model = MT5_Webhook
+    else:
+        return HttpResponse("Invalid webhook identifier.", status=400)
+
+    # Retrieve the webhook instance
+    webhook = model.objects.filter(pk=webhook_id, user=request.user).first()
+    if not webhook:
+        return HttpResponse("Webhook not found.", status=404)
+
+    # Delete the webhook and its related child objects
+    webhook.delete()
+
+    return HttpResponse("Webhook and all related data have been deleted successfully.", status=200)
 

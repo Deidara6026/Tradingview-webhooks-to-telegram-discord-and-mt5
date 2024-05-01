@@ -45,7 +45,7 @@ def send_messages(data:list, w):
                 message = x[1]
                 webhook = DiscordWebhook(webhook_url)
                 embed = DiscordEmbed(
-                    title="Alert Triggered Via Stiletto",
+                    title="Alert Triggered Via ToT",
                     description=message,
                     color="03b2f8",
                 )
@@ -371,6 +371,7 @@ def handle_lemon_webhook(id, wid, reason):
         t.product_id = pid
         t.subscription_id = id
         t.status = "active"
+        t.pause = "active"
         t.renews_at = datetime.datetime.strptime(renews_at, "%Y-%m-%dT%H:%M:%S.%fZ")
 
         if vid in settings.LEMONSQUEEZY["telegram_vids"]:
@@ -428,7 +429,7 @@ class LemonAPIView(APIView):
         subscription_id = data["data"]["attributes"]["subscription_id"]
         reason = data["meta"]["event_name"]
         if reason == "renewal":
-            return # cant remember if this is finished, prolly is but investigate
+            return # check if webhook is inactive, and activate it
         webhook_id = data["meta"]["custom_data"]["webhook_id"]
         handle_lemon_webhook(subscription_id, webhook_id, reason)
 
