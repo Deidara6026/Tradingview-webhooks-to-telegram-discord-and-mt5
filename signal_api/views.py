@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotAllowed
 from .models import *
 from .serializers import *
 from rest_framework.views import APIView
@@ -293,13 +293,21 @@ class NoteAPIView(APIView):
         print(note, rating)
         return JsonResponse({"status": "success"})
 
-    def get_queryset(self):
+    def get(self, request, *args, **kwargs):
         wid = self.request.query_params.get('wid', None)
-        webhoook = self.request.query_params.get('w', None)
-        if webhook == "mt5":
-            
+        webhook_type = self.request.query_params.get('w', None)
+        if webhook_type in ["mt5", "tg", "discord"]:
+            model_map = {
+                "mt5": MT5_Webhook,
+                "tg": Telegram_Webhook,
+                "discord": Discord_Webhook
+            }
+            model = model_map[webhook_type]
+            webhook = model.objects.filter(webhook_id=wid).first()
+            if not webhook:
+                return HttpResponseNotFound('Webhook not found')
 
-            queryset = MT5_Webhook.objects.filter(id=wid).one().order_set.all()
+            queryset = Order.objects.filter(literal_webhook_id=wid)
             buffer = BytesIO()
             pdf = canvas.Canvas(buffer)
 
@@ -312,18 +320,18 @@ class NoteAPIView(APIView):
                 Distance: {order.td}
                 """
                 modify = "\n".join([f"Modify {m.magic or m.ticker} Tp: {m.tp or 'No Change'} Sl: {m.sl or 'No Change'}" for m in order.modifyorder_set.all()])
-                close = "\n".join([f"Close {m.magic or m.ticker or 'All'}" for m in order.cancelorder_set.all()])
+                close = "\n".join([f"Close {m.magic or m.ticker or 'All'}" for m in order.closeorder_set.all()])
                 at = f"""
                 {order.date_created.strftime("%m/%d/%Y, %H:%M:%S")}
-                {order.side.upper()} - {order.ticker.upper}
+                {order.side.upper()} - {order.ticker.upper()}
                 Chart Image: {order.img_url}
                 
                 Entry: {order.entry}
-                Profit Targets: {", ".join([tp.price for tp in order.takeprofit_set.all()])}
+                Profit Targets: {", ".join([str(tp.price) for tp in order.takeprofit_set.all()])}
                 Stop Loss(initial): {order.sl}
                 Quantity: {order.quantity}{"%" if order.q_type < 0 else ""}
                 
-                {t if not order.tt is None else ""}
+                {t if order.tt is not None else ""}
                 Related Commands:
                 
                 {modify}
@@ -340,8 +348,9 @@ class NoteAPIView(APIView):
             pdf.save()
             buffer.seek(0)
             encoded_pdf = base64.b64encode(buffer.read()).decode('utf-8')
-            return encoded_pdf
-        
+            return JsonResponse({"message":encoded_pdf}) 
+        else:
+            return HttpResponseNotAllowed(['GET'])
 
 
 def handle_lemon_webhook(id, wid, reason):
