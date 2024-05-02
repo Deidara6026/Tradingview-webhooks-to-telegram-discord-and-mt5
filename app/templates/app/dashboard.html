@@ -140,10 +140,7 @@
       }
  
   </style>
-  <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-  Launch static backdrop modal
-</button>
+
 
 <!-- Modal -->
 <div class="modal fade" id="telegramModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createwebhook" aria-hidden="true">
@@ -211,20 +208,32 @@
   </div>
 </div>
 
-<!-- <div class="modal fade" id="subscriptionmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createwebhook" aria-hidden="true">
+<div class="modal fade" id="editmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editwebhook" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Manage Subscription</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Edit Webhook</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        
+        <form action="" method="post">
+          {%csrf_token%}
+          <div class="form-group">
+            <label for="chatid" id="cid">Chat ID</label>
+            <input type="text" class="form-control mb-1" id="chatid" name="chatid" required>
+          </div>
+          <input type="hidden" id="editmodalwid" name="editmodalwid">
+          <input type="hidden" id="editmodalw" name="editmodalw">
+          <div class="float-end mt-1">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" id="#ebtn" onclick="add_chat_id()" class="btn btn-secondary" id="addInput">+</button>
+          </div>
+        </form>
       </div>
 
     </div>
   </div>
-</div> -->
+</div>
 
 
 
@@ -299,8 +308,7 @@
                     
                     <a href="#" class="fs-4 text-black" title="Copy" onclick="copy(event)"><i class="bi bi-clipboard-data" style="color: #cd5008;"></i></a>&emsp;
                     
-                    
-                    <a href="#" class="fs-4 text-black" title="Edit"><i class="bi bi-pencil" style="color: #cd5008;"></i></a>&emsp;
+                    <a href="#" class="fs-4 text-black" data-bs-toggle="modal" onclick="add_data('{{webhook.pk}}', '{{webhook.identifier}}', {{webhook.get_chat_limit}} )" data-bs-target="#editmodal" title="Edit"><i class="bi bi-pencil" style="color: #cd5008;"></i></a>&emsp;
                   
                     <span class="dropend">
                       <a class="fs-4 text-black text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" title="Manage">
@@ -366,10 +374,10 @@
 
                       <button type="button" class="list-group-item list-group-item-action">
                         <a href="#" class="text-decoration-none text-black"><i style="color: #cd5008;"  class="bi bi-database-fill-check fs-5"></i> &ensp; 
-                          Webhooks : {{no_webhooks}} </a>
+                          Webhooks : {{webhooks|length}} </a>
                       </button>
 
-                      <button type="button" class="list-group-item list-group-item-action" disabled>A disabled button item</button>
+                      <button type="button" class="list-group-item list-group-item-action" disabled>Stay sharp, stay focused</button>
                       
                     </div>
                   </div>
@@ -427,7 +435,7 @@
                           Hits </a>
                       </button>
 
-                      <button type="button" class="list-group-item list-group-item-action" disabled>A disabled button item</button>
+                      <button type="button" class="list-group-item list-group-item-action" disabled>Embrace risk, Embrace opportunity</button>
 
                     </div>
                   </div>

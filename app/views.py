@@ -33,11 +33,10 @@ def dashboard(request):
     orders = Order.objects.filter(user=request.user).order_by("-id").prefetch_related("takeprofit_set").all()[:100]
     alerts = list(Alert.objects.filter(webhook__user=request.user).order_by("-id")[:100])
     webhooks = list(mt5_list) + list(discord_list) + list(telegram_list)
-    print(webhooks)
+
     
     context = {
         "webhooks": webhooks,
-        "no_webhooks":len(webhooks),
         "orders": orders,
         "alerts": alerts,
         "telegram_form": Telegram_Webhook_Form(),
@@ -285,7 +284,21 @@ def delete_webhook(request, webhook_id, identifier):
     webhook = model.objects.filter(pk=webhook_id, user=request.user).first()
     if not webhook:
         return HttpResponse("Webhook not found.", status=404)
+    # Get the subscription_id from the webhook
+    subscription_id = webhook.subscription_id
 
+    # Send a request to lemonsqueezy to stop recurring payments
+    lemonsqueezy_url = "https://api.lemonsqueezy.com/subscriptions/{}/cancel".format(subscription_id)
+    headers = {
+        "Accept": "application/vnd.api+json",
+        "Content-Type": "application/vnd.api+json",
+        "Authorization": f"Bearer {settings.LEMONSQUEEZY['api_key']}",
+    }
+    response = requests.post(lemonsqueezy_url, headers=headers)
+
+    # Check if the request was successful
+    if response.status_code != 200:
+        return HttpResponse("Failed to cancel recurring payment.", status=500)
     # Delete the webhook and its related child objects
     webhook.delete()
 

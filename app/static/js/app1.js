@@ -54,7 +54,32 @@ function copy(event) {
     showToast("Failed to copy text.");
 });
 }
-    
+   
+function add_data(wid, w, n) {
+    document.getElementById("editmodalwid").innerText = wid;
+    document.getElementById("editmodalw").innerText = w;
+    if (w == "discord") {
+        document.getElementById("cid").innerText = "Chat Webhook Url";
+    }
+    document.getElementById("editmodalw").data = n;
+}
+
+function add_chat_id() {
+    b = document.getElementById("editmodalw");
+    var maxChats = b.data; // Change this to the maximum number of chats allowed
+    var numChats = document.querySelectorAll('#editmodal input[type="text"]:not([hidden])').length;
+    if (numChats >= maxChats) {
+        showToast("Exceeded max number of chats, upgrade to add more");
+        return;
+    }
+    var newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.className = 'form-control mb-1';
+    newInput.name = 'chatid';
+    newInput.required = true;
+    document.querySelector('#editmodal form').insertBefore(newInput, document.querySelector('#editmodal .float-end'));
+ }
+
 function showToast(message) {
 const toastContainer = document.createElement('div');
 toastContainer.classList.add('toast-container', 'position-fixed', 'bottom-0', 'end-0', 'p-3');
