@@ -222,6 +222,30 @@ def submit_alert(request):
             }
             return JsonResponse(response)
 
+@login_required
+def add_chat(request):
+    # Get the data from the POST request
+    data = request.POST
+    pk = data.get('editmodalwid')
+    identifier = data.get('editmodalw')
+    chat_id = data.get('chat_id')
+
+    # Determine the model based on the identifier
+    if identifier == "tg":
+        webhook = Telegram_Webhook.objects.filter(pk=pk, user=request.user).first()
+        chat = TelegramChat.objects.create(webhook=webhook, chat_id=chat_id)
+    elif identifier == "discord":
+        webhook = Discord_Webhook.objects.filter(pk=pk, user=request.user).first()
+        chat = DiscordChat.objects.create(webhook=webhook, chat_id=chat_id)
+    else:
+        return HttpResponse("Invalid identifier", status=400)
+    
+    # Save the chat
+    chat.save()
+    
+    return HttpResponse("Chat added successfully", status=200)
+
+
 
 @login_required
 def submit_telegram_link(request, pk):

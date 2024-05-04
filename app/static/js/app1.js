@@ -62,6 +62,67 @@ function add_data(wid, w, n) {
         document.getElementById("cid").innerText = "Chat Webhook Url";
     }
     document.getElementById("editmodalw").data = n;
+    if (w == "discord" || w == "tg") {
+        var messagePrefix = document.createElement("input");
+        messagePrefix.type = "text";
+        messagePrefix.className = "form-control mb-1";
+        messagePrefix.name = "message-prefix";
+        messagePrefix.required = true;
+        var messagePrefixLabel = document.createElement("label");
+        messagePrefixLabel.for = "message-prefix";
+        messagePrefixLabel.innerText = "Message Prefix";
+        var messagePrefixBox = document.createElement("div");
+        messagePrefixBox.className = "message-box";
+        messagePrefixBox.appendChild(messagePrefixLabel);
+        messagePrefixBox.appendChild(messagePrefix);
+        document.querySelector('#editmodal form').insertBefore(messagePrefixBox, document.querySelector('#editmodal .float-end'));
+
+        var messageSuffix = document.createElement("input");
+        messageSuffix.type = "text";
+        messageSuffix.className = "form-control mb-1";
+        messageSuffix.name = "message-suffix";
+        messageSuffix.required = true;
+        var messageSuffixLabel = document.createElement("label");
+        messageSuffixLabel.for = "message-suffix";
+        messageSuffixLabel.innerText = "Message Suffix";
+        var messageSuffixBox = document.createElement("div");
+        messageSuffixBox.className = "message-box";
+        messageSuffixBox.appendChild(messageSuffixLabel);
+        messageSuffixBox.appendChild(messageSuffix);
+        document.querySelector('#editmodal form').insertBefore(messageSuffixBox, document.querySelector('#editmodal .float-end'));
+        var name = document.createElement("input");
+        name.type = "text";
+        name.className = "form-control mb-1";
+        name.name = "name";
+        name.required = true;
+        var nameLabel = document.createElement("label");
+        nameLabel.for = "name";
+        nameLabel.innerText = "Name";
+        document.querySelector('#editmodal form').insertBefore(nameLabel, document.querySelector('#editmodal .float-end'));
+        document.querySelector('#editmodal form').insertBefore(name, document.querySelector('#editmodal .float-end'));
+
+        var parse = document.createElement("input");
+        parse.type = "checkbox";
+        parse.className = "form-check-input";
+        parse.name = "parse";
+        parse.required = true;
+        var parseLabel = document.createElement("label");
+        parseLabel.for = "parse";
+        parseLabel.innerText = "Parse";
+        document.querySelector('#editmodal form').insertBefore(parseLabel, document.querySelector('#editmodal .float-end'));
+        document.querySelector('#editmodal form').insertBefore(parse, document.querySelector('#editmodal .float-end'));
+    } else if (w == "mt5") {
+        var name = document.createElement("input");
+        name.type = "text";
+        name.className = "form-control mb-1";
+        name.name = "name";
+        name.required = true;
+        var nameLabel = document.createElement("label");
+        nameLabel.for = "name";
+        nameLabel.innerText = "Name";
+        document.querySelector('#editmodal form').insertBefore(nameLabel, document.querySelector('#editmodal .float-end'));
+        document.querySelector('#editmodal form').insertBefore(name, document.querySelector('#editmodal .float-end'));
+    }
 }
 
 function add_chat_id() {

@@ -32,6 +32,7 @@ urlpatterns = [
     path('submitwebhookmt5/', submit_mt5_webhook, name="submitwebhookmt5"),
     path('submittg/', submit_telegram_link, name="submittg"),
     path('submitmt5/', submit_telegram_link, name="submitmt5"),
+    path('add_chat/', add_chat, name="add_chat"),
     path('toggle_webhook_status/<uuid:webhook_id>/<str:identifier>/', toggle_webhook_status, name="toggle_webhook_status"),
     path('delete_webhook/<uuid:webhook_id>/<str:identifier>/', delete_webhook, name="delete_webhook"),
     path('submitdiscord/', submit_telegram_link, name="submitdiscord"),

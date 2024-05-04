@@ -209,18 +209,18 @@
 </div>
 
 <div class="modal fade" id="editmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editwebhook" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">Edit Webhook</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="" method="post">
+        <form action="{% url 'add_chat' %}" method="post">
           {%csrf_token%}
           <div class="form-group">
             <label for="chatid" id="cid">Chat ID</label>
-            <input type="text" class="form-control mb-1" id="chatid" name="chatid" required>
+            <input type="text" class="form-control mb-1" id="chatid" name="chat_id" required>
           </div>
           <input type="hidden" id="editmodalwid" name="editmodalwid">
           <input type="hidden" id="editmodalw" name="editmodalw">
