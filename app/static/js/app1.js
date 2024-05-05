@@ -55,121 +55,196 @@ function copy(event) {
 });
 }
    
-function add_data(wid, w, n) {
-    document.getElementById("editmodalwid").innerText = wid;
-    document.getElementById("editmodalw").innerText = w;
+function add_data(wid, w, n, name, messagePrefix, messageSuffix, chat_ids, parse, messageFormat) {
+    document.getElementById("editmodalwid").value = wid;
+    document.getElementById("editmodalw").value = w;
     if (w == "discord") {
         document.getElementById("cid").innerText = "Chat Webhook Url";
     }
-    document.getElementById("editmodalw").data = n;
+    document.getElementById("editmodalw").setAttribute('data', n);
     if (w == "discord" || w == "tg") {
-        var messagePrefix = document.createElement("input");
-        messagePrefix.type = "text";
-        messagePrefix.className = "form-control mb-1";
-        messagePrefix.name = "message-prefix";
-        messagePrefix.required = true;
+        chat_ids.forEach(function(chat_id) {
+            var chatIdInput = document.createElement("input");
+            chatIdInput.type = "text";
+            chatIdInput.className = "form-control mb-1 to-be-deleted chatid";
+            chatIdInput.name = "chat_id";
+            chatIdInput.required = true;
+            chatIdInput.value = chat_id;
+            chatIdInput.setAttribute('data', chat_id);
+            document.querySelector('#editmodal form').insertBefore(chatIdInput, document.querySelector('#editmodal .float-end'));
+        });
+        var messagePrefixInput = document.createElement("textarea");
+        messagePrefixInput.type = "text";
+        messagePrefixInput.className = "form-control mb-1 to-be-deleted";
+        messagePrefixInput.name = "message-prefix";
+        messagePrefixInput.required = true;
+        messagePrefixInput.value = messagePrefix;
         var messagePrefixLabel = document.createElement("label");
         messagePrefixLabel.for = "message-prefix";
         messagePrefixLabel.innerText = "Message Prefix";
         var messagePrefixBox = document.createElement("div");
-        messagePrefixBox.className = "message-box";
+        messagePrefixBox.className = "message-box to-be-deleted";
         messagePrefixBox.appendChild(messagePrefixLabel);
-        messagePrefixBox.appendChild(messagePrefix);
+        messagePrefixBox.appendChild(messagePrefixInput);
         document.querySelector('#editmodal form').insertBefore(messagePrefixBox, document.querySelector('#editmodal .float-end'));
 
-        var messageSuffix = document.createElement("input");
-        messageSuffix.type = "text";
-        messageSuffix.className = "form-control mb-1";
-        messageSuffix.name = "message-suffix";
-        messageSuffix.required = true;
+        var messageSuffixInput = document.createElement("textarea");
+        messageSuffixInput.className = "form-control mb-1 to-be-deleted";
+        messageSuffixInput.name = "message-suffix";
+        messageSuffixInput.required = true;
+        messageSuffixInput.value = messageSuffix;
         var messageSuffixLabel = document.createElement("label");
         messageSuffixLabel.for = "message-suffix";
         messageSuffixLabel.innerText = "Message Suffix";
         var messageSuffixBox = document.createElement("div");
-        messageSuffixBox.className = "message-box";
+        messageSuffixBox.className = "message-box to-be-deleted";
         messageSuffixBox.appendChild(messageSuffixLabel);
-        messageSuffixBox.appendChild(messageSuffix);
+        messageSuffixBox.appendChild(messageSuffixInput);
         document.querySelector('#editmodal form').insertBefore(messageSuffixBox, document.querySelector('#editmodal .float-end'));
-        var name = document.createElement("input");
-        name.type = "text";
-        name.className = "form-control mb-1";
-        name.name = "name";
-        name.required = true;
+        var nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.className = "form-control mb-1 to-be-deleted";
+        nameInput.name = "name";
+        nameInput.required = true;
+        nameInput.value = name;
         var nameLabel = document.createElement("label");
         nameLabel.for = "name";
+        nameLabel.className = "to-be-deleted";
         nameLabel.innerText = "Name";
         document.querySelector('#editmodal form').insertBefore(nameLabel, document.querySelector('#editmodal .float-end'));
-        document.querySelector('#editmodal form').insertBefore(name, document.querySelector('#editmodal .float-end'));
+        document.querySelector('#editmodal form').insertBefore(nameInput, document.querySelector('#editmodal .float-end'));
 
         var parse = document.createElement("input");
         parse.type = "checkbox";
-        parse.className = "form-check-input";
+        parse.className = "form-check-input to-be-deleted";
         parse.name = "parse";
-        parse.required = true;
+        parse.required = false;
+        parse.checked = true; // Make it checked by default
+        parse.setAttribute('onChange', 'is_checked()');
         var parseLabel = document.createElement("label");
         parseLabel.for = "parse";
+        parseLabel.className = "to-be-deleted";
         parseLabel.innerText = "Parse";
         document.querySelector('#editmodal form').insertBefore(parseLabel, document.querySelector('#editmodal .float-end'));
         document.querySelector('#editmodal form').insertBefore(parse, document.querySelector('#editmodal .float-end'));
+        
+        var messageFormatInput = document.createElement("textarea");
+        messageFormatInput.type = "text";
+        messageFormatInput.className = "form-control mb-1 to-be-deleted";
+        messageFormatInput.name = "message-format";
+        messageFormatInput.required = true;
+        messageFormatInput.value = messageFormat;
+        var messageFormatLabel = document.createElement("label");
+        messageFormatLabel.for = "message-format";
+        messageFormatLabel.className = "to-be-deleted";
+        messageFormatLabel.innerText = "Message Format";
+        var messageFormatBox = document.createElement("div");
+        messageFormatBox.className = "message-box to-be-deleted";
+        messageFormatBox.appendChild(messageFormatLabel);
+        messageFormatBox.appendChild(messageFormatInput);
+        document.querySelector('#editmodal form').insertBefore(messageFormatBox, document.querySelector('#editmodal .float-end'));
+        
+        if (parse.checked == "False") {
+            messageFormatBox.style.display = "none";
+        }
+
+
+
     } else if (w == "mt5") {
-        var name = document.createElement("input");
-        name.type = "text";
-        name.className = "form-control mb-1";
-        name.name = "name";
-        name.required = true;
+        var nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.className = "form-control mb-1 to-be-deleted";
+        nameInput.name = "name";
+        nameInput.required = true;
+        nameInput.value = name;
         var nameLabel = document.createElement("label");
         nameLabel.for = "name";
+        nameLabel.className = "to-be-deleted";
         nameLabel.innerText = "Name";
         document.querySelector('#editmodal form').insertBefore(nameLabel, document.querySelector('#editmodal .float-end'));
-        document.querySelector('#editmodal form').insertBefore(name, document.querySelector('#editmodal .float-end'));
+        document.querySelector('#editmodal form').insertBefore(nameInput, document.querySelector('#editmodal .float-end'));
+    }
+}
+function removeElements() {
+    var elements = document.getElementsByClassName('to-be-deleted');
+    while(elements.length > 0){
+        elements[0].parentNode.removeChild(elements[0]);
     }
 }
 
+function is_checked() {
+    var checkbox = document.querySelector('#editmodal input[name="parse"]');
+    if (checkbox.checked) {
+        var messageFormatTextarea = document.querySelector('#editmodal textarea[name="message-format"]').parentElement;
+        messageFormatTextarea.style.display = "block";
+    } else {
+        // Checkbox is not checked
+        var messageFormatTextarea = document.querySelector('#editmodal textarea[name="message-format"]').parentElement;
+        messageFormatTextarea.style.display = "none";
+        }
+    }
+
+
+
+
+
 function add_chat_id() {
-    b = document.getElementById("editmodalw");
-    var maxChats = b.data; // Change this to the maximum number of chats allowed
-    var numChats = document.querySelectorAll('#editmodal input[type="text"]:not([hidden])').length;
+    var b = document.getElementById("editmodalw");
+    var maxChats = b.getAttribute("data"); // Change this to the maximum number of chats allowed
+    var numChats = document.querySelectorAll('#editmodal input[name="chat_id"]').length;
     if (numChats >= maxChats) {
         showToast("Exceeded max number of chats, upgrade to add more");
         return;
     }
+    console.log(maxChats, numChats)
     var newInput = document.createElement('input');
     newInput.type = 'text';
     newInput.className = 'form-control mb-1';
-    newInput.name = 'chatid';
+    newInput.name = 'chat_id';
+    newInput.setAttribute('data', "new");
     newInput.required = true;
-    document.querySelector('#editmodal form').insertBefore(newInput, document.querySelector('#editmodal .float-end'));
- }
+    var chatInputs = document.querySelectorAll('#editmodal form input[name="chat_id"]');
+    var lastChatInput = chatInputs.length > 0 ? chatInputs[chatInputs.length - 1] : null;
+    lastChatInput.parentNode.insertBefore(newInput, lastChatInput.nextSibling);
+}
+ 
+function appendText() {
+    var chatInputs = document.querySelectorAll('#editmodal input[name="chat_id"]');
+    chatInputs.forEach(function(input) {
+        var data = input.getAttribute('data');
+        input.value = data + ':' + input.value;
+    });
+}
 
 function showToast(message) {
-const toastContainer = document.createElement('div');
-toastContainer.classList.add('toast-container', 'position-fixed', 'bottom-0', 'end-0', 'p-3');
+    const toastContainer = document.createElement('div');
+    toastContainer.classList.add('toast-container', 'position-fixed', 'bottom-0', 'end-0', 'p-3');
 
-const toastHTML = `
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <strong class="me-auto">Notification</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    const toastHTML = `
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">${message}</div>
         </div>
-        <div class="toast-body">${message}</div>
-    </div>
-`;
+    `;
 
-toastContainer.innerHTML = toastHTML;
-document.body.appendChild(toastContainer);
+    toastContainer.innerHTML = toastHTML;
+    document.body.appendChild(toastContainer);
 
-const toastElement = toastContainer.querySelector('.toast');
-const toast = new bootstrap.Toast(toastElement, {
-    autohide: true,
-    delay: 2000
-});
+    const toastElement = toastContainer.querySelector('.toast');
+    const toast = new bootstrap.Toast(toastElement, {
+        autohide: true,
+        delay: 2000
+    });
 
-toast.show();
+    toast.show();
 
-// Remove the toast from DOM after it's hidden
-toastElement.addEventListener('hidden.bs.toast', () => {
-    document.body.removeChild(toastContainer);
-});
+    // Remove the toast from DOM after it's hidden
+    toastElement.addEventListener('hidden.bs.toast', () => {
+        document.body.removeChild(toastContainer);
+    });
 }
 function toggle_note(pk, wid) {
     console.log("kk")

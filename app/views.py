@@ -226,22 +226,53 @@ def submit_alert(request):
 def add_chat(request):
     # Get the data from the POST request
     data = request.POST
+    print(data)
     pk = data.get('editmodalwid')
     identifier = data.get('editmodalw')
-    chat_id = data.get('chat_id')
-
+    chat_id = dict([item.split(":") for item in data.getlist('chat_id')])
+    parse = data.get('parse', False)
+    message_prefix = data.get('message-prefix')
+    message_suffix = data.get('message-suffix')
+    name = data.get('name')
+    print(chat_id)
     # Determine the model based on the identifier
     if identifier == "tg":
         webhook = Telegram_Webhook.objects.filter(pk=pk, user=request.user).first()
-        chat = TelegramChat.objects.create(webhook=webhook, chat_id=chat_id)
+        webhook.parse = parse
+        webhook.message_prefix = message_prefix
+        webhook.message_suffix = message_suffix
+        webhook.name = name
+        webhook.save()
+        for before in chat_id.keys():
+            if webhook.telegramchat_set.filter(chat_id=before).exists():
+                telegram_chat = webhook.telegramchat_set.get(chat_id=before)
+                telegram_chat.chat_id = chat_id[before]
+                telegram_chat.save()
+            else:
+                if webhook.chat_limit > len(webhook.telegramchat_set.all()):
+                    c = TelegramChat.objects.create(webhook=webhook, chat_id=chat_id[before])
+                    c.save()
     elif identifier == "discord":
         webhook = Discord_Webhook.objects.filter(pk=pk, user=request.user).first()
-        chat = DiscordChat.objects.create(webhook=webhook, chat_id=chat_id)
+        webhook.parse = parse
+        webhook.message_prefix = message_prefix
+        webhook.message_suffix = message_suffix
+        webhook.name = name
+        webhook.save()
+        for before in chat_id.keys():
+            if webhook.discordchat_set.filter(channel_webhook_url=before).exists():
+                discord_chat = webhook.discordchat_set.get(channel_webhook_url=before)
+                discord_chat.channel_webhook_url = chat_id[before]
+                discord_chat.save()
+            else:
+                if webhook.chat_limit > len(webhook.discordchat_set.all()):
+                    c = DiscordChat.objects.create(webhook=webhook, channel_webhook_url=chat_id[before])
+                    c.save()
     else:
         return HttpResponse("Invalid identifier", status=400)
     
     # Save the chat
-    chat.save()
+   
     
     return HttpResponse("Chat added successfully", status=200)
 
