@@ -14,6 +14,9 @@
 
 
 <body style="font-family: Arial, Helvetica, sans-serif;">
+  {% if error %}
+  <script>displayError("{{error}}");</script>
+  {%endif%}
   <style>
     body{
       max-width: 97%;
@@ -195,24 +198,27 @@
 </div>
 
 <div class="modal fade" id="editmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editwebhook" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">Edit Webhook</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="removeElements()"></button>
       </div>
       <div class="modal-body">
-        <form action="" method="post">
+        <form action="{% url 'add_chat' %}" onsubmit="appendText()" method="post">
           {%csrf_token%}
           <div class="form-group">
-            <label for="chatid" id="cid">Chat ID</label>
-            <input type="text" class="form-control mb-1" id="chatid" name="chatid" required>
+            <div class="input-group mb-3">
+              <label for="chatid" id="cid" class="input-group-text">Chat ID</label>
+              <button type="button" id="#ebtn" onclick="add_chat_id()" class="btn btn-outline-secondary" id="addInput">+ add</button>
+            </div>
+
           </div>
           <input type="hidden" id="editmodalwid" name="editmodalwid">
           <input type="hidden" id="editmodalw" name="editmodalw">
           <div class="float-end mt-1">
             <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="button" id="#ebtn" onclick="add_chat_id()" class="btn btn-secondary" id="addInput">+</button>
+            
           </div>
         </form>
       </div>
@@ -294,7 +300,7 @@
                     
                     <a href="#" class="fs-4 text-black" title="Copy" onclick="copy(event)"><i class="bi bi-clipboard-data" style="color: #cd5008;"></i></a>&emsp;
                     
-                    <a href="#" class="fs-4 text-black" data-bs-toggle="modal" onclick="add_data('{{webhook.pk}}', '{{webhook.identifier}}', {{webhook.get_chat_limit}} )" data-bs-target="#editmodal" title="Edit"><i class="bi bi-pencil" style="color: #cd5008;"></i></a>&emsp;
+                    <a href="#" class="fs-4 text-black" data-bs-toggle="modal" onclick="add_data('{{webhook.pk}}', '{{webhook.identifier}}',{% if webhook.identifier == 'tg' or webhook.identifier == 'discord' %} {{webhook.chat_limit}}, '{{webhook.name}}', '{{webhook.message_prefix}}', '{{webhook.message_suffix}}', [{% for chat in webhook.telegramchat_set.all%} '{{chat.chat_id}}', {%endfor%}], '{{webhook.parse}}', '{{webhook.message_format}}' {%endif%})" data-bs-target="#editmodal" title="Edit"><i class="bi bi-pencil" style="color: #cd5008;"></i></a>&emsp;
                   
                     <span class="dropend">
                       <a class="fs-4 text-black text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" title="Manage">
