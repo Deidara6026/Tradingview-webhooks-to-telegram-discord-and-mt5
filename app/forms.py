@@ -45,18 +45,20 @@ class Discord_Webhook_Form(ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Webhook Name",
+                    "style": "background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0); border-radius: 10px;",
+           
                 }
             ),
             "message_prefix": Textarea(
                 attrs={
-                    "placeholder": "Message Prefix: Optional text placed before all your discord alerts. Greet your followers maybe?",
-                    "style": "width: 70%;height:120px;",
+                    "placeholder": "Optional text placed before all your discord alerts.",
+                    "style": "width: 70%;height:120px; background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0); border-radius: 10px;",
                 }
             ),
             "message_suffix": Textarea(
                 attrs={
-                    "placeholder": "Message Prefix: Optional text placed after all your discord alerts. Greet your followers maybe?",
-                    "style": "width: 70%;height:120px;",
+                    "placeholder": "Optional text placed after all your discord alerts.",
+                    "style": "width: 70%;height:120px;background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0); border-radius: 10px;",
                 }
             ),
             "parse": CheckboxInput(
