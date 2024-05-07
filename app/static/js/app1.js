@@ -216,6 +216,28 @@ function appendText() {
     });
 }
 
+function displayError(message) {
+    const errorContainer = document.createElement('div');
+    errorContainer.classList.add('error-container', 'position-fixed', 'top-0', 'end-0', 'p-3');
+
+    const errorHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+
+    errorContainer.innerHTML = errorHTML;
+    document.body.appendChild(errorContainer);
+
+    // Automatically remove the error message after 5 seconds
+    setTimeout(() => {
+        document.body.removeChild(errorContainer);
+    }, 5000);
+}
+
+
+
 function showToast(message) {
     const toastContainer = document.createElement('div');
     toastContainer.classList.add('toast-container', 'position-fixed', 'bottom-0', 'end-0', 'p-3');

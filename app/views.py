@@ -269,7 +269,7 @@ def add_chat(request):
                     c = DiscordChat.objects.create(webhook=webhook, channel_webhook_url=chat_id[before])
                     c.save()
     else:
-        return HttpResponse("Invalid identifier", status=400)
+        return redirect('dashboard', error="Invalid identifier")
     
     # Save the chat
    

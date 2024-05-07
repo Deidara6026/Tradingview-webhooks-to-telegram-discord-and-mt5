@@ -32,6 +32,12 @@ class Telegram_Webhook_Form(ModelForm):
                     "checked": False,
                 }
             ),
+            "message_format": Textarea(
+                attrs={
+                    "placeholder": "Message Prefix: Optional text placed after all your telegram alerts. Greet your followers maybe?",
+                    "style": "width: 70%;height:120px;",
+                }
+            ),
             # "channel_chat_id": TextInput(attrs={"class":"form-control", "placeholder":"Telegram Chat ID", "style":"background-color: #131516; color: aliceblue;border-color:#766e61;"}),
         }
 
