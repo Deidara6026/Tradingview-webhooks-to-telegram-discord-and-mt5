@@ -16,6 +16,8 @@
 <body style="font-family: Arial, Helvetica, sans-serif;">
   {% if error %}
   <script>displayError("{{error}}");</script>
+  {%elif message%}
+  <script>showToast("{{message}}")</script>
   {%endif%}
   <style>
     body{
@@ -283,7 +285,7 @@
         <p class="fs-4 font-monospace" style="color: #cd5008;">Webhooks</p>
     </div>
     <div>
-
+        {%  %}
         <div id="carouselExampleAutoplaying" class="carousel carousel-dark slide mx-auto w-75" data-bs-ride="carousel">
             <div class="carousel-inner">
 

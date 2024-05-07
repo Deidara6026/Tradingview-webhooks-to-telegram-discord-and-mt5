@@ -269,12 +269,12 @@ def add_chat(request):
                     c = DiscordChat.objects.create(webhook=webhook, channel_webhook_url=chat_id[before])
                     c.save()
     else:
-        return redirect('dashboard', error="Invalid identifier")
+        return redirect('dashboard', error="An error occured, please reload the page and try again.")
     
     # Save the chat
    
     
-    return HttpResponse("Chat added successfully", status=200)
+    return redirect('dashboard', message="Chat added Successfully!")
 
 
 
@@ -288,7 +288,7 @@ def submit_telegram_link(request, pk):
             form.webhook = SignalWebhook.objects.get(id=pk)
             form.save()
         # Process the data and display it
-        return HttpResponse("Data received and processed successfully")
+        return redirect("dashboard","Data received and processed successfully")
     else:
         return HttpResponse("Only POST requests are allowed")
 
@@ -303,7 +303,7 @@ def submit_mt5_link(request, pk):
             form.webhook = SignalWebhook.objects.get(id=pk)
             form.save()
         # Process the data and display it
-        return HttpResponse("Data received and processed successfully")
+        return redirect("dashboard","Data received and processed successfully")
     else:
         return HttpResponse("Only POST requests are allowed")
 
@@ -318,7 +318,7 @@ def submit_discord_link(request, pk):
             form.webhook = SignalWebhook.objects.get(id=pk)
             form.save()
         # Process the data and display it
-        return HttpResponse("Data received and processed successfully")
+        return redirect("dashboard","Data received and processed successfully")
     else:
         return HttpResponse("Only POST requests are allowed")
 
@@ -333,12 +333,12 @@ def delete_webhook(request, webhook_id, identifier):
     elif identifier == "mt5":
         model = MT5_Webhook
     else:
-        return HttpResponse("Invalid webhook identifier.", status=400)
+        return redirect('dashboard', error="An error occured, please reload the page and try again.")
 
     # Retrieve the webhook instance
     webhook = model.objects.filter(pk=webhook_id, user=request.user).first()
     if not webhook:
-        return HttpResponse("Webhook not found.", status=404)
+        return redirect('dashboard', error="An error occured, please reload the page and try again.")
     # Get the subscription_id from the webhook
     subscription_id = webhook.subscription_id
 
@@ -353,9 +353,9 @@ def delete_webhook(request, webhook_id, identifier):
 
     # Check if the request was successful
     if response.status_code != 200:
-        return HttpResponse("Failed to cancel recurring payment.", status=500)
+        return redirect('dashboard', error="Failed to cancel recurring payment, Please try again.")
     # Delete the webhook and its related child objects
     webhook.delete()
 
-    return HttpResponse("Webhook and all related data have been deleted successfully.", status=200)
+    return redirect("dashboard",message="Webhook and all related data have been deleted successfully.")
 
