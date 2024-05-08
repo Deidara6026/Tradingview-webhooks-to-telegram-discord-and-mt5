@@ -38,6 +38,7 @@ def dashboard(request):
     context = {
         "webhooks": webhooks,
         "orders": orders,
+        "range":range(20),
         "alerts": alerts,
         "telegram_form": Telegram_Webhook_Form(),
         "discord_form": Discord_Webhook_Form(),

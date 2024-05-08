@@ -343,7 +343,7 @@
 
             </div>
             <br><br>
-          {%ENDIF%}
+          {%endif%}
             <div class="row">
               <div class="col-sm-4 mb-3 mb-sm-0 mx-auto">
                 <div class="card" id="webhook" style="height: 18rem;">
@@ -454,192 +454,33 @@
     <div>
         <div id="carouselExampleAutoplaying1" class="carousel carousel-dark slide mx-auto w-75" data-bs-ride="carousel">
             <div class="carousel-inner">
-
-              <div class="carousel-item active">
+              {% for i in range %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 <div class="card w-100 mb-3 mx-auto" id="webhook">
-                    <div class="row">
-                        <div class="col-sm-3 mb-3 mb-sm-0">
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY EURUSD</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                          <div class="card float-end" id="alerts" style="height: 13rem;width: 60%;">
+                            <div class="card-body mx-0">
+                              <h5 class="card-title text-danger"><i class="bi bi-exclamation-triangle fs-4"></i> &ensp; Alert Title</h5>
+                              <p class="text-muted">Alert details with parameters and values</p>
+                              <p class="text-warning"><strong>Rating:</strong> 
+                                <span class="bi-star-fill"></span>
+                                <span class="bi-star-fill"></span>
+                                <span class="bi-star-fill"></span>
+                                <span class="bi-star"></span>
+                                <span class="bi-star"></span>
+                              </p>
                             </div>
                           </div>
                         </div>
-                
-                
-                        <div class="col-sm-3 mb-3 mb-sm-0 ">
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY EURUSD</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                
-                          <br>
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY EURUSD</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
+                        <div class="col-md-4">
+                          <textarea class="form-control" rows="8" placeholder="Notes up to 5000 characters..."></textarea>
+                          <button type="button" class="btn btn-success mt-2">Save Notes</button>
                         </div>
-                
-                        <div class="col-sm-3 mb-3 mb-sm-0 ">
-                          <div class="card mx-auto" id="alerts"   style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY EURUSD</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                
-                          <br>
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY EURUSD</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                        </div>
-                
-                        <div class="col-sm-3 mb-3 mb-sm-0 ">
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color:#cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY EURUSD</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                        </div>
-                
-                        
-                      </div>
+                    </div>
                 </div>
               </div>
-
-
-              <div class="carousel-item">
-                <div class="card w-100 mb-3 mx-auto" id="webhook">
-                    <div class="row">
-                        <div class="col-sm-3 mb-3 mb-sm-0">
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY BIT</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                        </div>
-                
-                
-                        <div class="col-sm-3 mb-3 mb-sm-0 ">
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY BIT</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                
-                          <br>
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY BIT</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                        </div>
-                
-                        <div class="col-sm-3 mb-3 mb-sm-0 ">
-                          <div class="card mx-auto" id="alerts"   style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY BIT</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                
-                          <br>
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY BIT</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                        </div>
-                
-                        <div class="col-sm-3 mb-3 mb-sm-0 ">
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color:#cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY BIT</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                        </div>
-                
-                        
-                      </div>
-                </div>
-              </div>
-
-
-              <div class="carousel-item">
-                <div class="card w-100 mb-3 mx-auto" id="webhook">
-                    <div class="row">
-                        <div class="col-sm-3 mb-3 mb-sm-0">
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY ETH</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                        </div>
-                
-                
-                        <div class="col-sm-3 mb-3 mb-sm-0 ">
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY ETH</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                
-                          <br>
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY ETH</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                        </div>
-                
-                        <div class="col-sm-3 mb-3 mb-sm-0 ">
-                          <div class="card mx-auto" id="alerts"   style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY ETH</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                
-                          <br>
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY ETH</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                        </div>
-                
-                        <div class="col-sm-3 mb-3 mb-sm-0 ">
-                          <div class="card mx-auto" id="alerts"  style="height: 13rem;width: 15rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"> <i style="color:#cd5008;"  class="bi bi-exclamation-triangle fs-4"></i> &ensp; BUY ETH</h5>
-                              <p>e=1.2000 tp1=1.20500 tp2=1.2100 sl=1.19850 m=1</p>
-                            </div>
-                          </div>
-                        </div>
-                
-                        
-                      </div>
-                </div>
-              </div>
-
+              {% endfor %}
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -651,7 +492,6 @@
             </button>
           </div>
     </div>
-    
 </section>
 <br><br><br><br>
 
