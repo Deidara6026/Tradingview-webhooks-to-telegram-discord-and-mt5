@@ -120,6 +120,7 @@ class Order(models.Model):
     is_active = models.BooleanField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     literal_webhook_id = models.UUIDField(null=True, blank=True)
+    webhook_name = models.CharField(max_length=30, null=True, blank=True)
     entry = models.FloatField()
     magic = models.IntegerField(null=True, blank=True)
     tt = models.IntegerField(null=True, blank=True)
@@ -133,6 +134,7 @@ class Order(models.Model):
     ticker = models.CharField(max_length=10, null=True, blank=True)
     img_url = models.CharField(max_length=100, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    alert_text = models.CharField(max_length=5000, null=True, blank=True)
     trader_notes = models.CharField(max_length=5000, null=True, blank=True)
     rating = models.FloatField(default=0.0)
 

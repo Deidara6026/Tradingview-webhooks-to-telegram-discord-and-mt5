@@ -197,6 +197,7 @@ def parse_incoming_webhook_request(w, pk, data):
             o = CloseOrder.objects.create(
                 is_active=True,
                 literal_webhook_id=webhook.webhook_id,
+                webhook_name = webhook.name,
                 ticker=params.get("symbol", None),
                 magic=params.get("m", None),
                 _all=params.get("all", False),
@@ -206,6 +207,7 @@ def parse_incoming_webhook_request(w, pk, data):
             o = ModifyOrder.objects.create(
                 is_active=True,
                 literal_webhook_id=webhook.webhook_id,
+                webhook_name = webhook.name,
                 ticker=params.get("symbol", None),
                 magic=params.get("m", None),
                 sl=params.get("sl", None),
@@ -216,6 +218,7 @@ def parse_incoming_webhook_request(w, pk, data):
             o = Order.objects.create(
                 is_active=True,
                 literal_webhook_id=webhook.webhook_id,
+                webhook_name = webhook.name,
                 ticker=params.get("symbol", ""),
                 side=params.get("side", ""),
                 tt=params.get("tt", None),
@@ -247,8 +250,6 @@ def parse_incoming_webhook_request(w, pk, data):
             [chat.chat_id, data, params.get("img", None)] for chat in chats
         ]
         send_message(res, w)
-    a = Alert(content_object=webhook, webhook_type=w, user=webhook.user, text=str(data.get("message")))
-    a.save()
     webhook.hits += 1
     webhook.save()
     return JsonResponse({"status": "success"})

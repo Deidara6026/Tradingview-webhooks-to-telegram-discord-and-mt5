@@ -11,6 +11,7 @@ from django.db.models import Q
 from functools import reduce
 import datetime
 
+
 # Create your views here.
 User = get_user_model()
 
@@ -31,15 +32,14 @@ def dashboard(request):
     telegram_list = Telegram_Webhook.objects.filter(user=request.user).prefetch_related("telegramchat_set").all()
     mt5_list = MT5_Webhook.objects.filter(user=request.user).all()
     orders = Order.objects.filter(user=request.user).order_by("-id").prefetch_related("takeprofit_set").all()[:100]
-    alerts = list(Alert.objects.filter(webhook__user=request.user).order_by("-id")[:100])
     webhooks = list(mt5_list) + list(discord_list) + list(telegram_list)
-
+    print(orders)
     
     context = {
         "webhooks": webhooks,
         "orders": orders,
         "range":range(20),
-        "alerts": alerts,
+
         "telegram_form": Telegram_Webhook_Form(),
         "discord_form": Discord_Webhook_Form(),
         "mt5_form": MT5_Webhook_Form(),

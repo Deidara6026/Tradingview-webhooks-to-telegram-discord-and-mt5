@@ -236,6 +236,52 @@ function displayError(message) {
     }, 5000);
 }
 
+function toggleCarouselDisplay() {
+    const carousel1 = document.getElementById('carouselExampleAutoplaying1');
+    const carousel2 = document.getElementById('carouselExampleAutoplaying2');
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth < 768) { // Assuming 768px as the breakpoint for smaller screens
+        if (carousel1 && carousel2) {
+            carousel1.style.display = 'none';
+            carousel2.style.display = 'block';
+        }
+    } else {
+        if (carousel1 && carousel2) {
+            carousel1.style.display = 'block';
+            carousel2.style.display = 'none';
+        }
+    }
+}
+
+// Add event listener to window resize to handle dynamic changes in screen size
+window.addEventListener('resize', toggleCarouselDisplay);
+
+// Initial call to set the correct display on load
+toggleCarouselDisplay();
+
+
+function toggleStar(element) {
+    const stars = element.parentElement.querySelectorAll('.bi-star, .bi-star-fill');
+    let isChecked = false;
+
+    stars.forEach(star => {
+        if (isChecked) {
+            star.classList.remove('bi-star-fill');
+            star.classList.add('bi-star');
+        } else {
+            star.classList.remove('bi-star');
+            star.classList.add('bi-star-fill');
+        }
+
+        if (star === element) {
+            isChecked = true;
+        }
+    });
+}
+
+
+
 
 
 function showToast(message) {

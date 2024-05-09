@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 
 <!doctype html>
 <html lang="en">
@@ -14,11 +15,7 @@
 
 
 <body style="font-family: Arial, Helvetica, sans-serif;">
-  {% if error %}
-  <script>displayError("{{error}}");</script>
-  {%elif message%}
-  <script>showToast("{{message}}")</script>
-  {%endif%}
+
   <style>
     body{
       max-width: 97%;
@@ -447,39 +444,84 @@
     </div>
 </section>
 <br><br>
+{% if orders %}
 <section>
-    <div class="text-center p-5 mx-auto">
-        <p class="fs-4 font-monospace d-inline" style="color: #cd5008;"> Your Alerts Are Down Here</p> &ensp;&ensp;
-        <img class="img-fluid d-inline" style="max-width: 17%;" src="{% static 'img/online-money-transfer.svg' %}">
-    </div>
     <br>
     <div>
-        <div id="carouselExampleAutoplaying1" class="carousel carousel-dark slide mx-auto w-75" data-bs-ride="carousel">
+        <div id="carouselExampleAutoplaying1" class="carousel carousel-dark slide mx-auto" data-bs-ride="carousel">
             <div class="carousel-inner">
-              {% for i in range %}
-              <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <div class="card w-100 mb-3 mx-auto" id="webhook">
-                    <div class="row g-0">
-                        <div class="col-md-3 mx-auto">
-                          <div class="card float-end" id="alerts" style="height: 10rem;width: 100%;">
-                            <div class="card-body mx-0">
-                              <h5 class="card-title" style="color: #cd5008;"><i class="bi bi-exclamation-triangle fs-4"></i> &ensp; Alert Title</h5>
-                              <p class="text-muted">Alert details with parameters and values</p>
-                              <p class="text"><strong>Rating:</strong> 
-                                <span class="bi-star-fill"></span>
-                                <span class="bi-star-fill"></span>
-                                <span class="bi-star-fill"></span>
-                                <span class="bi-star"></span>
-                                <span class="bi-star"></span>
-                              </p>
-                            </div>
-                          </div>
+              {% for chunk in orders|for_three_loop %}
+              {% if forloop.first %}
+              <div class="carousel-item active">
+              {% else %}
+              <div class="carousel-item">
+              {% endif %}
+                <div class="d-flex justify-content-around mx-auto" style="width: 80%;">
+                  {% for order in chunk %}
+                  <div class="card mb-3" style="width: 20rem;">
+                    <div class="card-body">
+                      <h5 class="card-title" style="color: #cd5008;">{{order.webhook_name}}</h5>
+                      <p class="card-text"><small class="text-muted">{{order.date_created}}</small></p>
+                      <p class="card-text">{{order.alert_text}}</p>
+                      <textarea class="form-control" rows="3" placeholder="{{order.trader_notes}}"></textarea>
+                      <div class="d-flex justify-content-between mt-2">
+                        <div class="text mt-2"><strong>Rating:</strong>
+                          {% for star in order.rating|star_rating %}
+                            {% if star == 'filled' %}
+                            <span class="bi-star-fill" onclick="toggleStar(this)"></span>
+                            {% else %}
+                              <span class="bi-star" onclick="toggleStar(this)"></span>
+                            {% endif %}
+                          {% endfor %}
                         </div>
-                        <div class="col-md-4 mx-auto">
-                          <textarea class="form-control" rows="8" id="textarea" placeholder="Notes up to 5000 characters..."></textarea>
-                          <button type="button" class="btn mt-2" style="background-color: #cd5008; color: white;" >Save Notes</button>
+                        <div>
+                          <button type="button" class="btn btn-primary">Save</button>
                         </div>
+                      </div>
                     </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            <button class="carousel-control-prev" style="width:10%;" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" style="width:10%;" type="button" data-bs-target="#carouselExampleAutoplaying1" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+          <div id="carouselExampleAutoplaying2" style="display: none;" class="carousel carousel-dark slide mx-auto" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              {% for o in orders %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="d-flex justify-content-center mx-auto" style="width: 100%;">
+                  <div class="card mb-3" style="max-width: 20rem;">
+                    <div class="card-body">
+                      <h5 class="card-title" style="color: #cd5008;">Webhook Name: Test Hook {{ i }}</h5>
+                      <p class="card-text"><small class="text-muted">Date Created: 2023-01-0{{ i }}</small></p>
+                      <p class="card-text">Alert Text: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quos.</p>
+                      <textarea class="form-control" rows="3" placeholder="Alert Notes: Lorem ipsum dolor sit amet..."></textarea>
+                      <div class="d-flex justify-content-between mt-2">
+                        <div class="text mt-2"><strong>Rating:</strong>
+                          {% for star in o.rating|star_rating %}
+                            {% if star == 'filled' %}
+                              <span class="bi-star-fill" onclick="toggleStar(this)"></span>
+                            {% else %}
+                              <span class="bi-star" onclick="toggleStar(this)"></span>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                        <div>
+                          <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               {% endfor %}
@@ -495,214 +537,11 @@
           </div>
     </div>
 </section>
+{% endif %}
 <br><br><br><br>
 
 
-<section>
-    <div class="text-center">
-        <p class="fs-4 font-monospace" style="color: #cd5008;">Track progress in MyJournal</p>
-    </div>
-    <br><br>
 
-
-    <div class="row">
-        <div class="col-sm-3 mb-3 mb-sm-0 mx-auto">
-          
-          <div>
-           &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; <img class="img-fluid d-inline" style="max-width: 60%;" src="{% static 'img/financial-year.svg' %}">
-          </div>
-          
-          <br>
-
-          <div class="card" style="height: 10rem;" id="card-body">
-            <div class="card-body">
-              <h5 class="card-title"> <i  style="color: #cd5008;" class=" bi bi-calculator"></i> Study</h5>
-              <div class="list-group list-group-flush text-center">
-                <button type="button" class="list-group-item list-group-item-action" aria-current="true">
-                  <a href="#" class="text-decoration-none text-black"><i style="color: #cd5008;" class="bi bi-lightbulb fs-5"></i> &ensp; 
-                    Thought Journal </a>
-                </button>
-
-                <button  class="list-group-item list-group-item-action">
-                  <a href="#" class="text-decoration-none text-black"><i style="color: #cd5008;"  class="bi bi-archive fs-5"></i> &ensp; 
-                    Trade Archive </a>
-                </button>
-
-              </div>
-             
-            </div>
-          </div><br>
-
-          <div class="card" style="height: 10rem;"  id="card-body">
-            <div class="card-body">
-              <h5 class="card-title"> <i  style="color: #cd5008;" class=" bi bi-pencil-square"></i> Fast Button</h5>
-              <div class="list-group list-group-flush text-center">
-                <button type="button" class="list-group-item list-group-item-action" aria-current="true">
-                  <a href="#" class="text-decoration-none text-black"><i style="color: #cd5008;" class="bi bi-arrow-right-square-fill fs-5"></i> &ensp; 
-                    Quick Trade </a>
-                </button>
-
-                <button  class="list-group-item list-group-item-action">
-                  <a href="#" class="text-decoration-none text-black"><i style="color: #cd5008;"  class="bi bi-lightbulb fs-5"></i> &ensp; 
-                    Today's Thought </a>
-                </button>
-
-              </div>
-            </div>
-          </div><br>
-
-          <div class="card" style="height: 13rem;"  id="card-body">
-            <div class="card-body">
-              <h5 class="card-title"> <i  style="color: #cd5008;"  class=" bi bi-database"></i> Database</h5>
-              <div class="list-group list-group-flush text-center">
-                <button type="button" class="list-group-item list-group-item-action" aria-current="true">
-                  <a href="#" class="text-decoration-none text-black"><i style="color: #cd5008;" class="bi bi-arrow-right-square fs-5"></i> &ensp; 
-                    Single Trade </a>
-                </button>
-
-                <button  class="list-group-item list-group-item-action">
-                  <a href="#" class="text-decoration-none text-black"><i style="color: #cd5008;"  class="bi bi-calendar fs-5"></i> &ensp; 
-                    Day </a>
-                </button>
-
-                <button  class="list-group-item list-group-item-action">
-                  <a href="#" class="text-decoration-none text-black"><i style="color: #cd5008;"  class="bi bi-calendar3 fs-5"></i> &ensp; 
-                    Month </a>
-                </button>
-
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <div class="col-sm-8 mx-auto">
-          <div class="card" id="card-body" style="height: 17rem;">
-            <div class="card-body">
-              <h5 class="card-title"> <i style="color: #cd5008;"  class="bi bi-calendar fs-5"></i> &ensp; Daily Progress</h5>
-           
-
-              <div class="tableFixHead">
-                <table class="caption-top">
-                  <thead>
-                    <tr>
-                      <th class="fw-light"> <i style="color: #cd5008;" class="bi bi-calendar-check fs-6"></i> &ensp; Date</th>
-                      <th class="fw-light"> <i style="color: #cd5008;"  class="bi bi-cash-stack fs-6"></i> &ensp; Take Profit</th>
-                      <th class="fw-light"> <i style="color: #cd5008;"  class="bi bi-hash fs-6"></i> &ensp; Win Trade</th>
-                      <th class="fw-light"> <i style="color: #cd5008;"  class="bi bi-hash fs-6"></i> &ensp; Loss Trade</th>
-                      <th class="fw-light"> <i style="color: #cd5008;" class="bi bi-arrow-up-right fs-6"></i> &ensp; Last Updated</th>
-                      
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td id="data">12th February, 2024.</td>
-                      <td id="data">$150.00</td>
-                      <td id="data">1</td>
-                      <td id="data">1</td>
-                      <td id="data">31/03/2024</td>
-                      <td id="data"></td>
-                    </tr>
-                    <tr>
-                      <td id="data">13th March, 2024.</td>
-                      <td id="data">$69.00</td>
-                      <td id="data">6</td>
-                      <td id="data">7</td>
-                      <td id="data">31/03/2024</td>
-                      <td id="data"></td>
-                    </tr>
-                    <tr>
-                      <td id="data">14th March, 2024.</td>
-                      <td id="data">$210.00</td>
-                      <td id="data">4</td>
-                      <td id="data">1</td>
-                      <td id="data">31/03/2024</td>
-                      <td id="data"></td>
-                    </tr>
-                    <tr>
-                      <td id="data">18th March, 2024.</td>
-                      <td id="data">-$57.00</td>
-                      <td id="data">0</td>
-                      <td id="data">3</td>
-                      <td id="data">31/03/2024</td>
-                      <td id="data"></td>
-                    </tr>
-                    <tr>
-                      <td id="data">21st March, 2024</td>
-                      <td id="data">$30.00</td>
-                      <td id="data">2</td>
-                      <td id="data">0</td>
-                      <td id="data">31/03/2024</td>
-                      <td id="data"></td>
-                    </tr>
-                    <tr>
-                      <td id="data">30th March, 2024.</td>
-                      <td id="data">-$98.00</td>
-                      <td id="data">2</td>
-                      <td id="data">5</td>
-                      <td id="data">31/03/2024</td>
-                      <td id="data"></td>
-                    </tr>
-                     <tfoot style="background-color: #eee;">
-                      <td>
-                        <button style="border-color:#eee;"><i style="color: #cd5008;"  class="bi bi-plus-lg fs-6"></i> &ensp; New</button>
-                      </td>
-                     </tfoot>
-                  </tbody>
-                </table>
-              </div>
-
-            
-                
-            </div>
-          </div><br>
-
-          <div class="card" id="webhook" style="height: 25rem;">
-            <div class="card-body">
-              <h5 class="card-title"><i style="color: #cd5008;"  class="bi bi-calendar3 fs-5"></i> &ensp; Monthly Progress</h5>
-               <br>
-              <div class="row" id="cardscroll">
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                  <div class="card w-75" id="tinycard" style="height: 6rem;">
-                    <div class="card-body">
-                      <h5 class="card-title">February</h5>
-                      <p style="color: rgb(2, 164, 2);">$540.00</p>
-                    </div>
-                  </div>
-                    
-                </div>
-
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                  <div class="card w-75" id="tinycard" style="height: 6rem;">
-                    <div class="card-body">
-                      <h5 class="card-title">March</h5>
-                      <p style="color: rgb(224, 4, 4);">-$156.00</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                  <div class="card w-75" id="tinycard" style="height: 6rem;">
-                    <div class="card-body">
-                      <h5 class="card-title">April</h5>
-                      <p>$0.00</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                  <div class="card w-75" style="height: 6rem;">
-                    <div class="card-body">
-                      <h6 class="card-title"> <i style="color: #cd5008;" class="bi bi-plus-lg fs-6"></i> &ensp; New Month</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-      </div>
-</section>
 
    <br><br><br><br><br><br>
    
@@ -713,6 +552,12 @@
     <br><br>
     ©<script>document.write(new Date().getFullYear())</script> TheOrangeTeam
     <script src="{% static  'js/app1.js' %}"></script>
+    
+  {% if error %}
+  <script>displayError("{{error}}");</script>
+  {%elif message%}
+  <script>showToast("{{message}}")</script>
+  {%endif%}
    </div><br><br>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
