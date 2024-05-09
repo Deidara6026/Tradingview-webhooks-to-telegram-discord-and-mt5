@@ -11,18 +11,22 @@ class Telegram_Webhook_Form(ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Webhook Name",
+                    "style": "background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
+           
                 }
             ),
             "message_prefix": Textarea(
                 attrs={
-                    "placeholder": "Message Prefix: Optional text placed before all your telegram alerts. Greet your followers maybe?",
-                    "style": "width: 70%;height:120px;",
+                    "class": "form-control",
+                    "placeholder": "Optional text placed before all your telegram alerts.",
+                    "style": "width: 70%;height:60px;background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
                 }
             ),
             "message_suffix": Textarea(
                 attrs={
-                    "placeholder": "Message Prefix: Optional text placed after all your telegram alerts. Greet your followers maybe?",
-                    "style": "width: 70%;height:120px;",
+                    "class": "form-control",
+                    "placeholder": "Optional text placed after all your telegram alerts.",
+                    "style": "width: 70%;height:60px;background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
                 }
             ),
             "parse": CheckboxInput(
@@ -34,8 +38,9 @@ class Telegram_Webhook_Form(ModelForm):
             ),
             "message_format": Textarea(
                 attrs={
-                    "placeholder": "Message Prefix: Optional text placed after all your telegram alerts. Greet your followers maybe?",
-                    "style": "width: 70%;height:120px;",
+                    "class": "form-control",
+                    "placeholder": " Optional text",
+                    "style": "width: 70%;height:60px;background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
                 }
             ),
             # "channel_chat_id": TextInput(attrs={"class":"form-control", "placeholder":"Telegram Chat ID", "style":"background-color: #131516; color: aliceblue;border-color:#766e61;"}),
@@ -47,22 +52,26 @@ class Discord_Webhook_Form(ModelForm):
         model = Discord_Webhook
         fields = ["name", "message_prefix", "message_suffix", "parse", "message_format"]
         widgets = {
-            "name": TextInput(
+             "name": TextInput(
                 attrs={
                     "class": "form-control",
                     "placeholder": "Webhook Name",
+                    "style": "background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
+           
                 }
             ),
             "message_prefix": Textarea(
                 attrs={
-                    "placeholder": "Message Prefix: Optional text placed before all your discord alerts. Greet your followers maybe?",
-                    "style": "width: 70%;height:120px;",
+                    "class": "form-control",
+                    "placeholder": "Optional text placed before all your discord alerts.",
+                    "style": "width: 70%;height:60px;background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
                 }
             ),
             "message_suffix": Textarea(
                 attrs={
-                    "placeholder": "Message Prefix: Optional text placed after all your discord alerts. Greet your followers maybe?",
-                    "style": "width: 70%;height:120px;",
+                    "class": "form-control",
+                    "placeholder": "Optional text placed after all your discord alerts.",
+                    "style": "width: 70%;height:60px;background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
                 }
             ),
             "parse": CheckboxInput(
@@ -70,6 +79,13 @@ class Discord_Webhook_Form(ModelForm):
                     "class": "form-check-input",
                     "onclick": "show_tg_parse()",
                     "checked": False,
+                }
+            ),
+            "message_format": Textarea(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": " Optional text",
+                    "style": "width: 70%;height:60px;background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
                 }
             ),
             # "channel_chat_id": TextInput(attrs={"class":"form-control", "placeholder":"Telegram Chat ID", "style":"background-color: #131516; color: aliceblue;border-color:#766e61;"}),
@@ -85,7 +101,7 @@ class MT5_Webhook_Form(ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "name...",
-                    "style": "border-color:#766e61;",
+                    "style": "background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
                 }
             ),
         }
