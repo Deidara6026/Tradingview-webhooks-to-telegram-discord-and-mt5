@@ -32,13 +32,13 @@ class Telegram_Webhook_Form(ModelForm):
             "parse": CheckboxInput(
                 attrs={
                     "class": "form-check-input",
-                    "onclick": "show_tg_parse()",
+                    "onclick": "show_tg_parse(this)",
                     "checked": False,
                 }
             ),
             "message_format": Textarea(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-control tt-2",
                     "placeholder": " Optional text",
                     "style": "width: 70%;height:60px;background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
                 }
@@ -83,7 +83,7 @@ class Discord_Webhook_Form(ModelForm):
             ),
             "message_format": Textarea(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-control tt-2",
                     "placeholder": " Optional text",
                     "style": "width: 70%;height:60px;background: rgba(255, 255, 255, 0.22);box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);backdrop-filter: blur(20px);-webkit-backdrop-filter: blur(20px);border: 1px solid rgba(255, 255, 255, 0.3);",
                 }
