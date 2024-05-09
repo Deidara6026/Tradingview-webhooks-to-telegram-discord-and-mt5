@@ -475,7 +475,7 @@
                           {% endfor %}
                         </div>
                         <div>
-                          <button type="button" class="btn btn-primary">Save</button>
+                          <button type="button" class="btn btn-primary" onclick="submitNote(this, `{% url 'note_api_endpoint' %}`, '{{order.pk}}', '{{csrf_token}}')">Save</button>
                         </div>
                       </div>
                     </div>

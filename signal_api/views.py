@@ -278,16 +278,14 @@ class DiscordAPIView(APIView):
 
 
 class NoteAPIView(APIView):
-    serializers = OrderSerializer
-    authentication_classes = [SessionAuthentication]
-    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):    
         data = request.data
-        print(data, (dict(data).get("note-rating"))[0])
+        print(data, dict(data).get("note-rating"))
         order = get_object_or_404(Order, id=data.get("pk")) 
         note = data.get("note-text", order.trader_notes)
-        rating = (dict(data).get("note-rating"))[0]
+        rating = dict(data).get("note-rating", order.rating)
+        print(note, rating)
         order.trader_notes = note
         order.rating = rating
         order.save()

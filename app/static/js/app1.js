@@ -280,6 +280,49 @@ function toggleStar(element) {
     });
 }
 
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function submitNote(element, link, pk) {
+    const textareaValue = element.parentElement.parentElement.parentElement.querySelector('textarea').value.trim();
+    const stars = element.parentElement.parentElement.querySelectorAll('.bi-star, .bi-star-fill');
+    let filledStars = 0;
+
+    stars.forEach(star => {
+        if (star.classList.contains('bi-star-fill')) {
+            filledStars++;
+        }
+    });
+
+    const requestBody = { 'note-rating': filledStars, 'pk': pk };
+
+    if (textareaValue !== '' && textareaValue !== null) {
+        requestBody['note-text'] = textareaValue;
+    }
+
+    fetch(link, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken') // Function to get the CSRF token from the cookie
+        },
+        body: JSON.stringify(requestBody),
+    })
+    .then(response => {
+        if (response.ok) {
+           showToast('Note submitted successfully');
+        } else {
+            displayError('Failed to submit note');
+        }
+    })
+    .catch(error => {
+        console.error('Error submitting note:', error);
+        displayError('Error submitting note');
+    });
+}
 
 
 
