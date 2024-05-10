@@ -67,7 +67,7 @@ def toggle_webhook_status(request, webhook_id, identifier):
         webhook = None
     
     if not webhook:
-        return HttpResponse("Webhook not found.", status=404)
+        return redirect("dashboard", error="Webhook not found.", status=404)
     
     # Toggle the status of the webhook
     if webhook.pause == 'active':
@@ -118,11 +118,11 @@ def submit_telegram_webhook(request):
             form = form.save(commit=False)
             form.user = request.user
             form.save()
-            return HttpResponse("Webhook data received and processed successfully")
+            return redirect("dashboard",message="Webhook data received and processed successfully")
         else:
-            return HttpResponse("Invalid form data. Please check your input.")
+            return redirect("dashboard",error="Invalid form data. Please check your input.")
     else:
-        return HttpResponse("Only POST requests are allowed")
+        return redirect("dashboard",error="An error occured, please retry later")
 
 @login_required
 def submit_mt5_webhook(request):
@@ -133,11 +133,12 @@ def submit_mt5_webhook(request):
             form = form.save(commit=False)
             form.user = request.user
             form.save()
-            return HttpResponse("Webhook data received and processed successfully")
+            return redirect("dashboard",message="Webhook data received and processed successfully")
         else:
-            return HttpResponse("Invalid form data. Please check your input.")
+            return redirect("dashboard",error="Invalid form data. Please check your input.")
     else:
-        return HttpResponse("Only POST requests are allowed")
+        return redirect("dashboard",error="An error occured, please retry later")
+
 
 @login_required
 def submit_discord_webhook(request):
@@ -148,11 +149,11 @@ def submit_discord_webhook(request):
             form = form.save(commit=False)
             form.user = request.user
             form.save()
-            return HttpResponse("Webhook data received and processed successfully")
+            return redirect("dashboard",message="Webhook data received and processed successfully")
         else:
-            return HttpResponse("Invalid form data. Please check your input.")
+            return redirect("dashboard",error="Invalid form data. Please check your input.")
     else:
-        return HttpResponse("Only POST requests are allowed")
+        return redirect("dashboard",error="An error occured, please retry later")
 
 
 

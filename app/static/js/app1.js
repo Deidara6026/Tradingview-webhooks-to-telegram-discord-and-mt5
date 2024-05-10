@@ -184,15 +184,18 @@ function is_checked() {
         }
     }
 
-document.querySelector('.tt-2').style.display = "none";
+document.querySelector('.tt-2').parentElement.style.display = "none";
 function show_tg_parse(element) {
         var checkbox = element;
         if (checkbox.checked) {
             var messageFormatTextarea = document.querySelector('.tt-2');
+            messageFormatTextarea.parentElement.style.display = "block";
             messageFormatTextarea.style.display = "block";
+            
         } else {
             // Checkbox is not checked
             var messageFormatTextarea = document.querySelector('.tt-2');
+            messageFormatTextarea.parentElement.style.display = "none";
             messageFormatTextarea.style.display = "none";
             }
         }
