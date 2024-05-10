@@ -247,7 +247,7 @@ function displayError(message) {
     // Automatically remove the error message after 5 seconds
     setTimeout(() => {
         document.body.removeChild(errorContainer);
-    }, 5000);
+    }, 10000);
 }
 
 function toggleCarouselDisplay() {
@@ -361,7 +361,7 @@ function showToast(message) {
     const toastElement = toastContainer.querySelector('.toast');
     const toast = new bootstrap.Toast(toastElement, {
         autohide: true,
-        delay: 2000
+        delay: 10000
     });
 
     toast.show();
