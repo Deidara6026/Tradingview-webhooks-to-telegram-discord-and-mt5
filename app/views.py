@@ -78,7 +78,7 @@ def toggle_webhook_status(request, webhook_id, identifier):
     # Save the updated webhook
     webhook.save()
     
-    return HttpResponse(f"Webhook status changed to {webhook.pause}.", status=200)
+    return redirect("dashboard", message=f"Webhook status changed to {webhook.pause}.")
 
 @login_required
 def get_webhook_form(request, webhook_id, identifier):

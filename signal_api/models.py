@@ -58,7 +58,8 @@ class Telegram_Webhook(models.Model):
     hit_limit = models.IntegerField(null=True, blank=True)
     chat_limit = models.IntegerField(default=0)
     old_alerts = GenericRelation(Alert)
-    status = models.CharField(max_length=10, default="inactive")
+    status = models.CharField(max_length=10, default="inactive") #lemon
+    pause = models.CharField(max_length=10, default="inactive") #user
     identifier = models.CharField(default="tg", max_length=10)
     message_format = models.CharField(max_length=500, null=True, blank=True)
     message_prefix = models.CharField(max_length=200, null=True, blank=True)
@@ -85,7 +86,8 @@ class Discord_Webhook(models.Model):
     ends_at = models.DateTimeField(null=True, blank=True)
     parse = models.BooleanField(default=False)
     hits = models.IntegerField(default=0)
-    status = models.CharField(max_length=10, default="inactive")
+    status = models.CharField(max_length=10, default="inactive") #lemon
+    pause = models.CharField(max_length=10, default="inactive") #user
     hit_limit = models.IntegerField(null=True, blank=True)
     chat_limit = models.IntegerField(default=0)
     old_alerts = GenericRelation(Alert)
