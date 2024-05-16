@@ -167,6 +167,14 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGIN_EXEMPT_URLS = {
+  r'^account/logout/$',
+  r'^account/register/$',
+  r'^account/password-reset/$',
+  r'^account/password-reset/done/$',
+  r'^account/password-reset/confirm/',
+  r'^account/password-reset/complete/$',
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
