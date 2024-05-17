@@ -269,6 +269,7 @@
     </div>
 
 <br><br><br><br>
+
 <section>
     <div class="text-center">
         <p class="fs-4 font-monospace" style="color: #cd5008;">Webhooks</p>
@@ -552,14 +553,15 @@
     <br><br>
     ©<script>document.write(new Date().getFullYear())</script> TheOrangeTeam
     <script src="{% static  'js/app1.js' %}"></script>
-    
-  {% if error %}
-  <script>displayError("{{error}}");</script>
-  {%elif message%}
-  <script>showToast("{{message}}")</script>
-  {%endif%}
-   </div><br><br>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  {% for error in errors %}
+  <script>displayError("{{error}}");</script>
+  {% endfor %}
+  {% for message in messages %}
+  <script>showToast("{{message}}")</script>
+  {% endfor %}
+   </div><br><br>
+    
 </body>
 </html>
 

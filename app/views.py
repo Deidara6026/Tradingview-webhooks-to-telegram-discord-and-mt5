@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -10,7 +10,7 @@ from django.conf import settings
 from django.db.models import Q
 from functools import reduce
 import datetime
-
+from django.contrib import messages
 
 # Create your views here.
 User = get_user_model()
@@ -67,7 +67,8 @@ def toggle_webhook_status(request, webhook_id, identifier):
         webhook = None
     
     if not webhook:
-        return redirect("dashboard", error="Webhook not found.", status=404)
+        messages.error(request, "Webhook not found.")
+        return redirect("dashboard")
     
     # Toggle the status of the webhook
     if webhook.pause == 'active':
@@ -78,7 +79,8 @@ def toggle_webhook_status(request, webhook_id, identifier):
     # Save the updated webhook
     webhook.save()
     
-    return redirect("dashboard", message=f"Webhook status changed to {webhook.pause}.")
+    messages.success(request, f"Webhook status changed to {webhook.pause}.")
+    return redirect("dashboard")
 
 @login_required
 def get_webhook_form(request, webhook_id, identifier):
@@ -118,11 +120,14 @@ def submit_telegram_webhook(request):
             form = form.save(commit=False)
             form.user = request.user
             form.save()
-            return redirect("dashboard",message="Webhook data received and processed successfully")
+            messages.success(request, "Webhook data received and processed successfully")
+            return redirect("dashboard")
         else:
-            return redirect("dashboard",error="Invalid form data. Please check your input.")
+            messages.error(request, "Invalid form data. Please check your input.")
+            return redirect("dashboard")
     else:
-        return redirect("dashboard",error="An error occured, please retry later")
+        messages.error(request, "An error occurred, please retry later")
+        return redirect("dashboard")
 
 @login_required
 def submit_mt5_webhook(request):
@@ -133,9 +138,11 @@ def submit_mt5_webhook(request):
             form = form.save(commit=False)
             form.user = request.user
             form.save()
-            return redirect("dashboard",message="Webhook data received and processed successfully")
+            messages.success(request, "Webhook data received and processed successfully")
+            return redirect("dashboard")
         else:
-            return redirect("dashboard",error="Invalid form data. Please check your input.")
+            messages.error(request, "Invalid form data. Please check your input.")
+            return redirect("dashboard")
     else:
         return redirect("dashboard",error="An error occured, please retry later")
 
@@ -149,11 +156,14 @@ def submit_discord_webhook(request):
             form = form.save(commit=False)
             form.user = request.user
             form.save()
-            return redirect("dashboard",message="Webhook data received and processed successfully")
+            messages.success(request, "Webhook data received and processed successfully")
+            return redirect("dashboard")
         else:
-            return redirect("dashboard",error="Invalid form data. Please check your input.")
+            messages.error(request, "Invalid form data. Please check your input.")
+            return redirect("dashboard")
     else:
-        return redirect("dashboard",error="An error occured, please retry later")
+        messages.error(request, "An error occurred, please retry later")
+        return redirect("dashboard")
 
 
 
@@ -271,12 +281,14 @@ def add_chat(request):
                     c = DiscordChat.objects.create(webhook=webhook, channel_webhook_url=chat_id[before])
                     c.save()
     else:
-        return redirect('dashboard', error="An error occured, please reload the page and try again.")
+        messages.error(request, "An error occurred, please reload the page and try again.")
+        return redirect('dashboard')
     
     # Save the chat
    
     
-    return redirect('dashboard', message="Chat added Successfully!")
+    messages.success(request, "Chat added Successfully!")
+    return redirect('dashboard')
 
 
 
@@ -290,7 +302,8 @@ def submit_telegram_link(request, pk):
             form.webhook = SignalWebhook.objects.get(id=pk)
             form.save()
         # Process the data and display it
-        return redirect("dashboard","Data received and processed successfully")
+        messages.success(request, "Data received and processed successfully")
+        return redirect("dashboard")
     else:
         return HttpResponse("Only POST requests are allowed")
 
@@ -305,7 +318,8 @@ def submit_mt5_link(request, pk):
             form.webhook = SignalWebhook.objects.get(id=pk)
             form.save()
         # Process the data and display it
-        return redirect("dashboard","Data received and processed successfully")
+        messages.success(request, "Data received and processed successfully")
+        return redirect("dashboard")
     else:
         return HttpResponse("Only POST requests are allowed")
 
@@ -320,7 +334,8 @@ def submit_discord_link(request, pk):
             form.webhook = SignalWebhook.objects.get(id=pk)
             form.save()
         # Process the data and display it
-        return redirect("dashboard","Data received and processed successfully")
+        messages.success(request, "Data received and processed successfully")
+        return redirect("dashboard")
     else:
         return HttpResponse("Only POST requests are allowed")
 
@@ -335,14 +350,20 @@ def delete_webhook(request, webhook_id, identifier):
     elif identifier == "mt5":
         model = MT5_Webhook
     else:
-        return redirect('dashboard', error="An error occured, please reload the page and try again.")
+        messages.error(request, "An error occurred, please reload the page and try again.")
+        return redirect('dashboard')
 
     # Retrieve the webhook instance
     webhook = model.objects.filter(pk=webhook_id, user=request.user).first()
     if not webhook:
-        return redirect('dashboard', error="An error occured, please reload the page and try again.")
+        messages.error(request, "An error occurred, please reload the page and try again.")
+        return redirect('dashboard')
     # Get the subscription_id from the webhook
     subscription_id = webhook.subscription_id
+    if webhook.status == "inactive":
+        webhook.delete()
+        messages.success(request, "Webhook and all related data have been deleted successfully.")
+        return redirect("dashboard")
 
     # Send a request to lemonsqueezy to stop recurring payments
     lemonsqueezy_url = "https://api.lemonsqueezy.com/subscriptions/{}/cancel".format(subscription_id)
@@ -355,9 +376,9 @@ def delete_webhook(request, webhook_id, identifier):
 
     # Check if the request was successful
     if response.status_code != 200:
-        return redirect('dashboard', error="Failed to cancel recurring payment, Please try again.")
+        messages.error(request, "Failed to cancel recurring payment, Please try again.")
+        return redirect('dashboard')
     # Delete the webhook and its related child objects
     webhook.delete()
-
-    return redirect("dashboard",message="Webhook and all related data have been deleted successfully.")
-
+    messages.success(request, "Webhook and all related data have been deleted successfully.")
+    return redirect("dashboard")
