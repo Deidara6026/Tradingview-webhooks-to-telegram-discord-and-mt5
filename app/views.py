@@ -243,6 +243,10 @@ def add_chat(request):
     identifier = data.get('editmodalw')
     chat_id = dict([item.split(":") for item in data.getlist('chat_id')])
     parse = data.get('parse', False)
+    if parse =="on":
+        parse=True
+    else:
+        parse=False
     message_prefix = data.get('message-prefix')
     message_suffix = data.get('message-suffix')
     name = data.get('name')

@@ -75,7 +75,7 @@ function add_data(wid, w, n, name, messagePrefix, messageSuffix, chat_ids, parse
         });
         var messagePrefixInput = document.createElement("textarea");
         messagePrefixInput.type = "text";
-        messagePrefixInput.className = "form-control mb-1 to-be-deleted";
+        messagePrefixInput.className = "form-control mb-1 to-be-deleted input2";
         messagePrefixInput.name = "message-prefix";
         messagePrefixInput.required = true;
         messagePrefixInput.value = messagePrefix;
@@ -89,7 +89,7 @@ function add_data(wid, w, n, name, messagePrefix, messageSuffix, chat_ids, parse
         document.querySelector('#editmodal form').insertBefore(messagePrefixBox, document.querySelector('#editmodal .float-end'));
 
         var messageSuffixInput = document.createElement("textarea");
-        messageSuffixInput.className = "form-control mb-1 to-be-deleted";
+        messageSuffixInput.className = "form-control mb-1 to-be-deleted input2";
         messageSuffixInput.name = "message-suffix";
         messageSuffixInput.required = true;
         messageSuffixInput.value = messageSuffix;
@@ -97,7 +97,7 @@ function add_data(wid, w, n, name, messagePrefix, messageSuffix, chat_ids, parse
         messageSuffixLabel.for = "message-suffix";
         messageSuffixLabel.innerText = "Message Suffix";
         var messageSuffixBox = document.createElement("div");
-        messageSuffixBox.className = "message-box to-be-deleted";
+        messageSuffixBox.className = "message-box to-be-deleted mt-2";
         messageSuffixBox.appendChild(messageSuffixLabel);
         messageSuffixBox.appendChild(messageSuffixInput);
         document.querySelector('#editmodal form').insertBefore(messageSuffixBox, document.querySelector('#editmodal .float-end'));
@@ -109,28 +109,32 @@ function add_data(wid, w, n, name, messagePrefix, messageSuffix, chat_ids, parse
         nameInput.value = name;
         var nameLabel = document.createElement("label");
         nameLabel.for = "name";
-        nameLabel.className = "to-be-deleted";
+        nameLabel.className = "to-be-deleted mt-2";
         nameLabel.innerText = "Name";
         document.querySelector('#editmodal form').insertBefore(nameLabel, document.querySelector('#editmodal .float-end'));
         document.querySelector('#editmodal form').insertBefore(nameInput, document.querySelector('#editmodal .float-end'));
 
         var parse = document.createElement("input");
         parse.type = "checkbox";
-        parse.className = "form-check-input to-be-deleted";
+        parse.className = "form-check-input to-be-deleted mx-1";
         parse.name = "parse";
         parse.required = false;
         parse.checked = true; // Make it checked by default
         parse.setAttribute('onChange', 'is_checked()');
         var parseLabel = document.createElement("label");
         parseLabel.for = "parse";
-        parseLabel.className = "to-be-deleted";
+        parseLabel.className = "to-be-deleted mr-1";
         parseLabel.innerText = "Parse";
-        document.querySelector('#editmodal form').insertBefore(parseLabel, document.querySelector('#editmodal .float-end'));
-        document.querySelector('#editmodal form').insertBefore(parse, document.querySelector('#editmodal .float-end'));
+        var parseBox = document.createElement("div");
+        parseBox.className = "to-be-deleted mt-3";
+        parseBox.appendChild(parseLabel);
+        parseBox.appendChild(parse);
+        document.querySelector('#editmodal form').insertBefore(parseBox, document.querySelector('#editmodal .float-end'));
+        
         
         var messageFormatInput = document.createElement("textarea");
         messageFormatInput.type = "text";
-        messageFormatInput.className = "form-control mb-1 to-be-deleted";
+        messageFormatInput.className = "form-control mb-1 to-be-deleted input2";
         messageFormatInput.name = "message-format";
         messageFormatInput.required = true;
         messageFormatInput.value = messageFormat;
@@ -139,7 +143,7 @@ function add_data(wid, w, n, name, messagePrefix, messageSuffix, chat_ids, parse
         messageFormatLabel.className = "to-be-deleted";
         messageFormatLabel.innerText = "Message Format";
         var messageFormatBox = document.createElement("div");
-        messageFormatBox.className = "message-box to-be-deleted";
+        messageFormatBox.className = "message-box to-be-deleted mt-2";
         messageFormatBox.appendChild(messageFormatLabel);
         messageFormatBox.appendChild(messageFormatInput);
         document.querySelector('#editmodal form').insertBefore(messageFormatBox, document.querySelector('#editmodal .float-end'));
