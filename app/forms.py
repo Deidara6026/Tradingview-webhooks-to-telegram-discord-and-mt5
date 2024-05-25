@@ -77,7 +77,7 @@ class Discord_Webhook_Form(ModelForm):
             "parse": CheckboxInput(
                 attrs={
                     "class": "form-check-input",
-                    "onclick": "show_tg_parse()",
+                    "onclick": "show_tg_parse(this)",
                     "checked": False,
                 }
             ),
