@@ -55,7 +55,7 @@ function copy(event) {
 });
 }
    
-function add_data(wid, w, n, name, messagePrefix, messageSuffix, chat_ids, parse, messageFormat) {
+function add_data(wid, w, name, n, messagePrefix, messageSuffix, chat_ids, parse, messageFormat) {
     document.getElementById("editmodalwid").value = wid;
     document.getElementById("editmodalw").value = w;
     if (w == "discord") {

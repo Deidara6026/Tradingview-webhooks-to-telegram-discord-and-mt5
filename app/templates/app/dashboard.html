@@ -190,7 +190,7 @@
                     
                     <a href="#" class="fs-4 text-black" title="Copy" onclick="copy(event)"><i class="bi bi-clipboard-data" style="color: #cd5008;"></i></a>&emsp;
                     
-                    <a href="#" class="fs-4 text-black" data-bs-toggle="modal" onclick="add_data('{{webhook.pk}}', '{{webhook.identifier}}',{% if webhook.identifier == 'tg' or webhook.identifier == 'discord' %} {{webhook.chat_limit}}, '{{webhook.name}}', '{{webhook.message_prefix}}', '{{webhook.message_suffix}}', [{% for chat in webhook.telegramchat_set.all%} '{{chat.chat_id}}', {%endfor%}], '{{webhook.parse}}', '{{webhook.message_format}}' {%endif%})" data-bs-target="#editmodal" title="Edit"><i class="bi bi-pencil" style="color: #cd5008;"></i></a>&emsp;
+                    <a href="#" class="fs-4 text-black" data-bs-toggle="modal" onclick="add_data('{{webhook.pk}}', '{{webhook.identifier}}',  '{{webhook.name}}', {% if webhook.identifier == 'tg' or webhook.identifier == 'discord' %} {{webhook.chat_limit}}, '{{webhook.message_prefix}}', '{{webhook.message_suffix}}', [{% for chat in webhook.telegramchat_set.all%} '{{chat.chat_id}}', {%endfor%}], '{{webhook.parse}}', '{{webhook.message_format}}' {%endif%})" data-bs-target="#editmodal" title="Edit"><i class="bi bi-pencil" style="color: #cd5008;"></i></a>&emsp;
                   
                     <span class="dropend">
                       <a class="fs-4 text-black text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" title="Manage">
