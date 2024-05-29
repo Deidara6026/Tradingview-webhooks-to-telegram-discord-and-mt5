@@ -103,7 +103,50 @@
       <h3 class="display-4 font-monospace" style="color: black;">Telegram</h3>
     </div>
 
-    
+<div class="container">
+  <p>Telegram Messenger is a globally accessible freemium, cross-platform, encrypted, cloud-based and centralized instant messaging service.</p>
+</div>
+
+<div class="container">
+  <h3>How It Works</h3>
+  <p>Create a webhook in your dashboard, Attach the Webhook to your TradingView alerts together with the message that you would want to be posted on your Telegram account on the message box of the alert. You can send your alerts to Telegram Channels, Groups, and private chats. You can also switch between different channels and groups at any time.</p>
+</div>
+
+<div class="container">
+  <h3>Features</h3>
+  <p>This automation tool lets you forward TradingView alerts to your Telegram Channels or Groups. You can also use Markdown and HTML to customize your messages.</p>
+  <p>You can also switch your alerts to different Telegram channels and groups at any time.</p>
+</div>
+
+<div class="container">
+  <h3>Alert Message Example</h3>
+  <p><strong>BUY</strong> {{ticker}} <strong>e=</strong> {{close}}, <strong>tp=</strong> 1.001, <strong>sl=</strong> 1.0009, <strong>q=</strong> 0.1, <strong>m=</strong>77 <strong>link</strong>=https://www.example.com/image-to-send-to-telegram-with-message</p>
+  <p><strong>Details:</strong> e is the price at which you want to enter your trade. tp is the target price for profit. sl is the price at which you want to limit losses. q is the amount of the asset to trade. m is a unique identifier for the trade.</p>
+</div>
+
+<div class="container">
+  <h3>Modify Trade</h3>
+  <p><strong>m:</strong> 77, <strong>tp:</strong> 0.001, <strong>sl:</strong> Breakeven (move stop loss to breakeven condition)</p>
+</div>
+
+<div class="container">
+  <h3>Close Trade</h3>
+  <p><strong>m:</strong> 77</p>
+  <p>Closes the order</p>
+</div>
+
+<div class="container">
+  <h3>Custom Messages</h3>
+  <p>If "Parse" is off in the webhook settings, you can enter custom messages that will be sent directly to your telegram.</p>
+  <p>Example of custom alert text: Buy EURUSD at 1.000 🎫,</p>
+  <p>10% of your account size,</p>
+  <p>Hold your position for the next 4 hours,</p>
+  <p>Take Profit at 1.001, Stop Loss at 1.0009</p>
+</div>
+
+
+
+ 
 
 
 

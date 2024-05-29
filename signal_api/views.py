@@ -97,7 +97,7 @@ def parse_signal_hit(m: str):
                 if k.lower() == "tp":
                     d.update({"tp": v})
                 if k.lower() == "sl":
-                    if v.lower == "b":
+                    if v.lower == "b": #breakeven
                         v = -1
                     d.update({"sl": v})
 
