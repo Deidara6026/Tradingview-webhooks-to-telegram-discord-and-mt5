@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" 
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="shortcut icon" href="logoo.png" />
+    <link rel="shortcut icon" href="/accounts/static/img/logoo.png" />
   </head>
   <style>
     body{
@@ -30,34 +30,19 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #616161; 
 }
-    @media only screen and (min-width: 1520px) {
-      @keyframes typing {
-      from { width: 0 }
-      to { width: 40% }
-    }
-    @keyframes blinking {
-      from { border-color: transparent }
-      to { border-color: #cd5008; }
-    }
-    .typed-out{
-      overflow: hidden;
-      border-right: .15em solid #cd5008;
-      white-space: nowrap;
-      animation: typing 2.5s steps(40, end) forwards,  blinking 1s infinite;
-      margin: auto;
-    }
-}
     
-    #card-body{
+    .card{
       background: rgba(255, 255, 255, 0.22);
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
-    #card-body:hover {
+    .card:hover {
       background-color: rgb(240, 239, 239);
       transition: background-color 0.7s;
+      position: relative;
+      top: -20px;
     }
     #MT{
             max-width: 15%;
@@ -70,7 +55,7 @@
   <body style="font-family: Arial, Helvetica, sans-serif;">
     <nav class="navbar navbar-expand-lg navbar-light fixed-top font-monospace" style="background-color: white;">
       <div class="container-fluid">
-        <img class="img-fluid" style="max-height: 70px; max-width: 13%;" src="logoo.png" id="logoo">
+        <img class="img-fluid" style="max-height: 70px; max-width: 13%;" src="/accounts/static/img/logoo.png" id="logoo">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -98,50 +83,97 @@
       
 
    
-    <div class="justify-content-center text-center align-items-center">
-      <h3 class="display-2 font-monospace" style="color: black;"><i class="bi bi-telegram"></i></h3>
-      <h3 class="display-4 font-monospace" style="color: black;">Telegram</h3>
+    <div class="p-5 justify-content-center text-center align-items-center">
+      <h3 class="display-2 d-inline font-monospace" style="color: #cd5008;"><i class="bi bi-telegram"></i></h3>&ensp;
+      <h3 class=" d-inline display-4 font-monospace" style="color: black;">Telegram</h3>
     </div>
 
-<div class="container">
-  <p>Telegram Messenger is a globally accessible freemium, cross-platform, encrypted, cloud-based and centralized instant messaging service.</p>
-</div>
+    <br>
+    <div>
+      <p class="fw-bold fst-italic font-monospace text-center">Telegram Messenger is a globally accessible freemium, cross-platform, encrypted, cloud-based and centralized instant messaging service.</p>
+    </div>
 
-<div class="container">
-  <h3>How It Works</h3>
+
+
+
+<br><br><br>
+
+<div class="card w-75 mx-auto">
+  <br>
+<div class="container text-center">
+  <h3 style="color: #cd5008;">How It Works</h3>
   <p>Create a webhook in your dashboard, Attach the Webhook to your TradingView alerts together with the message that you would want to be posted on your Telegram account on the message box of the alert. You can send your alerts to Telegram Channels, Groups, and private chats. You can also switch between different channels and groups at any time.</p>
 </div>
+<br>
+</div>
 
-<div class="container">
-  <h3>Features</h3>
+
+<br><br><br>
+
+
+<div class="card w-75 mx-auto">
+  <br>
+<div class="container text-center">
+  <h3 style="color: #cd5008;">Features</h3>
   <p>This automation tool lets you forward TradingView alerts to your Telegram Channels or Groups. You can also use Markdown and HTML to customize your messages.</p>
   <p>You can also switch your alerts to different Telegram channels and groups at any time.</p>
 </div>
+<br>
+</div>
 
-<div class="container">
-  <h3>Alert Message Example</h3>
+<br><br><br>
+
+
+<div class="card w-75 mx-auto">
+  <br>
+<div class="container text-center">
+  <h3 style="color: #cd5008;">Alert Message Example</h3>
   <p><strong>BUY</strong> {{ticker}} <strong>e=</strong> {{close}}, <strong>tp=</strong> 1.001, <strong>sl=</strong> 1.0009, <strong>q=</strong> 0.1, <strong>m=</strong>77 <strong>link</strong>=https://www.example.com/image-to-send-to-telegram-with-message</p>
   <p><strong>Details:</strong> e is the price at which you want to enter your trade. tp is the target price for profit. sl is the price at which you want to limit losses. q is the amount of the asset to trade. m is a unique identifier for the trade.</p>
 </div>
-
-<div class="container">
-  <h3>Modify Trade</h3>
-  <p><strong>m:</strong> 77, <strong>tp:</strong> 0.001, <strong>sl:</strong> Breakeven (move stop loss to breakeven condition)</p>
+<br>
 </div>
 
-<div class="container">
-  <h3>Close Trade</h3>
+
+<br><br><br>
+
+
+<div class="card w-75 mx-auto">
+  <br>
+<div class="container text-center">
+  <h3 style="color: #cd5008;">Modify Trade</h3>
+  <p><strong>m:</strong> 77, <strong>tp:</strong> 0.001, <strong>sl:</strong> Breakeven (move stop loss to breakeven condition)</p>
+</div>
+<br>
+</div>
+
+<br>
+
+<div class="card w-75 mx-auto">
+  <br>
+<div class="container text-center">
+  <h3 style="color: #cd5008;">Close Trade</h3>
   <p><strong>m:</strong> 77</p>
   <p>Closes the order</p>
 </div>
+<br>
+</div>
 
-<div class="container">
-  <h3>Custom Messages</h3>
+
+<br><br><br>
+
+
+<div class="card w-75 mx-auto">
+  <br>
+<div class="container text-center">
+  <h3 style="color: #cd5008;">Custom Messages</h3>
   <p>If "Parse" is off in the webhook settings, you can enter custom messages that will be sent directly to your telegram.</p>
   <p>Example of custom alert text: Buy EURUSD at 1.000 🎫,</p>
   <p>10% of your account size,</p>
   <p>Hold your position for the next 4 hours,</p>
   <p>Take Profit at 1.001, Stop Loss at 1.0009</p>
+</div>
+<br>
 </div>
 
 
