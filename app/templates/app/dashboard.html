@@ -168,6 +168,7 @@
                 <div class="card w-75 mb-3 mx-auto" id="webhook">
                   <div class="card-body">
                     <div class="card-title">
+                      <a href="{% if webhook.identifier == 'tg' %}{% url 'telegram_help_page' %}{% elif webhook.identifier == 'discord' %}{% url 'discord_help_page' %}{% elif webhook.identifier == 'mt5' %}{% url 'mt5_help_page' %}{% endif %}" class="info-button" style="float: right;"><i class="bi bi-info-circle" style="color: #cd5008;"></i></a>
                       <h5>{% if webhook.identifier == "tg" %}
                         <i class="bi bi-telegram" style="color: #0088cc;"></i>
                       {% elif webhook.identifier == "mt5" %}
@@ -208,7 +209,7 @@
                         <li><a class="dropdown-item" href="{{customer_portal}}">Edit Subscriptions</a></li>
                         <li><a class="dropdown-item text-danger" href="#" onclick="if(confirm('Are you sure you want to delete this webhook?')) { window.location.href='{% url 'delete_webhook' webhook.pk webhook.identifier%}'; }">Delete</a></li>
                       </ul>
-                    </span>
+                      
                   </div>
                 </div>
               </div>
@@ -240,7 +241,7 @@
                     <h5 class="card-title text-muted">Manage Webhooks</h5>
                     <div class="list-group list-group-flush">
                       <button type="button" class="list-group-item list-group-item-action" aria-current="true">
-                        <a href="#" class="text-decoration-none text-black"><i style="color:#cd5008;" class="bi bi-file-earmark-richtext-fill fs-5"></i> &ensp; 
+                        <a href="{% url 'telegram_help_page' %}" class="text-decoration-none text-black"><i style="color:#cd5008;" class="bi bi-file-earmark-richtext-fill fs-5"></i> &ensp; 
                           Help </a>
                       </button>
 

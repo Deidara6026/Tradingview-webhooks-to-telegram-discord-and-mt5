@@ -295,6 +295,14 @@ def add_chat(request):
     return redirect('dashboard')
 
 
+def telegram_help_page(request):
+    return render(request, 'app/telegram_blog_page.html')
+
+def discord_help_page(request):
+    return render(request, 'app/discord_blog_page.html')
+
+def mt5_help_page(request):
+    return render(request, 'app/mt5_blog_page.html')
 
 @login_required
 def submit_telegram_link(request, pk):

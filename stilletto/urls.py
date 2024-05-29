@@ -43,5 +43,8 @@ urlpatterns = [
     path('journal_note_api/', NoteAPIView.as_view(), name="note_api_endpoint"),
     path('webhooks/lemons', LemonAPIView.as_view(), name="lemon_api_endpoint"),
     path('submitalert/', submit_alert, name="submitalert"),
+    path('help/telegram/', telegram_help_page, name="telegram_help_page"),
+    path('help/discord/', discord_help_page, name="discord_help_page"),
+    path('help/mt5/', mt5_help_page, name="mt5_help_page"),
 
 ]
