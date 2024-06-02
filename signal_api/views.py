@@ -142,7 +142,7 @@ def parse(params: dict, webhook):
 
 
 Entry Price: {{e}}
-
+quantity: {{q}}
 Take Profit: {{tp}}
 Stop Loss: {{sl}}
 --------------------

@@ -38,12 +38,12 @@
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
-    .card:hover {
+    /* .card:hover {
       background-color: rgb(240, 239, 239);
       transition: background-color 0.7s;
       position: relative;
       top: -20px;
-    }
+    } */
     #MT{
             max-width: 15%;
         }
@@ -93,97 +93,146 @@
       <p class="fw-bold fst-italic font-monospace text-center">Telegram Messenger is a globally accessible freemium, cross-platform, encrypted, cloud-based and centralized instant messaging service.</p>
     </div>
 
-
-
-
 <br><br><br>
 
-<div class="card w-75 mx-auto">
-  <br>
-<div class="container text-center">
-  <h3 style="color: #cd5008;">How It Works</h3>
-  <p>Create a webhook in your dashboard, Attach the Webhook to your TradingView alerts together with the message that you would want to be posted on your Telegram account on the message box of the alert. You can send your alerts to Telegram Channels, Groups, and private chats. You can also switch between different channels and groups at any time.</p>
+<div class="container">
+  <h3 class="text-center" style="color: #cd5008; font-weight: bold;">How It Works</h3><br>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+    <div class="col">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <i class="bi bi-gear" style="font-size: 2.5rem; color: #cd5008;"></i>
+          <h5 class="card-title mt-3" style="font-weight: bold;">Step 1</h5>
+          <p class="card-text">Create a webhook in your dashboard.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <i class="bi bi-credit-card" style="font-size: 2.5rem; color: #cd5008;"></i>
+          <h5 class="card-title mt-3" style="font-weight: bold;">Step 2</h5>
+          <p class="card-text">Activate your hook on our payment processor.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <i class="bi bi-link" style="font-size: 2.5rem; color: #cd5008;"></i>
+          <h5 class="card-title mt-3" style="font-weight: bold;">Step 3</h5>
+          <p class="card-text">Attach the Webhook to your TradingView alerts along with the desired message.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <i class="bi bi-send" style="font-size: 2.5rem; color: #cd5008;"></i>
+          <h5 class="card-title mt-3" style="font-weight: bold;">Step 4</h5>
+          <p class="card-text">Send alerts to Telegram Channels, Groups, and private chats.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col mx-auto">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <i class="bi bi-arrow-repeat" style="font-size: 2.5rem; color: #cd5008;"></i>
+          <h5 class="card-title mt-3" style="font-weight: bold;">Step 5</h5>
+          <p class="card-text">Switch between different channels and groups anytime.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<br>
-</div>
-
-
-<br><br><br>
-
-
-<div class="card w-75 mx-auto">
-  <br>
-<div class="container text-center">
-  <h3 style="color: #cd5008;">Features</h3>
-  <p>This automation tool lets you forward TradingView alerts to your Telegram Channels or Groups. You can also use Markdown and HTML to customize your messages.</p>
-  <p>You can also switch your alerts to different Telegram channels and groups at any time.</p>
-</div>
-<br>
-</div>
-
-<br><br><br>
-
-
-<div class="card w-75 mx-auto">
-  <br>
-<div class="container text-center">
-  <h3 style="color: #cd5008;">Alert Message Example</h3>
-  <p><strong>BUY</strong> {{ticker}} <strong>e=</strong> {{close}}, <strong>tp=</strong> 1.001, <strong>sl=</strong> 1.0009, <strong>q=</strong> 0.1, <strong>m=</strong>77 <strong>link</strong>=https://www.example.com/image-to-send-to-telegram-with-message</p>
-  <p><strong>Details:</strong> e is the price at which you want to enter your trade. tp is the target price for profit. sl is the price at which you want to limit losses. q is the amount of the asset to trade. m is a unique identifier for the trade.</p>
-</div>
-<br>
-</div>
-
-
-<br><br><br>
-
-
-<div class="card w-75 mx-auto">
-  <br>
-<div class="container text-center">
-  <h3 style="color: #cd5008;">Modify Trade</h3>
-  <p><strong>m:</strong> 77, <strong>tp:</strong> 0.001, <strong>sl:</strong> Breakeven (move stop loss to breakeven condition)</p>
-</div>
-<br>
-</div>
-
-<br>
-
-<div class="card w-75 mx-auto">
-  <br>
-<div class="container text-center">
-  <h3 style="color: #cd5008;">Close Trade</h3>
-  <p><strong>m:</strong> 77</p>
-  <p>Closes the order</p>
-</div>
-<br>
-</div>
-
 
 <br><br><br>
 
 
-<div class="card w-75 mx-auto">
+
+
   <br>
-<div class="container text-center">
-  <h3 style="color: #cd5008;">Custom Messages</h3>
-  <p>If "Parse" is off in the webhook settings, you can enter custom messages that will be sent directly to your telegram.</p>
-  <p>Example of custom alert text: Buy EURUSD at 1.000 🎫,</p>
-  <p>10% of your account size,</p>
-  <p>Hold your position for the next 4 hours,</p>
-  <p>Take Profit at 1.001, Stop Loss at 1.0009</p>
-</div>
-<br>
-</div>
+  <div class="container text-center">
+    <div class="alert alert-info text-center" role="alert">
+      <strong>Tip:</strong> If <code>parse</code> is enabled, you can create a template that all your messages will follow. If not, you can enter curstom messages that will be forwarded without editing to telegram
+    </div><br><br><br><br>
+
+    <p style="font-size: 1.25rem; background-color: #f8f9fa; padding: 10px; border: 2px solid #cd5008; border-radius: 5px;">“
+      <strong style="color: #cd5008;">BUY EURUSD</strong>
+      <strong tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="Price at which you want to enter your trade." style="color: #cd5008;">e=</strong> 1.000
+      <strong tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="Target price for profit." style="color: #cd5008;">tp=</strong> 1.001
+      <strong tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="Price at which you want to limit losses." style="color: #cd5008;">sl=</strong> 1.0009 
+      <strong tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="Amount of the asset to trade in lots or percentage." style="color: #cd5008;">q=</strong> 0.1  
+      <strong tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="Unique identifier for the trade. Can be any number as long as you rememebr it" style="color: #cd5008;">m=</strong> 77 
+      <strong tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="Link to the image to send to Telegram with the message." style="color: #cd5008;">link</strong>=https://www.tradingview.com/x/HFUdhKD5/
+      ”</p>
+    <div class="mt-4">
+
+      <div class="d-flex justify-content-center my-4">
+        <div class="card w-30 mx-2 p-4 shadow-sm">
+          <div class="container text-center">
+            <p><strong>Template text:</strong></p><hr>
+            <ul class="list-unstyled text-start">
+              <li class="mb-2">
+                <strong>{{side}} {{symbol}}</strong> at <strong>{{e}}</strong> 🎫,
+              </li>
+              <li class="mb-2">
+                <strong>{{q}}%</strong> of your account size,
+              </li>
+              <li class="mb-2">
+                Hold your position for the next <strong>4 hours</strong>,
+              </li>
+              <li class="mb-2">
+                Take Profit at <strong>{{tp}}</strong>, Stop Loss at <strong>{{sl}}</strong>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <i class="bi bi-arrow-right align-self-center mx-3" style="font-size: 2rem; color: #cd5008;"></i>
+        <div class="card w-30 mx-2 p-4 shadow-sm">
+          <div class="container text-center">
+            <p><strong>Telegram Message:</strong></p><hr>
+            <img src="https://www.tradingview.com/x/HFUdhKD5/" alt="TradingView Chart" class="img-fluid" style="max-width: 200px;">
+            <ul class="list-unstyled text-start">
+              <li class="mb-2">
+                <strong>BUY EURUSD</strong> at <strong>1.000</strong> 🎫,
+              </li>
+              <li class="mb-2">
+                <strong>10%</strong> of your account size,
+              </li>
+              <li class="mb-2">
+                Hold your position for the next <strong>4 hours</strong>,
+              </li>
+              <li class="mb-2">
+                Take Profit at <strong>1.001</strong>, Stop Loss at <strong>1.0009</strong>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div><br><br><br>
+    <br></div>
+  <br>
 
 
 
- 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+      return new bootstrap.Popover(popoverTriggerEl)
+    })
+  });
+</script>
+
+
+<br><br><br>
 
 
 
 
-<br><br><br><br><br><br>
+
+
 
 <div class="text-center">
   <a style="color: #cd5008;" href="#" class="text-decoration-none">Contact Us</a> &nbsp; | &nbsp;
