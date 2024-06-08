@@ -194,26 +194,34 @@ def parse_incoming_webhook_request(w, pk, data):
     tradingview_message = data.get("message")
     for params in parse_signal_hit(tradingview_message):
         if params.get("side").lower() == "close":
+            order = Order.objects.filter(magic=params.get("m", None), literal_webhook_id=webhook.webhook_id).first()
             o = CloseOrder.objects.create(
                 is_active=True,
                 literal_webhook_id=webhook.webhook_id,
                 webhook_name = webhook.name,
+                order=order,
+                user = order.user,
                 ticker=params.get("symbol", None),
                 magic=params.get("m", None),
                 _all=params.get("all", False),
             )
             o.save()
         elif params.get("side").lower() == "modify":
-            o = ModifyOrder.objects.create(
-                is_active=True,
-                literal_webhook_id=webhook.webhook_id,
-                webhook_name = webhook.name,
-                ticker=params.get("symbol", None),
-                magic=params.get("m", None),
-                sl=params.get("sl", None),
-                tp=params.get("tp", None),
-            )
-            o.save()
+            order = Order.objects.filter(magic=params.get("m", None), literal_webhook_id=webhook.webhook_id).first()
+            if order:
+                modify_order = ModifyOrder.objects.create(
+                    is_active=True,
+                    order=order,
+                    user = order.user,
+                    literal_webhook_id=webhook.webhook_id,
+                    webhook_name=webhook.name,
+                    ticker=params.get("symbol", None),
+                    magic=params.get("m", None),
+                    sl=params.get("sl", None),
+                    tp=params.get("tp", None),
+                )
+                modify_order.save()
+
         elif params.get("side").lower() in ["buy", "sell"]:
             o = Order.objects.create(
                 is_active=True,
@@ -306,12 +314,12 @@ class NoteAPIView(APIView):
             if not webhook:
                 return HttpResponseNotFound('Webhook not found')
 
-            queryset = Order.objects.filter(literal_webhook_id=wid)
+            queryset = Order.objects.filter(literal_webhook_id=wid).all()
             buffer = BytesIO()
-            pdf = canvas.Canvas(buffer)
-
+            print(wid, queryset)
             text = "\n-----------------------------------------------\n"
             for order in queryset:
+                print(order)
                 t = f"""
                 Trailing Settings
                 Trigger: {order.tt}
@@ -341,13 +349,14 @@ class NoteAPIView(APIView):
                 
                 {order.trader_notes}
                 """
-                pdf.drawString(100, 100, at)
-                pdf.showPage()
-
-            pdf.save()
+                buffer.write(at.encode('utf-8'))
+                buffer.write(b"\n-----------------------------------------------\n")
+            
             buffer.seek(0)
-            encoded_pdf = base64.b64encode(buffer.read()).decode('utf-8')
-            return JsonResponse({"message":encoded_pdf}) 
+            txt_content = buffer.read().decode('utf-8')
+            encoded_txt = base64.b64encode(txt_content.encode('utf-8')).decode('utf-8')
+            print(encoded_txt)
+            return JsonResponse({"message": encoded_txt})
         else:
             return HttpResponseNotAllowed(['GET'])
 

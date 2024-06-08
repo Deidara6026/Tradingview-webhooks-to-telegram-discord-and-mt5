@@ -20,15 +20,18 @@ function get_notes(wid, w) {
         `http://localhost:8000/journal_note_api?w=${w}&wid=${wid}`,{"method":"GET"}
     ).then((res) => res.json()
     ).then((data) => {
-        message = data.message;
-        const linkSource = `data:application/pdf;base64,${message}`;
+        if (!data.message) {
+            showToast("There's no data to export");
+            return;
+        }
+        const decodedData = atob(data.message);
+        const linkSource = `data:text/plain;charset=utf-8,${encodeURIComponent(decodedData)}`;
         const downloadLink = document.createElement("a");
-        const fileName = "Compiled Orders.pdf";
+        const fileName = "Compiled Notes.txt";
         downloadLink.href = linkSource;
         downloadLink.download = fileName;
         downloadLink.click();
     })
-    
 }
 
 function get_note(wid, w) {

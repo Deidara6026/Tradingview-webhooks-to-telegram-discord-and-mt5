@@ -10,6 +10,7 @@ from django.conf import settings
 from django.db.models import Q
 from functools import reduce
 import datetime
+import mimetypes
 from django.contrib import messages
 
 # Create your views here.
@@ -52,6 +53,18 @@ def dashboard(request):
 
     return render(request, "app/dashboard.html", context)
 
+
+
+def download_file(request):
+    # fill these variables with real values
+    fl_path = "./stiletto-auto.mq5"
+    filename = "TOTEA.mq5"
+
+    fl = open(fl_path, 'r')
+    mime_type, _ = mimetypes.guess_type(fl_path)
+    response = HttpResponse(fl, content_type=mime_type)
+    response['Content-Disposition'] = "attachment; filename=%s" % filename
+    return response
 
 @login_required
 def toggle_webhook_status(request, webhook_id, identifier):
@@ -303,6 +316,9 @@ def discord_help_page(request):
 
 def mt5_help_page(request):
     return render(request, 'app/mt5_blog_page.html')
+
+def pp_tos_page(request):
+    return render(request, 'app/pp_tos_page.html')
 
 @login_required
 def submit_telegram_link(request, pk):
