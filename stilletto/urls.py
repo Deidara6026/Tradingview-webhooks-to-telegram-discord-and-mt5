@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 from signal_api.views import TelegramAPIView, MT5APIView, DiscordAPIView, EAAPIView, LemonAPIView, NoteAPIView
 from app.views import *
+import os
 
 urlpatterns = [
 
@@ -50,3 +52,8 @@ urlpatterns = [
     path("get_ea/", download_file, name="get_ea")
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=os.path.join(settings.BASE_DIR, 'app/static'))
+    urlpatterns += static(settings.STATIC_URL, document_root=os.path.join(settings.BASE_DIR, 'accounts/static'))
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
