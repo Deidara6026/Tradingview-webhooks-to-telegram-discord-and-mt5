@@ -132,7 +132,7 @@
         <div class="card-body">
           <i class="bi bi-download" style="font-size: 2.5rem; color: #cd5008;"></i>
           <h5 class="card-title mt-3" style="font-weight: bold;">Step 4</h5>
-          <p class="card-text">Download our expert advisor and attach it to your terminal</p>
+          <a href="{% url 'get_ea' %}"><p class="card-text">Download our expert advisor and attach it to your terminal</p></a>
         </div>
       </div>
     </div>
@@ -201,7 +201,6 @@
             <li><strong>Trailing Distance (TD):</strong> The distance between your stop loss and the current market price, specified in points or as a percentage.</li>
             <li><strong>Trailing Step (TS):</strong> The number of points/percentage movement in the market after which your SL should be adjusted.</li>
             <li><strong>Magic (M):</strong> The trade magic number to use, to identify different strategies. Example M=1234.</li>
-            <li><strong>Expiry (E):</strong> Set the expiry period for pending orders in minutes. Example E=30.</li>
           </ul>
         </div>
       </div>
@@ -232,9 +231,9 @@
 
 
 <div class="text-center">
-  <a style="color: #cd5008;" href="#" class="text-decoration-none">Contact Us</a> &nbsp; | &nbsp;
-  <a style="color: #cd5008;" href="#" class="text-decoration-none">Privacy Policy</a> &nbsp; | &nbsp;
-  <a style="color: #cd5008;" href="#" class="text-decoration-none">Terms of Service</a>
+  <a style="color: #cd5008;" href="mailto:Support@theorange.team?Subject=Have%20a%20question" class="text-decoration-none">Contact Us</a> &nbsp; | &nbsp;
+  <a style="color: #cd5008;" href="{% url 'pp_tos_page' %}" class="text-decoration-none">Privacy Policy</a> &nbsp; | &nbsp;
+  <a style="color: #cd5008;" href="{% url 'pp_tos_page' %}" class="text-decoration-none">Terms of Service</a>
   <br><br>
   ©<script>document.write(new Date().getFullYear())</script> TheOrange Team
  </div><br><br>

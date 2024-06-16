@@ -150,6 +150,7 @@ class TakeProfit(models.Model):
 
 class CloseOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     is_active = models.BooleanField()
     literal_webhook_id = models.UUIDField(null=True, blank=True)
     magic = models.IntegerField(null=True, blank=True)
@@ -158,6 +159,7 @@ class CloseOrder(models.Model):
 
 class ModifyOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     is_active = models.BooleanField()
     literal_webhook_id = models.UUIDField(null=True, blank=True)
     magic = models.IntegerField(null=True, blank=True)

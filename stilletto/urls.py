@@ -46,5 +46,7 @@ urlpatterns = [
     path('help/telegram/', telegram_help_page, name="telegram_help_page"),
     path('help/discord/', discord_help_page, name="discord_help_page"),
     path('help/mt5/', mt5_help_page, name="mt5_help_page"),
+    path('help/privacy-TOS/', pp_tos_page, name="pp_tos_page"),
+    path("get_ea/", download_file, name="get_ea")
 
 ]

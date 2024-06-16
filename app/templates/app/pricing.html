@@ -62,7 +62,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" style="color: #cd5008;" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" style="color: #cd5008;" href="{% url 'index'%}">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active" href="{% url 'dashboard' %}">Dashboard</a>
@@ -123,7 +123,7 @@
                   <li>Alerts Dashbaord</li>
                 </ul>
               </div>
-              <button class="btn card-link" id="card-link" style="color: #cd5008; border-color: black;">Buy</button>
+              <a href="{% url 'dashboard' %}" class="btn card-link" style="color: #cd5008; border-color: black;">Dashboard</a>
             </div></div>
           </div>
         
@@ -140,7 +140,7 @@
                   <li>Alerts Dashbaord</li>
                 </ul>
               </div>
-              <button class="btn card-link" id="card-link" style="color: #cd5008; border-color: black;">Buy</button>
+              <a href="{% url 'dashboard' %}" class="btn card-link" style="color: #cd5008; border-color: black;">Dashboard</a>
             </div></div>
           </div>
           
@@ -157,7 +157,7 @@
                   <li>Alerts Dashbaord</li>
                 </ul>
               </div>
-              <button class="btn card-link" id="card-link" style="color: #cd5008; border-color: black;">Buy</button>
+              <a href="{% url 'dashboard' %}" class="btn card-link" style="color: #cd5008; border-color: black;">Dashboard</a>
             </div></div>
           </div>
           </div>
@@ -190,7 +190,7 @@
                   <li>Alerts Dashbaord</li>
                 </ul>
               </div>
-              <button class="btn card-link" id="card-link" style="color: #cd5008; border-color: black;">Buy</button>
+              <a href="{% url 'dashboard' %}" class="btn card-link" style="color: #cd5008; border-color: black;">Dashboard</a>
             </div></div>
           </div>
         
@@ -206,7 +206,7 @@
                   <li>Alerts Dashbaord</li>
                 </ul>
               </div>
-              <button class="btn card-link" id="card-link" style="color: #cd5008; border-color: black;">Buy</button>
+              <a href="{% url 'dashboard' %}" class="btn card-link" style="color: #cd5008; border-color: black;">Dashboard</a>
             </div></div>
           </div>
           
@@ -222,7 +222,7 @@
                   <li>Alerts Dashbaord</li>
                 </ul>
               </div>
-              <button class="btn card-link" id="card-link" style="color: #cd5008; border-color: black;">Buy</button>
+              <a href="{% url 'dashboard' %}" class="btn card-link" style="color: #cd5008; border-color: black;">Dashboard</a>
             </div></div>
           </div>
           </div>
@@ -258,7 +258,7 @@
                   <li>24/7 Support</li>
                 </ul>
               </div>
-              <button class="btn card-link" id="card-link" style="color: #cd5008; border-color: black;">Buy</button>
+              <a href="{% url 'dashboard' %}" class="btn card-link" style="color: #cd5008; border-color: black;">Dashboard</a>
             </div></div>
           </div>
         
@@ -276,7 +276,7 @@
                   <li>24/7 Support</li>
                 </ul>
               </div>
-              <button class="btn card-link" id="card-link" style="color: #cd5008; border-color: black;">Buy</button>
+              <a href="{% url 'dashboard' %}" class="btn card-link" style="color: #cd5008; border-color: black;">Dashboard</a>
             </div></div>
           </div>
           
@@ -295,7 +295,7 @@
                   <li>Trade Notifications (Telegram)</li>
                 </ul>
               </div>
-              <button class="btn card-link" id="card-link" style="color: #cd5008; border-color: black;">Buy</button>
+              <a href="{% url 'dashboard' %}" class="btn card-link" style="color: #cd5008; border-color: black;">Dashboard</a>
             </div></div>
           </div>
           </div>
@@ -332,8 +332,9 @@
              
 
             <div class="text-center">
-              <a href="#" class="text-decoration-none text-black text-muted">ToS &emsp;</a>
-              <a href="#" class="text-decoration-none text-black text-muted">Privacy Policy &emsp;</a>
+              <a style="color: #cd5008;" href="mailto:Support@theorange.team?Subject=Have%20a%20question" class="text-decoration-none">Contact Us</a> &nbsp; | &nbsp;
+              <a style="color: #cd5008;" href="{% url 'pp_tos_page' %}" class="text-decoration-none">Privacy Policy</a> &nbsp; | &nbsp;
+              <a style="color: #cd5008;" href="{% url 'pp_tos_page' %}" class="text-decoration-none">Terms of Service</a><br><br><br>
               ©<script>document.write(new Date().getFullYear())</script>&nbsp; TheOrange Team
             </div>
             <br>
