@@ -58,7 +58,5 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=os.path.join(settings.BASE_DIR, 'accounts/static'))
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-else: 
-       urlpatterns = [
-       # your url patterns
-   ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+else:
+       urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
