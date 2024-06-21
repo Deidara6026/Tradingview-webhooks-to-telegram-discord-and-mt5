@@ -132,11 +132,11 @@
                       
                       <h6 class="text-muted">Renewal Date: {{webhook.renews_at}}</h6></div>
                     {% if webhook.identifier == "tg" %}
-                        <p class="card-text" id="link">{{request.scheme}}://{{ request.get_host }}{% url 'telegram_signal_api_endpoint' webhook.pk %}</p>
+                        <p class="card-text" id="link" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{request.scheme}}://{{ request.get_host }}{% url 'telegram_signal_api_endpoint' webhook.pk %}</p>
                     {% elif webhook.identifier == "mt5" %}
-                        <p class="card-text" id="link">{{request.scheme}}://{{ request.get_host }}{% url 'mt5_signal_api_endpoint' webhook.pk %}</p>
+                        <p class="card-text" id="link" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{request.scheme}}://{{ request.get_host }}{% url 'mt5_signal_api_endpoint' webhook.pk %}</p>
                     {% elif webhook.identifier == "discord" %}
-                        <p class="card-text" id="link">{{request.scheme}}://{{ request.get_host }}{% url 'discord_signal_api_endpoint' webhook.pk %}</p>
+                        <p class="card-text" id="link" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{request.scheme}}://{{ request.get_host }}{% url 'discord_signal_api_endpoint' webhook.pk %}</p>
                     {% endif %}
                     
                     <a href="{% url 'toggle_webhook_status' webhook.pk webhook.identifier %}" title="{% if webhook.pause == 'active' %}Pause{%else%}Resume{%endif%}" class="fs-4 text-black"><i class="bi bi-{% if webhook.pause == 'active' %}pause{%else%}play{%endif%}-circle" style="color: #cd5008;"></i></a> &emsp;
