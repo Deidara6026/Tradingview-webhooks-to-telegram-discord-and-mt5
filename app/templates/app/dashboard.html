@@ -1,25 +1,9 @@
+{% extends 'app/base.html' %}
 {% load static %}
+{% block title %}<title>Dashboard</title>{% endblock %}
 {% load custom_filters %}
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" 
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="shortcut icon" href="{% static 'app/img/logoo.png' %}" />
-    <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
-  </head>
-
-
-<body style="font-family: Arial, Helvetica, sans-serif;">
-
-
-
-
+{% block hstyle %} <link rel="stylesheet" href="{% static 'app/css/style.css' %}"> {% endblock %}
+{% block modals %}
 <!-- Modal -->
 <div class="modal fade" id="telegramModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createwebhook" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -115,36 +99,7 @@
     </div>
   </div>
 </div>
-
-
-
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top font-monospace" style="background-color: white;">
-      <div class="container-fluid">
-        <img class="img-fluid" style="max-height: 70px; max-width: 13%;" src="{% static 'app/img/logoo.png' %}" id="logoo">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'index'%}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" style="color: #cd5008;" href="#">Dashboard</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'pricing' %}">Pricing</a>
-            </li>
-          </ul>
-          <form class="al">
-            <a class=" text-decoration-none" style="color: #cd5008;" href="{% url 'accounts:sign-out' %}">Logout</a>
-          </form>
-        </div>
-      </div>
-    </nav><br><br><br><br>
-      
-
-   
+{% endblock %} {% block content %}
     <div class="justify-content-center text-center align-items-center">
       <h3 class="display-3 font-monospace" style="color: #cd5008;"> Dashboard <img class="img-fluid" style="height: 200px;" src="{% static 'app/img/illustration-for-investment-concept.svg' %}" alt="meta" id="MT"></h3>
     </div>
@@ -206,7 +161,8 @@
                         <li><a class="dropdown-item" href="{{customer_portal}}">Edit Subscriptions</a></li>
                         <li><a class="dropdown-item text-danger" href="#" onclick="if(confirm('Are you sure you want to delete this webhook?')) { window.location.href='{% url 'delete_webhook' webhook.pk webhook.identifier%}'; }">Delete</a></li>
                       </ul>
-                      
+                    
+                    
                   </div>
                 </div>
               </div>
@@ -225,7 +181,7 @@
         {% else %}
             <div class="text-center mt-5">
                 <h3 class="text-muted">There's nothing to see here yet...</h3>
-                <p class="lead">Create a webhook to get started!</p>
+                <p class="lead">Click the create button below to get started, or visit our <a href="">help pages</a> to learn how this works!</p>
 
             </div>
             
@@ -422,40 +378,14 @@
 </section>
 {% endif %}
 <br><br><br><br>
-
-
-
-
-   <br><br><br><br><br><br>
-
-
-   <div class="card mb-3 mx-auto text-center" id="card-body" style="border-radius: 30px; width: 20rem;">
-    <div class="card-body">
-      <p class="card-text">
-        <a href="#"><i class="bi bi-discord fs-2" style="color: #cd5008;" ></i></a> &emsp;
-        <a href="#"><i class="bi bi-instagram fs-3" style="color: #cd5008;" ></i></a> &emsp;
-        <a href="#"><i class="bi bi-twitter-x fs-3" style="color: #cd5008;" ></i></a>
-      </p>
-    </div>
-  </div>
-  <br>
-   
-   <div class="text-center">
-    <a style="color: #cd5008;" href="mailto:Support@theorange.team?Subject=Have%20a%20question" class="text-decoration-none">Contact Us</a> &nbsp; | &nbsp;
-    <a style="color: #cd5008;" href="{% url 'pp_tos_page' %}" class="text-decoration-none">Privacy Policy</a> &nbsp; | &nbsp;
-    <a style="color: #cd5008;" href="{% url 'pp_tos_page' %}" class="text-decoration-none">Terms of Service</a>
-    <br><br>
-    ©<script>document.write(new Date().getFullYear())</script> TheOrangeTeam
-    <script src="{% static  'app/js/app1.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script src="{% static 'app/js/app1.js' %}"></script>
   {% for error in errors %}
   <script>displayError("{{error}}");</script>
   {% endfor %}
   {% for message in messages %}
   <script>showToast("{{message}}")</script>
   {% endfor %}
-   </div><br><br>
-    
-</body>
-</html>
+   <br><br><br><br><br><br>
+    {% endblock %}
+
 
