@@ -31,12 +31,7 @@
     #card-body:hover {
       background-color: rgb(240, 239, 239);
       transition: background-color 0.7s;
-    }
-    #MT{
-            max-width: 15%;
-        }
-    
-    
+    }    
   </style>
   {%endblock%}
 
@@ -147,7 +142,7 @@
        <div class="col-sm-4 mb-3 mb-sm-0 mx-auto">
           <div class="card text-center" id="card-body">
             <div class="card-body">
-              <h6 class="card-title display-6"><img class="img-fluid" src="{% static 'app/img/Meta.png' %}" alt="meta" id="MT"></h6>
+              <h6 class="card-title display-6"><img class="img-fluid" src="{% static 'app/img/Meta.png' %}" alt="meta" style="max-width: 15%;"></h6>
               <h3 class="card-text ">MetaTrader 5</h3>
               <a href="{% url 'dashboard' %}" class="btn" style="border-radius: 10px; color: #cd5008; border-color: black;">CONNECT</a>
             </div>
