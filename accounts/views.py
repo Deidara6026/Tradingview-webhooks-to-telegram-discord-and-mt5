@@ -19,7 +19,6 @@ def signup(request):
 
 
 def log_in(request):
-    error = False
     if request.user.is_authenticated:
         return redirect('dashboard')
     if request.method == "POST":
@@ -28,18 +27,17 @@ def log_in(request):
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
             user = authenticate(email=email, password=password)
-            print(user)
             if user:
-                login(request, user)  
-
+                login(request, user)
                 return redirect('dashboard')
             else:
-                print(user)
-                error = True
+                form.add_error(None, "Invalid email or password.")
+        else:
+            print(form.errors)
     else:
         form = LogInForm()
 
-    return render(request, 'accounts/sign-in.html', {'form': form, 'error': error})
+    return render(request, 'accounts/sign-in.html', {'form': form})
 
 
 def log_out(request):
