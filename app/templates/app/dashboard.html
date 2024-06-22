@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}<title>Dashboard</title>{% endblock %}
 {% load custom_filters %}
-{% block hstyle %} <link rel="stylesheet" href="{% static 'app/css/style.css' %}"> {% endblock %}
+<!-- {% block hstyle %} <link rel="stylesheet" href="{% static 'app/css/style.css' %}"> {% endblock %} -->
 {% block modals %}
 <!-- Modal -->
 <div class="modal fade" id="telegramModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createwebhook" aria-hidden="true">
@@ -187,8 +187,9 @@
             
           {%endif%}
           <br><br><br>
-            <div class="row">
-              <div class="col-sm-4 mb-3 mb-sm-0 mx-auto">
+
+            <div class="row mx-auto" style="width: 95%;">
+              <div class="col-sm-4 mb-3 mb-sm-0 mx-auto" style="width: 25rem;">
                 <div class="card" id="webhook" style="height: 18rem;">
                   <div class="card-body">
                     <h5 class="card-title text-muted">Manage Webhooks</h5>
@@ -225,12 +226,8 @@
                   </div>
                 </div>
               </div>
-         
-                  <div class="col-3 mx-auto">
-                    <img class="img-fluid" src="{% static 'app/img/cash-flow.svg' %}" alt="meta" id="mid">
-                  </div>
 
-              <div class="col-sm-4 mx-auto">
+              <div class="col-sm-4 mx-auto"  style="width: 25rem;">
                 <div class="card" id="webhook" style="height: 18rem;">
                   <div class="card-body">
                     <h5 class="card-title text-muted">Actions</h5>
@@ -287,7 +284,7 @@
 <section>
     <br>
     <div>
-        <div id="carouselExampleAutoplaying1" class="carousel carousel-dark slide mx-auto" data-bs-ride="carousel">
+        <div id="carouselExampleAutoplaying1" class="carousel carousel-dark slide mx-auto" style="width: inherit;" data-bs-ride="carousel">
             <div class="carousel-inner">
               {% for chunk in orders|for_three_loop %}
               {% if forloop.first %}
