@@ -5,25 +5,8 @@
 {%endblock%}
 {% block style %}
 <style>
-    ::-webkit-scrollbar {
-      width: 5px;
-    }
-    ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #959494; 
-  border-radius: 10px;
-}
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #616161; 
-}
-    
-    .card{
+.card{
       background: rgba(255, 255, 255, 0.22);
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(20px);
@@ -134,7 +117,7 @@
     <br>
     <br>
     <br>
-    <p style="font-size: 1.25rem; padding: 10px; border: 2px solid #cd5008; border-radius: 5px;">
+    <div class="overflow-auto" style="font-size: 1.25rem; padding: 10px; border: 2px solid #cd5008; border-radius: 5px;">
         “
         <strong style="color: #cd5008;">BUY EURUSD</strong>
         <strong
@@ -189,14 +172,14 @@
             data-bs-placement="top"
             data-bs-content="Link to the image to send to Telegram with the message."
             style="color: #cd5008;"
-        >link</strong>
-        =https://www.tradingview.com/x/HFUdhKD5/
+        >link=</strong>
+        https://www.tradingview.com/x/HFUdhKD5/
       ”
-    </p>
+    </div>
     <br>
     <div class="mt-4">
-        <div class="d-flex justify-content-center my-4">
-            <div class="card w-30 mx-2 p-4 shadow-sm">
+        <div class="d-flex flex-wrap justify-content-center">
+            <div class="card w-30 mx-2 p-4 shadow-sm d-flex">
                 <div class="container text-center">
                     <p>
                         <strong>Template text:</strong>
@@ -227,7 +210,10 @@
                     {% endverbatim %}
                 </div>
             </div>
-            <i class="bi bi-arrow-right align-self-center mx-3" style="font-size: 2rem; color: #cd5008;"></i>
+            <div class="w-100 d-block d-md-none"></div>
+            <i class="bi bi-arrow-right align-self-center mx-3 d-none d-md-block" style="font-size: 2rem; color: #cd5008;"></i>
+            <i class="bi bi-arrow-down align-self-center mx-3 d-md-none" style="font-size: 2rem; color: #cd5008;"></i>
+            <div class="w-100 d-block d-md-none"></div>
             <div class="card w-30 mx-2 p-4 shadow-sm">
                 <div class="container text-center">
                     <p>
