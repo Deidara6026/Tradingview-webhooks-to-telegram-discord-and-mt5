@@ -225,8 +225,12 @@ function add_chat_id() {
     newInput.setAttribute('data', "new");
     newInput.required = true;
     var chatInputs = document.querySelectorAll('#editmodal form input[name="chat_id"]');
-    var lastChatInput = chatInputs.length > 0 ? chatInputs[chatInputs.length - 1] : null;
-    lastChatInput.parentNode.insertBefore(newInput, lastChatInput.nextSibling);
+    if (chatInputs.length > 0) {
+        var lastChatInput = chatInputs[chatInputs.length - 1];
+        lastChatInput.parentNode.insertBefore(newInput, lastChatInput.nextSibling);
+    } else {
+        document.getElementById("#ebtn").parentElement.appendChild(newInput)
+    }
 }
  
 function appendText() {
